@@ -3,7 +3,12 @@ guid: c240e8a6df471524b829a6ffcbca366b
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: PlacementIndicatorMaterial
+    second: {fileID: 2100000, guid: c35e2ed5dd8f79b40a72a3682aaeb3a4, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
