@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: ObjectsDatabase
   m_EditorClassIdentifier: 
   objectsData:
-  - <Name>k__BackingField: House
-    <ID>k__BackingField: 0
+  - <Name>k__BackingField: HQ
+    <ID>k__BackingField: 1
+    <Size>k__BackingField: {x: 4, y: 4}
+    <prefab>k__BackingField: {fileID: 6599720412572843482, guid: 79c7b517c4833a14580e1868c79950aa, type: 3}
+  - <Name>k__BackingField: Gatherer
+    <ID>k__BackingField: 2
     <Size>k__BackingField: {x: 2, y: 2}
-    <prefab>k__BackingField: {fileID: 1799870105367624873, guid: a7b3a3d5dc3024247ad28fc7709f1786, type: 3}
+    <prefab>k__BackingField: {fileID: 3393274797144037646, guid: dedead6a9b3a0e9449d7d6b7bd6ff589, type: 3}
