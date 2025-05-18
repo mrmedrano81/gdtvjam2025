@@ -52,8 +52,6 @@ public class InputManager : MonoBehaviour
     {
         Vector3 mousePos = mousePosInput.ReadValue<Vector2>();
 
-        Debug.Log(mousePos);
-
         mousePos.z = sceneCamera.nearClipPlane;
         Ray ray = sceneCamera.ScreenPointToRay(mousePos);
         RaycastHit hit;
