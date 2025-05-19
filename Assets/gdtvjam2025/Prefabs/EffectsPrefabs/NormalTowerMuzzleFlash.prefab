@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 198234346748616026}
   - component: {fileID: 199409127382122440}
   m_Layer: 1
-  m_Name: TowerMuzzleFlash
+  m_Name: NormalTowerMuzzleFlash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -3,7 +3,7 @@ using UnityEngine;
 public class TowerAim : MonoBehaviour
 {
     [Header("References")]
-    public Transform towerBody;
+    public Transform pivotPoint;
     public Transform firePoint;
     private Transform currentTarget;
 
@@ -17,6 +17,8 @@ public class TowerAim : MonoBehaviour
 
     public Vector3 AimDirection { get; private set; }
 
+    public bool UpdateAimDirection = true;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,7 +31,11 @@ public class TowerAim : MonoBehaviour
     {
         GetClosestTarget();
         CheckTargetDistance();
-        AimAtTarget();
+
+        if (UpdateAimDirection)
+        {
+            AimAtTarget();
+        }
     }
 
     private void GetClosestTarget()
@@ -39,7 +45,7 @@ public class TowerAim : MonoBehaviour
         int maxColliders = maxTargetsDetected;
         Collider[] hitColliders = new Collider[maxColliders];
 
-        int numColliders = Physics.OverlapSphereNonAlloc(towerBody.position, radius, hitColliders, targetLayer);
+        int numColliders = Physics.OverlapSphereNonAlloc(pivotPoint.position, radius, hitColliders, targetLayer);
 
         float closestDistance = Mathf.Infinity;
 
@@ -47,10 +53,10 @@ public class TowerAim : MonoBehaviour
 
         for (int i = 0; i < numColliders; i++)
         {
-            if (Vector3.Distance(hitColliders[i].transform.position, towerBody.position) < closestDistance)
+            if (Vector3.Distance(hitColliders[i].transform.position, pivotPoint.position) < closestDistance)
             {
                 closestTarget = hitColliders[i].transform;
-                closestDistance = Vector3.Distance(hitColliders[i].transform.position, towerBody.position);
+                closestDistance = Vector3.Distance(hitColliders[i].transform.position, pivotPoint.position);
             }
         }
 
@@ -73,12 +79,12 @@ public class TowerAim : MonoBehaviour
         {
             Vector3 direction = currentTarget.position - firePoint.position;
 
+            AimDirection = direction.normalized;
+
             if (lockVerticalRotation)
             {
                 direction = Vector3.ProjectOnPlane(direction, Vector3.up);
             }
-
-            AimDirection = direction.normalized;
 
             if (invertDirection)
             {
@@ -87,15 +93,26 @@ public class TowerAim : MonoBehaviour
 
             Quaternion lookRotation = Quaternion.LookRotation(direction);
 
-            towerBody.rotation = Quaternion.Slerp(towerBody.rotation, lookRotation, Time.deltaTime * rotationSpeed);
+            pivotPoint.rotation = Quaternion.Slerp(pivotPoint.rotation, lookRotation, Time.deltaTime * rotationSpeed);
         }
+    }
+
+
+    public Vector3 GetTargetPosition()
+    {
+        if (currentTarget == null)
+        {
+            return Vector3.zero;
+        }
+
+        return currentTarget.position;
     }
 
     private void CheckTargetDistance()
     {
         if (currentTarget != null)
         {
-            if (Vector3.Distance(towerBody.position, currentTarget.position) > radius)
+            if (Vector3.Distance(pivotPoint.position, currentTarget.position) > radius)
             {
                 currentTarget = null;
             }
@@ -105,7 +122,7 @@ public class TowerAim : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(towerBody.position, radius);
+        Gizmos.DrawWireSphere(pivotPoint.position, radius);
 
         if (currentTarget != null)
         {
