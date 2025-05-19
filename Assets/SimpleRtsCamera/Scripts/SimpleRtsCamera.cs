@@ -3,13 +3,14 @@ using UnityEngine.InputSystem;
 
 namespace SimpleRtsCamera.Scripts
 {
-	public class SimpleRtsCamera : MonoBehaviour
+    public class SimpleRtsCamera : MonoBehaviour
 	{
 		[Header("RTS Camera Settings")]
 		[Header("Move")]
 		[SerializeField] private float _moveSpeed = 200;
 		[SerializeField] private float _edgeThreshold = 5;
 		[SerializeField] private float _rightMouseSpeedMultiplier = 10;
+		[SerializeField] private Vector2 cameraXZBounds;
 
 		[Header("Zoom")]
 		[SerializeField] private float _zoomSpeed = 200;
@@ -65,6 +66,7 @@ namespace SimpleRtsCamera.Scripts
 			MoveCameraWithRightMouse();
 			ZoomCamera();
 			RotateCamera();
+			ClampCameraPosition();
 		}
 
 		private void OnDisable()
@@ -144,7 +146,7 @@ namespace SimpleRtsCamera.Scripts
 			var moveY = mouseDelta.y * (_moveSpeed * _rightMouseSpeedMultiplier / Screen.height) * Time.deltaTime;
 
 			var moveDirection = new Vector3(moveX, 0, moveY);
-			transform.position += moveDirection;
+            transform.position += moveDirection;
 		}
 
 		private void ZoomCamera()
@@ -200,5 +202,44 @@ namespace SimpleRtsCamera.Scripts
 
 			return transform.position + transform.forward * _rotateFallback;
 		}
+
+		private void ClampCameraPosition()
+		{
+            //Vector3 lookAtPoint = GetCameraLookAtPoint();
+            //lookAtPoint.y = 0;
+
+            //float distX = transform.position.x - lookAtPoint.x;
+            //float distZ = transform.position.z - lookAtPoint.z;
+
+            //         float cameraBoundsX = cameraXZBounds.x + distX;
+            //float cameraBoundsZ = cameraXZBounds.y + distZ;
+
+            //var clampedX = Mathf.Clamp(transform.position.x, -cameraBoundsX, cameraBoundsX);
+            //         var clampedZ = Mathf.Clamp(transform.position.z, -cameraBoundsZ, cameraBoundsZ);			
+
+
+            // 1. Get the current look-at point
+            Vector3 lookDir = transform.forward;
+            float t = -transform.position.y / lookDir.y; // ray-plane intersection at y=0
+            Vector3 lookAtPoint = transform.position + lookDir * t;
+            // 2. Clamp the look-at point within bounds
+            Vector3 clampedLookAt = lookAtPoint;
+            clampedLookAt.x = Mathf.Clamp(lookAtPoint.x, -cameraXZBounds.x, cameraXZBounds.x);
+            clampedLookAt.z = Mathf.Clamp(lookAtPoint.z, -cameraXZBounds.y, cameraXZBounds.y);
+            clampedLookAt.y = 0;
+
+            // 3. Maintain the distance and direction from camera to look-at point
+            Vector3 cameraToLook = transform.position - lookAtPoint;
+            transform.position = clampedLookAt + cameraToLook;
+
+			
+
+
+
+            //var clampedX = Mathf.Clamp(transform.position.x, -cameraXZBounds.x, cameraXZBounds.x);
+            //var clampedZ = Mathf.Clamp(transform.position.z, -cameraXZBounds.y, cameraXZBounds.y);
+
+            //transform.position = new Vector3(clampedX, transform.position.y, clampedZ);
+        }
 	}
 }
