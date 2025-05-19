@@ -14,8 +14,8 @@ TagManager:
   - Indicator
   - Placement
   - Structure
-  - 
-  - 
+  - Enemy
+  - NavmeshObstacle
   - 
   - 
   - 
