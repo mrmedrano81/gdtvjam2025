@@ -13,6 +13,9 @@ namespace SimpleRtsCamera.Scripts
 
 		[Header("Zoom")]
 		[SerializeField] private float _zoomSpeed = 200;
+		[SerializeField] private float _minZoomDistance = 200;
+		[SerializeField] private float _maxZoomDistance = 200;
+		[SerializeField] private float _currentZoomDistance = 0;
 
 		[Header("Rotate")]
 		[SerializeField] private float _rotateSpeed = 0.5f;
@@ -26,10 +29,13 @@ namespace SimpleRtsCamera.Scripts
 		private float _scrollMouseInput;
 		private float _middleMouseInput;
 
+		Quaternion _initialRotation;
+
 		private void Awake()
 		{
 			_playerInput = FindAnyObjectByType<PlayerInput>();
 			_playerInput.SwitchCurrentActionMap("General");
+			_initialRotation = transform.rotation;
 		}
 
 		private void OnEnable()
@@ -146,7 +152,21 @@ namespace SimpleRtsCamera.Scripts
 			if (Mathf.Approximately(_scrollMouseInput, 0)) return;
 
 			var zoomDirection = transform.forward;
+
+			if (transform.position.y <= _minZoomDistance && _scrollMouseInput > 0)
+			{
+                //transform.position = new Vector3(transform.position.x, _minZoomDistance, transform.position.z);
+                return;
+			}
+			else if	(transform.position.y >= _maxZoomDistance && _scrollMouseInput < 0)
+			{
+                //transform.position = new Vector3(transform.position.x, _maxZoomDistance, transform.position.z);
+                return;
+			}
+
 			transform.position += zoomDirection * (_scrollMouseInput * _zoomSpeed * Time.deltaTime);
+
+			_currentZoomDistance = transform.position.y;
 		}
 
 		private void RotateCamera()
@@ -156,6 +176,11 @@ namespace SimpleRtsCamera.Scripts
 			var lookAtPoint = GetCameraLookAtPoint();
 			var mouseDelta = _mousePositionInput - _initialMousePosition;
 			transform.RotateAround(lookAtPoint, Vector3.up, mouseDelta.x * _rotateSpeed * Time.deltaTime);
+		}
+
+		public void ResetCameraRotation()
+		{
+			transform.rotation = _initialRotation;
 		}
 
 		private Vector3 GetCameraLookAtPoint()

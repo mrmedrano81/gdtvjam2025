@@ -44,7 +44,7 @@ public class PlacementState : IBuildingState
 
     public void EndState()
     {
-        previewSystem.StopShowingPlacementPreview();
+        previewSystem.StopShowingPreview();
     }
 
     public void OnAction(Vector3Int gridPosition)
