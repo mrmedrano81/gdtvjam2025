@@ -19,6 +19,16 @@ public class EnemyController : MonoBehaviour
         if (agent == null)
         {
             agent = GetComponentInChildren<NavMeshAgent>();
+
+            if (agent == null)
+            {
+                agent = GetComponentInParent<NavMeshAgent>();
+
+                if (agent == null)
+                {
+                    Debug.LogError("No NavMeshAgent found on this GameObject or its children/parents.");
+                }
+            }
         }
     }
 

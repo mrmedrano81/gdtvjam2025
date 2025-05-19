@@ -1,8 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(TowerAim))]
-public class TowerShoot : MonoBehaviour
+public class HeavyTowerShoot : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private bool addBulletSpread = true;
@@ -12,25 +11,27 @@ public class TowerShoot : MonoBehaviour
     [SerializeField] private LayerMask mask;
 
     [Header("References")]
-    [SerializeField] private Transform firePoint; 
-    [SerializeField] private TrailRenderer bulletTrail; 
+    [SerializeField] private Transform EffectfirePoint;
+    [SerializeField] private Transform bulletSpawnPosition;
+    [SerializeField] private TrailRenderer bulletTrail;
     [SerializeField] private ParticleSystem shootingParticleSystem;
     [SerializeField] private ParticleSystem impactParticleSystem;
 
-    private Animator animator;
+    //private Animator animator;
     private float lastShootTime;
     private TowerAim towerAim;
 
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
+        towerAim = GetComponent<TowerAim>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -44,15 +45,13 @@ public class TowerShoot : MonoBehaviour
 
     private void Shoot()
     {
-        if (lastShootTime + shootDelay > Time.time)
+        if (Time.time - lastShootTime > 1 / fireRate)
         {
-            animator.SetBool("IsShooting", true);
-
-            shootingParticleSystem.Play();
+            //animator.SetBool("IsShooting", true);
 
             Vector3 direction = towerAim.AimDirection;
 
-            if (Physics.Raycast(firePoint.position, direction, out RaycastHit hit, Mathf.Infinity, mask))
+            if (Physics.Raycast(bulletSpawnPosition.position, direction, out RaycastHit hit, Mathf.Infinity, mask.value))
             {
                 if (addBulletSpread)
                 {
@@ -65,19 +64,15 @@ public class TowerShoot : MonoBehaviour
                     direction += randomSpread;
                 }
 
-                TrailRenderer trail = Instantiate(bulletTrail, firePoint.position, Quaternion.identity);
-                trail.transform.forward = direction;
+                shootingParticleSystem.Play();
+                TrailRenderer trail = Instantiate(bulletTrail, EffectfirePoint.position, Quaternion.identity);
+                StartCoroutine(SpawnTrail(trail, hit));
+                trail.transform.forward = towerAim.GetAimDirection(EffectfirePoint);
 
-                trail.AddPosition(hit.point);
+                Instantiate(impactParticleSystem, hit.point, Quaternion.LookRotation(-direction), hit.collider.gameObject.transform);
 
-                ParticleSystem impact = Instantiate(impactParticleSystem, hit.point, Quaternion.identity);
-                impact.Play();
-
-                Destroy(trail.gameObject, 2f);
-                Destroy(impact.gameObject, 2f);
+                lastShootTime = Time.time;
             }
-
-            lastShootTime = Time.time;
         }
     }
 
@@ -86,17 +81,16 @@ public class TowerShoot : MonoBehaviour
         float time = 0;
         Vector3 startPos = trail.transform.position;
 
-        while(time < 1)
+        while (time < 1)
         {
             trail.transform.position = Vector3.Lerp(startPos, hit.point, time);
-            time += Time.deltaTime/trail.time;
+            time += Time.deltaTime / trail.time;
 
             yield return null;
         }
 
-        animator.SetBool("IsShooting", false);
+        //animator.SetBool("IsShooting", false);
         trail.transform.position = hit.point;
-        Instantiate(impactParticleSystem, hit.point, Quaternion.identity);
 
         Destroy(trail.gameObject, trail.time);
     }

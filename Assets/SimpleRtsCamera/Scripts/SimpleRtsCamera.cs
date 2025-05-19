@@ -3,6 +3,9 @@ using UnityEngine.InputSystem;
 
 public class SimpleRtsCamera : MonoBehaviour
 {
+	[Header("DEBUGGING")]
+	public bool disableCursorMove = false;
+
 	[Header("RTS Camera Settings")]
 	[Header("Move")]
 	[SerializeField] private float _moveSpeed = 200;
@@ -61,8 +64,13 @@ public class SimpleRtsCamera : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		MoveCamera();
-		MoveCameraWithCursor();
+
+		if (!disableCursorMove)
+		{
+            MoveCamera();
+            MoveCameraWithCursor();
+        }
+
 		MoveCameraWithRightMouse();
 		ZoomCamera();
 		RotateCamera();

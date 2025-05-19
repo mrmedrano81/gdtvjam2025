@@ -62,6 +62,11 @@ public class TowerAim : MonoBehaviour
         return currentTarget != null;
     }
 
+    public Vector3 GetAimDirection(Transform firePointTransform)
+    {
+        return currentTarget.position - firePointTransform.position;
+    }
+
     private void AimAtTarget()
     {
         if (currentTarget != null)
@@ -73,6 +78,8 @@ public class TowerAim : MonoBehaviour
                 direction = Vector3.ProjectOnPlane(direction, Vector3.up);
             }
 
+            AimDirection = direction.normalized;
+
             if (invertDirection)
             {
                 direction = -direction;
@@ -81,8 +88,6 @@ public class TowerAim : MonoBehaviour
             Quaternion lookRotation = Quaternion.LookRotation(direction);
 
             towerBody.rotation = Quaternion.Slerp(towerBody.rotation, lookRotation, Time.deltaTime * rotationSpeed);
-
-            AimDirection = direction.normalized;
         }
     }
 
