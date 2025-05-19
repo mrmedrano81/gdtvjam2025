@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(TowerAim))]
-public class HeavyTowerShoot : MonoBehaviour
+public class HeavyTowerScript : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private bool addBulletSpread = true;
@@ -31,12 +31,6 @@ public class HeavyTowerShoot : MonoBehaviour
         towerAim = GetComponent<TowerAim>();
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -50,43 +44,16 @@ public class HeavyTowerShoot : MonoBehaviour
     {
         if (Time.time - lastShootTime > 1 / fireRate && towerAim.CanShoot())
         {
-            //animator.SetBool("IsShooting", true);
-
-            //Vector3 direction = towerAim.AimDirection;
-
-            //if (Physics.Raycast(bulletSpawnPosition.position, direction, out RaycastHit hit, Mathf.Infinity, mask.value))
-            //{
-            //    if (addBulletSpread)
-            //    {
-            //        Vector3 randomSpread = new Vector3(
-            //            Random.Range(-bulletSpreadVariance.x, bulletSpreadVariance.x),
-            //            Random.Range(-bulletSpreadVariance.y, bulletSpreadVariance.y),
-            //            Random.Range(-bulletSpreadVariance.z, bulletSpreadVariance.z)
-            //        );
-
-            //        direction += randomSpread;
-            //    }
-
-            //    shootingParticleSystem.Play();
-            //    TrailRenderer trail = Instantiate(projectileTrail, EffectfirePoint.position, Quaternion.identity);
-            //    LineRenderer laserTrail = Instantiate(this.laserTrail, EffectfirePoint.position, Quaternion.identity);
-            //    StartCoroutine(SpawnTrail(trail, laserTrail, hit));
-            //    trail.transform.forward = towerAim.GetAimDirection(EffectfirePoint);
-            //    lastShootTime = Time.time;
-            //}
-
-
             shootingParticleSystem.Play();
 
             LineRenderer laserTrail = Instantiate(this.laserTrail, EffectfirePoint.position, Quaternion.identity);
 
-            StartCoroutine(SpawnTrail(laserTrail));
+            StartCoroutine(ExecuteLaser(laserTrail));
             lastShootTime = Time.time;
-
         }
     }
 
-    private IEnumerator SpawnTrail(LineRenderer laserRenderer)
+    private IEnumerator ExecuteLaser(LineRenderer laserRenderer)
     {
         float time = 0;
 
@@ -124,26 +91,4 @@ public class HeavyTowerShoot : MonoBehaviour
 
         Destroy(laserRenderer.gameObject);
     }
-
-    //private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit)
-    //{
-    //    float time = 0;
-    //    Vector3 startPos = trail.transform.position;
-
-    //    while (time < 1)
-    //    {
-    //        //trail.transform.position = Vector3.Lerp(startPos, hit.point, time);
-    //        trail.transform.position = Vector3.Lerp(startPos, hit.point, time);
-    //        time += Time.deltaTime / trail.time;
-
-    //        yield return null;
-    //    }
-
-    //    //animator.SetBool("IsShooting", false);
-    //    trail.transform.position = hit.point;
-
-    //    Instantiate(impactParticleSystem, hit.point, Quaternion.LookRotation(-towerAim.AimDirection), hit.collider.gameObject.transform);
-
-    //    Destroy(trail.gameObject, trail.time);
-    //}
 }

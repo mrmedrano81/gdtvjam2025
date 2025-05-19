@@ -73,9 +73,8 @@ public class NormalTowerShoot : MonoBehaviour
                 {
                     for (int i = 0; i < 2; i++)
                     {
-                        shootingParticleSystem[i].Play();
                         TrailRenderer trail = Instantiate(bulletTrail, EffectfirePoint[i].position, Quaternion.identity);
-                        StartCoroutine(SpawnTrail(trail, hit));
+                        StartCoroutine(SpawnTrail(trail, hit, i));
                         trail.transform.forward = towerAim.GetAimDirection(EffectfirePoint[i]);
                     }
                 }
@@ -83,9 +82,8 @@ public class NormalTowerShoot : MonoBehaviour
                 {
                     for (int i = 2; i < 4; i++)
                     {
-                        shootingParticleSystem[i].Play();
                         TrailRenderer trail = Instantiate(bulletTrail, EffectfirePoint[i].position, Quaternion.identity);
-                        StartCoroutine(SpawnTrail(trail, hit));
+                        StartCoroutine(SpawnTrail(trail, hit, i));
                         trail.transform.forward = towerAim.GetAimDirection(EffectfirePoint[i]);
                     }
                 }
@@ -110,8 +108,14 @@ public class NormalTowerShoot : MonoBehaviour
         }
     }
 
-    private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit)
+    private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit, int index)
     {
+        float randomDelay = Random.Range(0, 0.1f);
+
+        yield return new WaitForSeconds(randomDelay);
+
+        shootingParticleSystem[index].Play();
+
         float time = 0;
         Vector3 startPos = trail.transform.position;
 

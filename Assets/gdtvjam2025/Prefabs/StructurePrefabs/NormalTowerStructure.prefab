@@ -357,7 +357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b31724e8228d56f4fa05d825bb37bb53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerBody: {fileID: 7492226106521339806}
+  pivotPoint: {fileID: 7492226106521339806}
   firePoint: {fileID: 4570935103041174996}
   radius: 15
   rotationSpeed: 20
@@ -367,6 +367,7 @@ MonoBehaviour:
   maxTargetsDetected: 10
   lockVerticalRotation: 0
   invertDirection: 1
+  UpdateAimDirection: 1
 --- !u!114 &1385150564787058384
 MonoBehaviour:
   m_ObjectHideFlags: 0
