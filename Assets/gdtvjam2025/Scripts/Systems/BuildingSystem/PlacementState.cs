@@ -12,6 +12,7 @@ public class PlacementState : IBuildingState
     GridData floorData;
     GridData structureData;
     ObjectPlacer objectPlacer;
+    EventManager eventManager;
 
     public PlacementState(int iD,
                           Grid grid,
@@ -19,7 +20,8 @@ public class PlacementState : IBuildingState
                           ObjectsDatabaseSO databaseSO,
                           GridData floorData,
                           GridData furnitureData,
-                          ObjectPlacer objectPlacer)
+                          ObjectPlacer objectPlacer,
+                          EventManager eventManager)
     {
         ID = iD;
         this.grid = grid;
@@ -28,6 +30,7 @@ public class PlacementState : IBuildingState
         this.floorData = floorData;
         this.structureData = furnitureData;
         this.objectPlacer = objectPlacer;
+        this.eventManager = eventManager;
 
         selectedObjectIndex = databaseSO.objectsData.FindIndex(data => data.ID == ID);
 
@@ -67,6 +70,8 @@ public class PlacementState : IBuildingState
 
 
         previewSystem.UpdatePosition(grid.CellToWorld(gridPosition), false);
+
+        eventManager.OnStructurePlaced?.Invoke();
     }
 
     private bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex)

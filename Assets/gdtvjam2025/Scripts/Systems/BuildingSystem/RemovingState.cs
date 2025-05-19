@@ -11,13 +11,15 @@ public class RemovingState : IBuildingState
     GridData floorData;
     GridData structureData;
     ObjectPlacer objectPlacer;
+    EventManager eventManager;
 
     public RemovingState(Grid grid,
                          PreviewSystem previewSystem,
                          ObjectsDatabaseSO databaseSO,
                          GridData floorData,
                          GridData structureData,
-                         ObjectPlacer objectPlacer)
+                         ObjectPlacer objectPlacer,
+                         EventManager eventManager)
     {
         this.grid = grid;
         this.previewSystem = previewSystem;
@@ -25,6 +27,7 @@ public class RemovingState : IBuildingState
         this.floorData = floorData;
         this.structureData = structureData;
         this.objectPlacer = objectPlacer;
+        this.eventManager = eventManager;
 
         previewSystem.StartShowingRemovePreview();
     }
@@ -68,6 +71,8 @@ public class RemovingState : IBuildingState
         Vector3 cellPosition = grid.CellToWorld(gridPosition);
 
         previewSystem.UpdatePosition(cellPosition, CheckIfSelectionIsValid(gridPosition));
+
+        eventManager.OnStructureRemoved?.Invoke();
     }
 
     private bool CheckIfSelectionIsValid(Vector3Int gridPosition)

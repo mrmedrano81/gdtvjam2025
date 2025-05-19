@@ -1,245 +1,252 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace SimpleRtsCamera.Scripts
+public class SimpleRtsCamera : MonoBehaviour
 {
-    public class SimpleRtsCamera : MonoBehaviour
+	[Header("RTS Camera Settings")]
+	[Header("Move")]
+	[SerializeField] private float _moveSpeed = 200;
+	[SerializeField] private float _edgeThreshold = 5;
+	[SerializeField] private float _rightMouseSpeedMultiplier = 10;
+	[SerializeField] private Vector2 cameraXZBounds;
+
+	[Header("Zoom")]
+	[SerializeField] private float _zoomSpeed = 200;
+	[SerializeField] private float _minZoomDistance = 200;
+	[SerializeField] private float _maxZoomDistance = 200;
+	[SerializeField] private float _currentZoomDistance = 0;
+
+	[Header("Rotate")]
+	[SerializeField] private float _rotateSpeed = 0.5f;
+	[SerializeField] private float _rotateFallback = 1000f;
+
+	private PlayerInput _playerInput;
+	private Vector2 _moveInput;
+	private Vector2 _mousePositionInput;
+	private float _rightMouseInput;
+	private Vector2 _initialMousePosition;
+	private float _scrollMouseInput;
+	private float _middleMouseInput;
+
+	public Vector3 mousePosition;
+
+	Quaternion _initialRotation;
+
+	private void Awake()
 	{
-		[Header("RTS Camera Settings")]
-		[Header("Move")]
-		[SerializeField] private float _moveSpeed = 200;
-		[SerializeField] private float _edgeThreshold = 5;
-		[SerializeField] private float _rightMouseSpeedMultiplier = 10;
-		[SerializeField] private Vector2 cameraXZBounds;
+		_playerInput = FindAnyObjectByType<PlayerInput>();
+		_playerInput.SwitchCurrentActionMap("General");
+		_initialRotation = transform.rotation;
+	}
 
-		[Header("Zoom")]
-		[SerializeField] private float _zoomSpeed = 200;
-		[SerializeField] private float _minZoomDistance = 200;
-		[SerializeField] private float _maxZoomDistance = 200;
-		[SerializeField] private float _currentZoomDistance = 0;
+	private void OnEnable()
+	{
+		_playerInput.actions["CameraMove"].performed += MoveHandler;
+		_playerInput.actions["CameraMove"].canceled += MoveHandler;
 
-		[Header("Rotate")]
-		[SerializeField] private float _rotateSpeed = 0.5f;
-		[SerializeField] private float _rotateFallback = 1000f;
+		_playerInput.actions["Mouse Position"].performed += MousePositionHandler;
+		_playerInput.actions["Mouse Position"].canceled += MousePositionHandler;
 
-		private PlayerInput _playerInput;
-		private Vector2 _moveInput;
-		private Vector2 _mousePositionInput;
-		private float _rightMouseInput;
-		private Vector2 _initialMousePosition;
-		private float _scrollMouseInput;
-		private float _middleMouseInput;
+		_playerInput.actions["RightMouse"].started += InitialMousePositionHandler;
+		_playerInput.actions["RightMouse"].performed += RightMouseHandler;
+		_playerInput.actions["RightMouse"].canceled += RightMouseHandler;
 
-		Quaternion _initialRotation;
+		_playerInput.actions["ScrollMouse"].performed += ScrollMouseHandler;
+		_playerInput.actions["ScrollMouse"].canceled += ScrollMouseHandler;
 
-		private void Awake()
+		_playerInput.actions["MiddleMouse"].started += InitialMousePositionHandler;
+		_playerInput.actions["MiddleMouse"].performed += MiddleMouseHandler;
+		_playerInput.actions["MiddleMouse"].canceled += MiddleMouseHandler;
+	}
+
+	private void LateUpdate()
+	{
+		MoveCamera();
+		MoveCameraWithCursor();
+		MoveCameraWithRightMouse();
+		ZoomCamera();
+		RotateCamera();
+		ClampCameraPosition();
+	}
+
+	private void OnDisable()
+	{
+		if (!_playerInput) return;
+
+		_playerInput.actions["CameraMove"].performed -= MoveHandler;
+		_playerInput.actions["CameraMove"].canceled -= MoveHandler;
+
+		_playerInput.actions["Mouse Position"].performed -= MousePositionHandler;
+		_playerInput.actions["Mouse Position"].canceled -= MousePositionHandler;
+
+		_playerInput.actions["RightMouse"].started -= InitialMousePositionHandler;
+		_playerInput.actions["RightMouse"].performed -= RightMouseHandler;
+		_playerInput.actions["RightMouse"].canceled -= RightMouseHandler;
+
+		_playerInput.actions["ScrollMouse"].performed -= ScrollMouseHandler;
+		_playerInput.actions["ScrollMouse"].canceled -= ScrollMouseHandler;
+
+		_playerInput.actions["MiddleMouse"].started -= InitialMousePositionHandler;
+		_playerInput.actions["MiddleMouse"].performed -= MiddleMouseHandler;
+		_playerInput.actions["MiddleMouse"].canceled -= MiddleMouseHandler;
+	}
+
+	private void MoveHandler(InputAction.CallbackContext callbackContext) =>
+		_moveInput = callbackContext.ReadValue<Vector2>();
+
+	private void MousePositionHandler(InputAction.CallbackContext callbackContext)
+	{
+        _mousePositionInput = callbackContext.ReadValue<Vector2>();
+        mousePosition = callbackContext.ReadValue<Vector2>();
+    }
+
+    private void InitialMousePositionHandler(InputAction.CallbackContext callbackContext) =>
+		_initialMousePosition = _mousePositionInput;
+
+	private void RightMouseHandler(InputAction.CallbackContext callbackContext) =>
+		_rightMouseInput = callbackContext.ReadValue<float>();
+
+	private void ScrollMouseHandler(InputAction.CallbackContext callbackContext) =>
+		_scrollMouseInput = callbackContext.ReadValue<float>();
+
+	private void MiddleMouseHandler(InputAction.CallbackContext callbackContext) =>
+		_middleMouseInput = callbackContext.ReadValue<float>();
+
+	private void MoveCamera()
+	{
+		var moveDirection = new Vector3(_moveInput.x, 0, _moveInput.y) * (_moveSpeed * Time.deltaTime);
+		transform.position += moveDirection;
+	}
+
+	public bool RightMouseClicked()
+	{
+		return _playerInput.actions.FindAction("RightMouse").phase == InputActionPhase.Performed;
+    }
+
+	private void MoveCameraWithCursor()
+	{
+		if (_mousePositionInput.x < _edgeThreshold)
 		{
-			_playerInput = FindAnyObjectByType<PlayerInput>();
-			_playerInput.SwitchCurrentActionMap("General");
-			_initialRotation = transform.rotation;
+			transform.position += -transform.right * (_moveSpeed * Time.deltaTime);
+		}
+		else if (_mousePositionInput.x > Screen.width - _edgeThreshold)
+		{
+			transform.position += transform.right * (_moveSpeed * Time.deltaTime);
 		}
 
-		private void OnEnable()
+		if (_mousePositionInput.y < _edgeThreshold)
 		{
-			_playerInput.actions["CameraMove"].performed += MoveHandler;
-			_playerInput.actions["CameraMove"].canceled += MoveHandler;
+			transform.position += -Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized * (_moveSpeed * Time.deltaTime);
+		}
+		else if (_mousePositionInput.y > Screen.height - _edgeThreshold)
+		{
+			transform.position += Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized * (_moveSpeed * Time.deltaTime);
+		}
+	}
 
-			_playerInput.actions["Mouse Position"].performed += MousePositionHandler;
-			_playerInput.actions["Mouse Position"].canceled += MousePositionHandler;
+	private void MoveCameraWithRightMouse()
+	{
+		if (Mathf.Approximately(_rightMouseInput, 0) || _initialMousePosition == Vector2.zero) return;
 
-			_playerInput.actions["RightMouse"].started += InitialMousePositionHandler;
-			_playerInput.actions["RightMouse"].performed += RightMouseHandler;
-			_playerInput.actions["RightMouse"].canceled += RightMouseHandler;
+		var mouseDelta = _mousePositionInput - _initialMousePosition;
 
-			_playerInput.actions["ScrollMouse"].performed += ScrollMouseHandler;
-			_playerInput.actions["ScrollMouse"].canceled += ScrollMouseHandler;
+		var moveX = mouseDelta.x * (_moveSpeed * _rightMouseSpeedMultiplier / Screen.width) * Time.deltaTime;
+		var moveY = mouseDelta.y * (_moveSpeed * _rightMouseSpeedMultiplier / Screen.height) * Time.deltaTime;
 
-			_playerInput.actions["MiddleMouse"].started += InitialMousePositionHandler;
-			_playerInput.actions["MiddleMouse"].performed += MiddleMouseHandler;
-			_playerInput.actions["MiddleMouse"].canceled += MiddleMouseHandler;
+		var moveDirection = new Vector3(moveX, 0, moveY);
+        transform.position += moveDirection;
+	}
+
+	private void ZoomCamera()
+	{
+		if (Mathf.Approximately(_scrollMouseInput, 0)) return;
+
+		var zoomDirection = transform.forward;
+
+		if (transform.position.y <= _minZoomDistance && _scrollMouseInput > 0)
+		{
+            //transform.position = new Vector3(transform.position.x, _minZoomDistance, transform.position.z);
+            return;
+		}
+		else if	(transform.position.y >= _maxZoomDistance && _scrollMouseInput < 0)
+		{
+            //transform.position = new Vector3(transform.position.x, _maxZoomDistance, transform.position.z);
+            return;
 		}
 
-		private void LateUpdate()
+		transform.position += zoomDirection * (_scrollMouseInput * _zoomSpeed * Time.deltaTime);
+
+		_currentZoomDistance = transform.position.y;
+	}
+
+	private void RotateCamera()
+	{
+		if (Mathf.Approximately(_middleMouseInput, 0)) return;
+
+		var lookAtPoint = GetCameraLookAtPoint();
+		var mouseDelta = _mousePositionInput - _initialMousePosition;
+		transform.RotateAround(lookAtPoint, Vector3.up, mouseDelta.x * _rotateSpeed * Time.deltaTime);
+	}
+
+	public void ResetCameraRotation()
+	{
+		transform.rotation = _initialRotation;
+	}
+
+	private Vector3 GetCameraLookAtPoint()
+	{
+		var ray = new Ray(transform.position, transform.forward);
+
+		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
 		{
-			MoveCamera();
-			MoveCameraWithCursor();
-			MoveCameraWithRightMouse();
-			ZoomCamera();
-			RotateCamera();
-			ClampCameraPosition();
+			return hit.point;
 		}
 
-		private void OnDisable()
+		var groundPlane = new Plane(Vector3.up, Vector3.zero);
+		if (groundPlane.Raycast(ray, out float enter))
 		{
-			if (!_playerInput) return;
-
-			_playerInput.actions["CameraMove"].performed -= MoveHandler;
-			_playerInput.actions["CameraMove"].canceled -= MoveHandler;
-
-			_playerInput.actions["MousePosition"].performed -= MousePositionHandler;
-			_playerInput.actions["MousePosition"].canceled -= MousePositionHandler;
-
-			_playerInput.actions["RightMouse"].started -= InitialMousePositionHandler;
-			_playerInput.actions["RightMouse"].performed -= RightMouseHandler;
-			_playerInput.actions["RightMouse"].canceled -= RightMouseHandler;
-
-			_playerInput.actions["ScrollMouse"].performed -= ScrollMouseHandler;
-			_playerInput.actions["ScrollMouse"].canceled -= ScrollMouseHandler;
-
-			_playerInput.actions["MiddleMouse"].started -= InitialMousePositionHandler;
-			_playerInput.actions["MiddleMouse"].performed -= MiddleMouseHandler;
-			_playerInput.actions["MiddleMouse"].canceled -= MiddleMouseHandler;
+			return ray.GetPoint(enter);
 		}
 
-		private void MoveHandler(InputAction.CallbackContext callbackContext) =>
-			_moveInput = callbackContext.ReadValue<Vector2>();
+		return transform.position + transform.forward * _rotateFallback;
+	}
 
-		private void MousePositionHandler(InputAction.CallbackContext callbackContext) =>
-			_mousePositionInput = callbackContext.ReadValue<Vector2>();
+	private void ClampCameraPosition()
+	{
+        //Vector3 lookAtPoint = GetCameraLookAtPoint();
+        //lookAtPoint.y = 0;
 
-		private void InitialMousePositionHandler(InputAction.CallbackContext callbackContext) =>
-			_initialMousePosition = _mousePositionInput;
+        //float distX = transform.position.x - lookAtPoint.x;
+        //float distZ = transform.position.z - lookAtPoint.z;
 
-		private void RightMouseHandler(InputAction.CallbackContext callbackContext) =>
-			_rightMouseInput = callbackContext.ReadValue<float>();
+        //         float cameraBoundsX = cameraXZBounds.x + distX;
+        //float cameraBoundsZ = cameraXZBounds.y + distZ;
 
-		private void ScrollMouseHandler(InputAction.CallbackContext callbackContext) =>
-			_scrollMouseInput = callbackContext.ReadValue<float>();
-
-		private void MiddleMouseHandler(InputAction.CallbackContext callbackContext) =>
-			_middleMouseInput = callbackContext.ReadValue<float>();
-
-		private void MoveCamera()
-		{
-			var moveDirection = new Vector3(_moveInput.x, 0, _moveInput.y) * (_moveSpeed * Time.deltaTime);
-			transform.position += moveDirection;
-		}
-
-		private void MoveCameraWithCursor()
-		{
-			if (_mousePositionInput.x < _edgeThreshold)
-			{
-				transform.position += -transform.right * (_moveSpeed * Time.deltaTime);
-			}
-			else if (_mousePositionInput.x > Screen.width - _edgeThreshold)
-			{
-				transform.position += transform.right * (_moveSpeed * Time.deltaTime);
-			}
-
-			if (_mousePositionInput.y < _edgeThreshold)
-			{
-				transform.position += -Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized * (_moveSpeed * Time.deltaTime);
-			}
-			else if (_mousePositionInput.y > Screen.height - _edgeThreshold)
-			{
-				transform.position += Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized * (_moveSpeed * Time.deltaTime);
-			}
-		}
-
-		private void MoveCameraWithRightMouse()
-		{
-			if (Mathf.Approximately(_rightMouseInput, 0) || _initialMousePosition == Vector2.zero) return;
-
-			var mouseDelta = _mousePositionInput - _initialMousePosition;
-
-			var moveX = mouseDelta.x * (_moveSpeed * _rightMouseSpeedMultiplier / Screen.width) * Time.deltaTime;
-			var moveY = mouseDelta.y * (_moveSpeed * _rightMouseSpeedMultiplier / Screen.height) * Time.deltaTime;
-
-			var moveDirection = new Vector3(moveX, 0, moveY);
-            transform.position += moveDirection;
-		}
-
-		private void ZoomCamera()
-		{
-			if (Mathf.Approximately(_scrollMouseInput, 0)) return;
-
-			var zoomDirection = transform.forward;
-
-			if (transform.position.y <= _minZoomDistance && _scrollMouseInput > 0)
-			{
-                //transform.position = new Vector3(transform.position.x, _minZoomDistance, transform.position.z);
-                return;
-			}
-			else if	(transform.position.y >= _maxZoomDistance && _scrollMouseInput < 0)
-			{
-                //transform.position = new Vector3(transform.position.x, _maxZoomDistance, transform.position.z);
-                return;
-			}
-
-			transform.position += zoomDirection * (_scrollMouseInput * _zoomSpeed * Time.deltaTime);
-
-			_currentZoomDistance = transform.position.y;
-		}
-
-		private void RotateCamera()
-		{
-			if (Mathf.Approximately(_middleMouseInput, 0)) return;
-
-			var lookAtPoint = GetCameraLookAtPoint();
-			var mouseDelta = _mousePositionInput - _initialMousePosition;
-			transform.RotateAround(lookAtPoint, Vector3.up, mouseDelta.x * _rotateSpeed * Time.deltaTime);
-		}
-
-		public void ResetCameraRotation()
-		{
-			transform.rotation = _initialRotation;
-		}
-
-		private Vector3 GetCameraLookAtPoint()
-		{
-			var ray = new Ray(transform.position, transform.forward);
-
-			if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
-			{
-				return hit.point;
-			}
-
-			var groundPlane = new Plane(Vector3.up, Vector3.zero);
-			if (groundPlane.Raycast(ray, out float enter))
-			{
-				return ray.GetPoint(enter);
-			}
-
-			return transform.position + transform.forward * _rotateFallback;
-		}
-
-		private void ClampCameraPosition()
-		{
-            //Vector3 lookAtPoint = GetCameraLookAtPoint();
-            //lookAtPoint.y = 0;
-
-            //float distX = transform.position.x - lookAtPoint.x;
-            //float distZ = transform.position.z - lookAtPoint.z;
-
-            //         float cameraBoundsX = cameraXZBounds.x + distX;
-            //float cameraBoundsZ = cameraXZBounds.y + distZ;
-
-            //var clampedX = Mathf.Clamp(transform.position.x, -cameraBoundsX, cameraBoundsX);
-            //         var clampedZ = Mathf.Clamp(transform.position.z, -cameraBoundsZ, cameraBoundsZ);			
+        //var clampedX = Mathf.Clamp(transform.position.x, -cameraBoundsX, cameraBoundsX);
+        //         var clampedZ = Mathf.Clamp(transform.position.z, -cameraBoundsZ, cameraBoundsZ);			
 
 
-            // 1. Get the current look-at point
-            Vector3 lookDir = transform.forward;
-            float t = -transform.position.y / lookDir.y; // ray-plane intersection at y=0
-            Vector3 lookAtPoint = transform.position + lookDir * t;
-            // 2. Clamp the look-at point within bounds
-            Vector3 clampedLookAt = lookAtPoint;
-            clampedLookAt.x = Mathf.Clamp(lookAtPoint.x, -cameraXZBounds.x, cameraXZBounds.x);
-            clampedLookAt.z = Mathf.Clamp(lookAtPoint.z, -cameraXZBounds.y, cameraXZBounds.y);
-            clampedLookAt.y = 0;
+        // 1. Get the current look-at point
+        Vector3 lookDir = transform.forward;
+        float t = -transform.position.y / lookDir.y; // ray-plane intersection at y=0
+        Vector3 lookAtPoint = transform.position + lookDir * t;
+        // 2. Clamp the look-at point within bounds
+        Vector3 clampedLookAt = lookAtPoint;
+        clampedLookAt.x = Mathf.Clamp(lookAtPoint.x, -cameraXZBounds.x, cameraXZBounds.x);
+        clampedLookAt.z = Mathf.Clamp(lookAtPoint.z, -cameraXZBounds.y, cameraXZBounds.y);
+        clampedLookAt.y = 0;
 
-            // 3. Maintain the distance and direction from camera to look-at point
-            Vector3 cameraToLook = transform.position - lookAtPoint;
-            transform.position = clampedLookAt + cameraToLook;
+        // 3. Maintain the distance and direction from camera to look-at point
+        Vector3 cameraToLook = transform.position - lookAtPoint;
+        transform.position = clampedLookAt + cameraToLook;
 
 			
 
 
 
-            //var clampedX = Mathf.Clamp(transform.position.x, -cameraXZBounds.x, cameraXZBounds.x);
-            //var clampedZ = Mathf.Clamp(transform.position.z, -cameraXZBounds.y, cameraXZBounds.y);
+        //var clampedX = Mathf.Clamp(transform.position.x, -cameraXZBounds.x, cameraXZBounds.x);
+        //var clampedZ = Mathf.Clamp(transform.position.z, -cameraXZBounds.y, cameraXZBounds.y);
 
-            //transform.position = new Vector3(clampedX, transform.position.y, clampedZ);
-        }
-	}
+        //transform.position = new Vector3(clampedX, transform.position.y, clampedZ);
+    }
 }

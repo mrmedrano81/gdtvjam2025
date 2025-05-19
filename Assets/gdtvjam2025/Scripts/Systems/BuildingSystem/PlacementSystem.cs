@@ -1,25 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlacementSystem : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private InputManager inputManager;
-
     [SerializeField] private Grid grid;
-
     [SerializeField] private ObjectsDatabaseSO databaseSO;
-
     [SerializeField] private GameObject gridVisualization;
-
-    private GridData floorData, structureData;
-
     [SerializeField] private PreviewSystem previewSystem;
+    [SerializeField] private ObjectPlacer objectPlacer;
+    [SerializeField] private EventManager eventManager;
 
     private Vector3Int lastDetectedPosition = Vector3Int.zero;
-
-    [SerializeField] private ObjectPlacer objectPlacer;
+    private GridData floorData, structureData;
 
     IBuildingState buildingState;
+
+    private void Awake()
+    {
+        eventManager = FindFirstObjectByType<EventManager>();
+    }
 
     private void Start()
     {
@@ -60,7 +62,8 @@ public class PlacementSystem : MonoBehaviour
                                            databaseSO,
                                            floorData,
                                            structureData,
-                                           objectPlacer);
+                                           objectPlacer,
+                                           eventManager);
 
         inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
@@ -76,7 +79,8 @@ public class PlacementSystem : MonoBehaviour
                                           databaseSO,
                                           floorData,
                                           structureData,
-                                          objectPlacer);
+                                          objectPlacer,
+                                          eventManager);
 
         inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
@@ -92,14 +96,6 @@ public class PlacementSystem : MonoBehaviour
 
         buildingState.OnAction(gridPosition);
     }
-
-
-    //private bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex)
-    //{
-    //    GridData selectedData = databaseSO.objectsData[selectedObjectIndex].ID == 0 ? floorData : structureData;
-
-    //    return selectedData.CanPlaceObjectAt(gridPosition, databaseSO.objectsData[selectedObjectIndex].Size);
-    //}
 
     private void StopPlacement()
     {
