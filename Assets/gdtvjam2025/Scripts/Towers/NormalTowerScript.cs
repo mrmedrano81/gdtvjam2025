@@ -2,12 +2,10 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(TowerAim))]
-public class NormalTowerShoot : MonoBehaviour
+public class NormalTowerScript : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private bool addBulletSpread = true;
-    [SerializeField] private float fireRate = 2f;
-    [SerializeField] private float shootDelay = 0.5f;
     [SerializeField] private Vector3 bulletSpreadVariance = Vector3.zero;
     [SerializeField] private LayerMask mask;
 
@@ -21,6 +19,7 @@ public class NormalTowerShoot : MonoBehaviour
     //private Animator animator;
     private float lastShootTime;
     private TowerAim towerAim;
+    private TowerStats towerStats;
 
 
     private void Awake()
@@ -44,9 +43,17 @@ public class NormalTowerShoot : MonoBehaviour
         }
     }
 
+    public void SetNormalTowerStats(TowerStats towerStats)
+    {
+        this.towerStats = towerStats;
+
+        towerAim.radius = towerStats.range;
+        towerAim.rotationSpeed = towerStats.rotationSpeed;
+    }
+
     private void Shoot()
     {
-        if (Time.time - lastShootTime > 1/fireRate)
+        if (Time.time - lastShootTime > 1/towerStats.fireRate)
         {
             //animator.SetBool("IsShooting", true);
 

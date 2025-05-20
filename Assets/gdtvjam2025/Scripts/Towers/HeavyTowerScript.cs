@@ -6,8 +6,7 @@ public class HeavyTowerScript : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private bool addBulletSpread = true;
-    [SerializeField] private float fireRate = 2f;
-    [SerializeField] private float laserShotDuration = 0.7f;
+    public float laserLockonDuration = 0.7f;
     [SerializeField] private LayerMask mask;
 
     [Header("VFX Settings")]
@@ -19,10 +18,12 @@ public class HeavyTowerScript : MonoBehaviour
     [SerializeField] private LineRenderer laserTrail;
     [SerializeField] private ParticleSystem shootingParticleSystem;
     [SerializeField] private ParticleSystem impactParticleSystem;
+    [SerializeField] private GameObject explosionPrefab;
 
     //private Animator animator;
     private float lastShootTime;
     private TowerAim towerAim;
+    private TowerStats towerStats;
 
     private void Awake()
     {
@@ -39,9 +40,17 @@ public class HeavyTowerScript : MonoBehaviour
         }
     }
 
+    public void SetHeavyTowerStats(TowerStats towerStats)
+    {
+        this.towerStats = towerStats;
+
+        towerAim.radius = towerStats.range;
+        towerAim.rotationSpeed = towerStats.rotationSpeed;
+    }
+
     private void LaserExecutionSequence()
     {
-        if (Time.time - lastShootTime > 1 / fireRate && towerAim.CurrentTargetExists())
+        if (Time.time - lastShootTime > 1 / towerStats.fireRate && towerAim.CurrentTargetExists())
         {
             LineRenderer laserTrail = Instantiate(this.laserTrail, EffectfirePoint.position, Quaternion.identity);
 
@@ -101,7 +110,7 @@ public class HeavyTowerScript : MonoBehaviour
 
             lastAimDirection = towerAim.AimDirection;
 
-            time += Time.deltaTime / laserShotDuration;
+            time += Time.deltaTime / laserLockonDuration;
 
             if (!towerAim.CurrentTargetExists())
             {
