@@ -46,9 +46,4 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Collision with: " + collision.gameObject.name);
-    }
 }
