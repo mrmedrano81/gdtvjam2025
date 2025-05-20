@@ -10,7 +10,7 @@ public class InputManager : MonoBehaviour
 
     [SerializeField] private LayerMask placementLayerMask;
 
-    public event Action OnClicked, OnExit;
+    public event Action OnLeftClick, OnExit, OnSpace;
 
     private PlayerInput playerInput;
 
@@ -18,23 +18,32 @@ public class InputManager : MonoBehaviour
     private InputAction mouseLeftClick;
     private InputAction escape;
 
+    private InputAction space;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         playerInput = GetComponent<PlayerInput>();
         playerInput.SwitchCurrentActionMap("General");
+
+
         mousePosInput = playerInput.actions.FindAction("Mouse Position");
         mouseLeftClick = playerInput.actions.FindAction("Left Click");
         escape = playerInput.actions.FindAction("Escape");
+        space = playerInput.actions.FindAction("Space");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (space.WasPressedThisFrame())
+        {
+            OnSpace?.Invoke();
+        }
         if (mouseLeftClick.WasPressedThisFrame())
         {
-            OnClicked?.Invoke();
+            OnLeftClick?.Invoke();
         }
         if (escape.WasPressedThisFrame())
         {

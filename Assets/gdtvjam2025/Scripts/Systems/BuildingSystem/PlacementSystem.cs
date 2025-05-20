@@ -65,7 +65,7 @@ public class PlacementSystem : MonoBehaviour
                                            objectPlacer,
                                            eventManager);
 
-        inputManager.OnClicked += PlaceStructure;
+        inputManager.OnLeftClick += PlaceStructure;
         inputManager.OnExit += StopPlacement;
     }
 
@@ -82,7 +82,7 @@ public class PlacementSystem : MonoBehaviour
                                           objectPlacer,
                                           eventManager);
 
-        inputManager.OnClicked += PlaceStructure;
+        inputManager.OnLeftClick += PlaceStructure;
         inputManager.OnExit += StopPlacement;
     }
 
@@ -106,7 +106,7 @@ public class PlacementSystem : MonoBehaviour
 
         buildingState.EndState();
 
-        inputManager.OnClicked -= PlaceStructure;
+        inputManager.OnLeftClick -= PlaceStructure;
         inputManager.OnExit -= StopPlacement;
 
         lastDetectedPosition = Vector3Int.zero;

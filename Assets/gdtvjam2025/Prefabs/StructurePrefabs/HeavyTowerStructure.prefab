@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2185150816331763035}
   - component: {fileID: 5193328280563917162}
   - component: {fileID: 4786426256846911121}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BasePlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 52200055155406913}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PivotPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 6081620795711853500}
   - component: {fileID: 561045426468174512}
   - component: {fileID: 2734013015672473643}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 5641902558161454180}
   - component: {fileID: 1612575114936939814}
   - component: {fileID: 6742544794923244790}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeavyTowerStructure
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -258,10 +258,12 @@ MonoBehaviour:
   firePoint: {fileID: 7114584361875450404}
   radius: 20
   rotationSpeed: 10
+  firePointOffset: 1.5
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
   maxTargetsDetected: 10
+  offsetFirePoint: 1
   lockVerticalRotation: 1
   invertDirection: 1
   UpdateAimDirection: 1
@@ -278,9 +280,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   addBulletSpread: 1
-  fireRate: 0.5
-  laserShotDuration: 0.4
-  bulletSpreadVariance: {x: 0, y: 0, z: 0}
+  fireRate: 0.2
+  laserShotDuration: 1
   mask:
     serializedVersion: 2
     m_Bits: 512
@@ -301,7 +302,7 @@ GameObject:
   - component: {fileID: 541371077719669485}
   - component: {fileID: 3807428135171317001}
   - component: {fileID: 9014435594748987893}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MainGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -388,7 +389,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5664870186582963426}
-  m_Layer: 0
+  - component: {fileID: 3333182489077786516}
+  m_Layer: 8
   m_Name: HeavyTower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -413,6 +415,29 @@ Transform:
   - {fileID: 52200055155406913}
   m_Father: {fileID: 5641902558161454180}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &3333182489077786516
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7589827261460052455}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 3.31
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8169219844881399310
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,7 +449,7 @@ GameObject:
   - component: {fileID: 6374497824721702336}
   - component: {fileID: 459442332339130577}
   - component: {fileID: 2008214756459373976}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GunBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -552,7 +577,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.69
+  m_Radius: 1.21
   m_Height: 5.09
   m_Direction: 1
   m_Center: {x: 0, y: 0.35, z: 0}
@@ -567,7 +592,7 @@ GameObject:
   - component: {fileID: 1266237467377084953}
   - component: {fileID: 2374623769012994558}
   - component: {fileID: 1625121521862535747}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BasePlatform.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -651,7 +676,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7114584361875450404}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Firepoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -686,6 +711,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: HeavyTowerMuzzleFlash
       objectReference: {fileID: 0}
+    - target: {fileID: 1743301284569550, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1992675705445476, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
       propertyPath: m_LocalScale.x
       value: 2
@@ -704,11 +737,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.74
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -740,7 +773,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 198234346748616026, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
       propertyPath: stopAction
@@ -748,19 +781,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 198234346748616026, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
       propertyPath: lengthInSec
-      value: 0.3
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 198234346748616026, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 198234346748616026, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
       propertyPath: InitialModule.startSize.minScalar
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 198234346748616026, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 0.3
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 198234346748616026, guid: c4a0eeca43f0a104781bc951b520c99e, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b

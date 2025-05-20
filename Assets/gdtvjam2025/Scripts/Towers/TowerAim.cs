@@ -10,14 +10,18 @@ public class TowerAim : MonoBehaviour
     [Header("Settings")]
     public float radius = 5f;
     public float rotationSpeed = 10f;
+    [SerializeField] private float firePointOffset = 1f;
     public LayerMask targetLayer;
     public int maxTargetsDetected;
+    public bool offsetFirePoint = false;
     public bool lockVerticalRotation = true;
     public bool invertDirection = false;
 
     public Vector3 AimDirection { get; private set; }
 
     public bool UpdateAimDirection = true;
+
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -63,13 +67,22 @@ public class TowerAim : MonoBehaviour
         currentTarget = closestTarget;
     }
 
-    public bool CanShoot()
+    public bool CurrentTargetExists()
     {
         return currentTarget != null;
     }
 
     public Vector3 GetAimDirection(Transform firePointTransform)
     {
+        //if (offsetFirePoint)
+        //{
+        //    return currentTarget.position - (firePointTransform.position - firePoint.forward*firePointOffset);
+        //}
+        //else
+        //{
+        //    return currentTarget.position - firePointTransform.position;
+        //}
+
         return currentTarget.position - firePointTransform.position;
     }
 
@@ -78,6 +91,11 @@ public class TowerAim : MonoBehaviour
         if (currentTarget != null)
         {
             Vector3 direction = currentTarget.position - firePoint.position;
+
+            if (offsetFirePoint)
+            {
+                direction = currentTarget.position - (firePoint.position + firePoint.forward * firePointOffset);
+            }
 
             AimDirection = direction.normalized;
 
