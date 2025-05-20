@@ -6,6 +6,7 @@ public class PlacementState : IBuildingState
 {
     private int selectedObjectIndex = -1;
     int ID;
+    EStructureType structureType;
     Grid grid;
     PreviewSystem previewSystem;
     ObjectsDatabaseSO databaseSO;
@@ -14,25 +15,36 @@ public class PlacementState : IBuildingState
     ObjectPlacer objectPlacer;
     EventManager eventManager;
 
-    public PlacementState(int iD,
-                          Grid grid,
-                          PreviewSystem previewSystem,
-                          ObjectsDatabaseSO databaseSO,
-                          GridData floorData,
-                          GridData furnitureData,
-                          ObjectPlacer objectPlacer,
-                          EventManager eventManager)
+    //public PlacementState(int ID,
+    //                      Grid grid,
+    //                      PreviewSystem previewSystem,
+    //                      ObjectsDatabaseSO databaseSO,
+    //                      GridData floorData,
+    //                      GridData structureData,
+    //                      ObjectPlacer objectPlacer,
+    //                      EventManager eventManager)
+    public PlacementState(EStructureType structureType,
+                      Grid grid,
+                      PreviewSystem previewSystem,
+                      ObjectsDatabaseSO databaseSO,
+                      GridData floorData,
+                      GridData structureData,
+                      ObjectPlacer objectPlacer,
+                      EventManager eventManager)
     {
-        ID = iD;
+        //this.ID = ID;
+
+        this.structureType = structureType;
         this.grid = grid;
         this.previewSystem = previewSystem;
         this.databaseSO = databaseSO;
         this.floorData = floorData;
-        this.structureData = furnitureData;
+        this.structureData = structureData;
         this.objectPlacer = objectPlacer;
         this.eventManager = eventManager;
 
-        selectedObjectIndex = databaseSO.objectsData.FindIndex(data => data.ID == ID);
+        //selectedObjectIndex = databaseSO.objectsData.FindIndex(data => data.ID == this.ID);
+        selectedObjectIndex = databaseSO.objectsData.FindIndex(data => data.StructureType == this.structureType);
 
         if (selectedObjectIndex > -1)
         {
@@ -41,7 +53,8 @@ public class PlacementState : IBuildingState
         }
         else
         {
-            throw new System.Exception($"No object with ID {iD}");
+            //throw new System.Exception($"No object with ID {ID}");
+            throw new System.Exception($"No object with enum {this.structureType}");
         }
     }
 
@@ -59,13 +72,15 @@ public class PlacementState : IBuildingState
             return;
         }
 
-        int index = objectPlacer.PlaceObject(databaseSO.objectsData[selectedObjectIndex].prefab, grid.CellToWorld(gridPosition));
+        int index = objectPlacer.PlaceObject(databaseSO.objectsData[selectedObjectIndex].prefab,
+                                             databaseSO.objectsData[selectedObjectIndex].StructureType,
+                                             grid.CellToWorld(gridPosition));
 
-        GridData selectedData = databaseSO.objectsData[selectedObjectIndex].ID == 0 ? floorData : structureData;
+        //GridData selectedData = databaseSO.objectsData[selectedObjectIndex].ID == 0 ? floorData : structureData;
 
-        selectedData.AddObjectAt(gridPosition,
+        structureData.AddObjectAt(gridPosition,
                                  databaseSO.objectsData[selectedObjectIndex].Size,
-                                 databaseSO.objectsData[selectedObjectIndex].ID,
+                                 databaseSO.objectsData[selectedObjectIndex].StructureType,
                                  index);
 
 
@@ -76,9 +91,9 @@ public class PlacementState : IBuildingState
 
     private bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex)
     {
-        GridData selectedData = databaseSO.objectsData[selectedObjectIndex].ID == 0 ? floorData : structureData;
+        //GridData selectedData = databaseSO.objectsData[selectedObjectIndex].ID == 0 ? floorData : structureData;
 
-        return selectedData.CanPlaceObjectAt(gridPosition, databaseSO.objectsData[selectedObjectIndex].Size);
+        return structureData.CanPlaceObjectAt(gridPosition, databaseSO.objectsData[selectedObjectIndex].Size);
     }
 
     public void UpdateState(Vector3Int gridPosition)

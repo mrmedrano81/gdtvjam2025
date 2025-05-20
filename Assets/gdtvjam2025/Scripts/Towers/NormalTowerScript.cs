@@ -16,7 +16,6 @@ public class NormalTowerScript : MonoBehaviour
     [SerializeField] private ParticleSystem[] shootingParticleSystem;
     [SerializeField] private ParticleSystem impactParticleSystem;
 
-    //private Animator animator;
     private float lastShootTime;
     private TowerAim towerAim;
     private TowerStats towerStats;
@@ -24,14 +23,7 @@ public class NormalTowerScript : MonoBehaviour
 
     private void Awake()
     {
-        //animator = GetComponent<Animator>();
         towerAim = GetComponent<TowerAim>();
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
@@ -59,7 +51,7 @@ public class NormalTowerScript : MonoBehaviour
 
             Vector3 direction = towerAim.AimDirection;
 
-            if (Physics.Raycast(bulletSpawnPosition.position, direction, out RaycastHit hit, Mathf.Infinity, mask.value))
+            if (Physics.Raycast(bulletSpawnPosition.position, direction, out RaycastHit hit, Mathf.Infinity, mask.value, QueryTriggerInteraction.Collide))
             {
                 if (addBulletSpread)
                 {
@@ -94,11 +86,15 @@ public class NormalTowerScript : MonoBehaviour
                     }
                 }
 
+                // ------------- random firepoint ---------------- //
+
+                //int gunNumber = Random.Range(0, EffectfirePoint.Length);
                 //shootingParticleSystem[gunNumber].Play();
                 //TrailRenderer trail = Instantiate(bulletTrail, EffectfirePoint[gunNumber].position, Quaternion.identity);
                 //StartCoroutine(SpawnTrail(trail, hit));
                 //trail.transform.forward = towerAim.GetAimDirection(EffectfirePoint[gunNumber]);
 
+                // ------------- All firepoints ---------------- //
                 //for (int i = 0; i < EffectfirePoint.Length; i++)
                 //{
                 //    shootingParticleSystem[i].Play();
@@ -106,6 +102,14 @@ public class NormalTowerScript : MonoBehaviour
                 //    StartCoroutine(SpawnTrail(trail, hit));
                 //    trail.transform.forward = towerAim.GetAimDirection(EffectfirePoint[i]);
                 //}
+
+
+                Health health = hit.collider.GetComponentInParent<Health>();
+
+                if (health != null)
+                {
+                    health.TakeDamage(towerStats.damage);
+                }
 
                 Instantiate(impactParticleSystem, hit.point, Quaternion.LookRotation(-direction), hit.collider.gameObject.transform);
 

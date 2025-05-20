@@ -14,13 +14,13 @@ public class ObjectPool : MonoBehaviour
     private Queue<GameObject> OobjectPoolQueue = new Queue<GameObject>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Awake()
+    void Start()
     {
         for (int i = 0; i < poolSize; i++)
         {
             GameObject poolObject = Instantiate(objectPrefab);
 
-            OnPoolAwake(poolObject);
+            OnCreatePool(poolObject);
 
             poolObject.SetActive(false);
 
@@ -33,38 +33,27 @@ public class ObjectPool : MonoBehaviour
         currentPoolSize = OobjectPoolQueue.Count;
     }
 
-    /// <summary>
-    /// Override this function if you want to perform any setup after the pool is created but before any objects are spawned or returned.
-    /// </summary>
-    public virtual void OnPoolAwake(GameObject poolObject)
-    {
-        // This method can be overridden in derived classes to perform additional setup after the pool is created
-        // but before any objects are spawned or returned.
-    }
-
     public GameObject GetObject()
     {
         if (OobjectPoolQueue.Count > 0)
         {
             GameObject poolObject = OobjectPoolQueue.Dequeue();
+
+            OnObjectGet(poolObject);
+
             poolObject.SetActive(true);
             return poolObject;
         }
         else
         {
             GameObject newPoolObject = Instantiate(objectPrefab);
+
+            OnNewObjectCreated(newPoolObject);
+
+            OnObjectGet(newPoolObject);
+
             return newPoolObject;
         }
-    }
-
-    /// <summary>
-    ///  This method can be overridden in derived classes to perform additional setup after an object is spawned
-    ///  but before it is returned to the pool.
-    /// </summary>
-    /// <param name="poolObject"></param>
-    public virtual void OnObjectSpawned(GameObject poolObject)
-    {
-
     }
 
     public GameObject SpawnObjectAt(Vector3 position)
@@ -75,12 +64,18 @@ public class ObjectPool : MonoBehaviour
 
             poolObject.transform.position = position;
 
+            OnObjectGet(poolObject);
+
             poolObject.SetActive(true);
             return poolObject;
         }
         else
         {
             GameObject newPoolObject = Instantiate(objectPrefab, position, Quaternion.identity);
+
+            OnObjectGet(newPoolObject);
+
+            OnNewObjectCreated(newPoolObject);
 
             newPoolObject.transform.position = position;
 
@@ -97,6 +92,8 @@ public class ObjectPool : MonoBehaviour
             poolObject.transform.position = position;
             poolObject.transform.rotation = rotation;
 
+            OnObjectGet(poolObject);
+
             poolObject.SetActive(true);
             return poolObject;
         }
@@ -104,11 +101,45 @@ public class ObjectPool : MonoBehaviour
         {
             GameObject newPoolObject = Instantiate(objectPrefab, position, rotation);
 
+            OnNewObjectCreated(newPoolObject);
+
             newPoolObject.transform.position = position;
             newPoolObject.transform.rotation = rotation;
 
+            OnObjectGet(newPoolObject);
+
             return newPoolObject;
         }
+    }
+
+    public void ReturnObject(GameObject poolObject)
+    {
+        OnObjectReturned(poolObject);
+
+        poolObject.SetActive(false);
+        OobjectPoolQueue.Enqueue(poolObject);
+    }
+
+
+    /// <summary>
+    /// Override this function if you want to perform any setup after the pool is created but before any objects are spawned or returned.
+    /// </summary>
+    public virtual void OnCreatePool(GameObject poolObject)
+    {
+        OnNewObjectCreated(poolObject);
+
+        // This method can be overridden in derived classes to perform additional setup after the pool is created
+        // but before any objects are spawned or returned.
+    }
+
+    /// <summary>
+    ///  This method can be overridden in derived classes to perform additional setup after an object is spawned
+    ///  but before it is returned to the pool.
+    /// </summary>
+    /// <param name="poolObject"></param>
+    public virtual void OnObjectGet(GameObject poolObject)
+    {
+
     }
 
     /// <summary>
@@ -121,10 +152,13 @@ public class ObjectPool : MonoBehaviour
         // For example, you might want to reset the object's state or remove any references to it.
     }
 
-    public void ReturnObject(GameObject poolObject)
+    /// <summary>
+    /// This method can be overridden in derived classes to perform additional setup after a new object is created.
+    /// For example, you might want to set up references or initialize the object's state.
+    /// </summary>
+    /// <param name="poolObject"></param>
+    public virtual void OnNewObjectCreated(GameObject poolObject)
     {
-        OnObjectReturned(poolObject);
-        poolObject.SetActive(false);
-        OobjectPoolQueue.Enqueue(poolObject);
+
     }
 }

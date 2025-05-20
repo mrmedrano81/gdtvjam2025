@@ -312,7 +312,7 @@ MeshRenderer:
   - {fileID: 2100000, guid: d9b4fdc925eb16649ace981f0a5c3528, type: 2}
   - {fileID: 2100000, guid: d53110142f1fc2d478133b988d22a8b0, type: 2}
   - {fileID: 2100000, guid: 8c9e626349cbd2f42a8dbf24fb2fb8d5, type: 2}
-  - {fileID: 2100000, guid: b7254f480c9acee44afb502dd7a3c929, type: 2}
+  - {fileID: 2100000, guid: d9b4fdc925eb16649ace981f0a5c3528, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -385,10 +385,12 @@ MonoBehaviour:
   firePoint: {fileID: 4570935103041174996}
   radius: 15
   rotationSpeed: 20
+  firePointOffset: 1
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
-  maxTargetsDetected: 10
+  maxTargetsDetected: 30
+  offsetFirePoint: 0
   lockVerticalRotation: 0
   invertDirection: 1
   UpdateAimDirection: 1
@@ -405,8 +407,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   addBulletSpread: 1
-  fireRate: 5
-  shootDelay: 0.1
   bulletSpreadVariance: {x: 0, y: 0, z: 0}
   mask:
     serializedVersion: 2

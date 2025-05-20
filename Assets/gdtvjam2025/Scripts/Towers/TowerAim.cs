@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TowerAim : MonoBehaviour
@@ -17,17 +18,17 @@ public class TowerAim : MonoBehaviour
     public bool lockVerticalRotation = true;
     public bool invertDirection = false;
 
+    private Collider[] hitColliders;
+
     public Vector3 AimDirection { get; private set; }
 
     public bool UpdateAimDirection = true;
 
 
-
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        hitColliders = new Collider[maxTargetsDetected];
     }
 
     // Update is called once per frame
@@ -44,10 +45,9 @@ public class TowerAim : MonoBehaviour
 
     private void GetClosestTarget()
     {
-        if (currentTarget != null) return;
+        if (CurrentTargetExists()) return;
 
-        int maxColliders = maxTargetsDetected;
-        Collider[] hitColliders = new Collider[maxColliders];
+        Array.Clear(hitColliders, 0, hitColliders.Length);
 
         int numColliders = Physics.OverlapSphereNonAlloc(pivotPoint.position, radius, hitColliders, targetLayer);
 
@@ -57,10 +57,12 @@ public class TowerAim : MonoBehaviour
 
         for (int i = 0; i < numColliders; i++)
         {
-            if (Vector3.Distance(hitColliders[i].transform.position, pivotPoint.position) < closestDistance)
+            float dist = Vector3.Distance(hitColliders[i].transform.position, pivotPoint.position);
+
+            if (dist < closestDistance)
             {
                 closestTarget = hitColliders[i].transform;
-                closestDistance = Vector3.Distance(hitColliders[i].transform.position, pivotPoint.position);
+                closestDistance = dist;
             }
         }
 
@@ -69,7 +71,12 @@ public class TowerAim : MonoBehaviour
 
     public bool CurrentTargetExists()
     {
-        return currentTarget != null;
+        if (currentTarget == null)
+        {
+            return false;
+        }
+
+        return currentTarget.gameObject.activeInHierarchy;
     }
 
     public Vector3 GetAimDirection(Transform firePointTransform)
@@ -88,7 +95,7 @@ public class TowerAim : MonoBehaviour
 
     private void AimAtTarget()
     {
-        if (currentTarget != null)
+        if (CurrentTargetExists())
         {
             Vector3 direction = currentTarget.position - firePoint.position;
 
@@ -118,7 +125,7 @@ public class TowerAim : MonoBehaviour
 
     public Vector3 GetTargetPosition()
     {
-        if (currentTarget == null)
+        if (!CurrentTargetExists())
         {
             return Vector3.zero;
         }
@@ -128,7 +135,7 @@ public class TowerAim : MonoBehaviour
 
     private void CheckTargetDistance()
     {
-        if (currentTarget != null)
+        if (CurrentTargetExists())
         {
             if (Vector3.Distance(pivotPoint.position, currentTarget.position) > radius)
             {
@@ -142,7 +149,7 @@ public class TowerAim : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(pivotPoint.position, radius);
 
-        if (currentTarget != null)
+        if (CurrentTargetExists())
         {
             Gizmos.color = Color.green;
             Gizmos.DrawLine(firePoint.position, currentTarget.position);

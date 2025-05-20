@@ -45,7 +45,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -53,7 +53,7 @@ Camera:
   m_ShutterSpeed: 0.005
   m_Aperture: 16
   m_FocusDistance: 10
-  m_FocalLength: 50
+  m_FocalLength: 32.96973
   m_BladeCount: 5
   m_Curvature: {x: 2, y: 11}
   m_BarrelClipping: 0.25
@@ -150,9 +150,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7894587655ab4e418259be6ccf26c3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 200
-  _edgeThreshold: 5
-  _rightMouseSpeedMultiplier: 10
-  _zoomSpeed: 200
-  _rotateSpeed: 0.5
+  disableCursorMove: 0
+  _moveSpeed: 25
+  _edgeThreshold: 3
+  _rightMouseSpeedMultiplier: 1
+  cameraXZBounds: {x: 35, y: 35}
+  _zoomSpeed: 300
+  _minZoomDistance: 15
+  _maxZoomDistance: 40
+  _currentZoomDistance: 0
+  _rotateSpeed: 0.7
   _rotateFallback: 1000
+  mousePosition: {x: 0, y: 0, z: 0}

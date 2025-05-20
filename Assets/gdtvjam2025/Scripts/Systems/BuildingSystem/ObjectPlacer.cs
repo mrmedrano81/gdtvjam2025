@@ -4,12 +4,21 @@ using UnityEngine;
 
 public class ObjectPlacer : MonoBehaviour
 {
+    public StructureManager structureManager;
    [SerializeField] private List<GameObject> placedGameObjects = new List<GameObject>();
 
-    public int PlaceObject(GameObject prefab, Vector3 position)
+    private void Awake()
+    {
+        structureManager = FindFirstObjectByType<StructureManager>();
+    }
+
+    public int PlaceObject(GameObject prefab, EStructureType structureType, Vector3 position)
     {
         GameObject newObject = Instantiate(prefab);
+
         newObject.transform.position = position;
+
+        structureManager.SetupStructure(newObject, structureType);
 
         placedGameObjects.Add(newObject);
 

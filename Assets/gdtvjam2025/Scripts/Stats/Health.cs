@@ -4,8 +4,8 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     [Header("Settings")]
-    public float maxHealth = 100; // Maximum health of the object
-    public float currentHealth; // Current health of the object
+    public float maxHealth { get; private set; } = 100; // Maximum health of the object
+    public float currentHealth { get; private set; } // Current health of the object
 
     [Header("Events")]
     public UnityEvent OnDamageTaken; 

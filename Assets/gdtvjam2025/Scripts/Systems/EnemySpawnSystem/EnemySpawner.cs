@@ -13,11 +13,13 @@ public class EnemySpawner : MonoBehaviour
 
 
     private InputManager inputManager;
+    private ObjectPool enemyPool;
 
 
     private void Awake()
     {
         inputManager = FindFirstObjectByType<InputManager>();
+        enemyPool = GetComponent<ObjectPool>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -47,8 +49,10 @@ public class EnemySpawner : MonoBehaviour
                 Random.Range(-spawnAreaSize.y / 2, spawnAreaSize.y / 2)
             ) + transform.position;
 
-            GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-            enemy.GetComponent<EnemyAIController>().mapCenterPoint = mapCenterPoint;
+            //GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+            //enemy.GetComponent<EnemyAIController>().mapCenterPoint = mapCenterPoint;
+
+            enemyPool.SpawnObjectAt(spawnPosition);
         }
     }
 

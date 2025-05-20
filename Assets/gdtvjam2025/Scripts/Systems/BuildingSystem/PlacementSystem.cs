@@ -2,6 +2,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum EStructureType
+{
+    HQ,
+    Gatherer,
+    NormalTower,
+    HeavyTower,
+    MissileTower,
+    Wall
+}
+
 public class PlacementSystem : MonoBehaviour
 {
     [Header("References")]
@@ -53,10 +63,12 @@ public class PlacementSystem : MonoBehaviour
 
     public void StartPlacement(int ID)
     {
+        EStructureType structureType = (EStructureType)ID;
+
         StopPlacement();
         gridVisualization.SetActive(true);
 
-        buildingState = new PlacementState(ID,
+        buildingState = new PlacementState(structureType,
                                            grid,
                                            previewSystem,
                                            databaseSO,

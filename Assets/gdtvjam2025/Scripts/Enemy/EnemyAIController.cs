@@ -61,6 +61,11 @@ public class EnemyAIController : MonoBehaviour
         mapCenterPoint = GameObject.FindGameObjectWithTag("HQ").transform;
     }
 
+    public void EnemyDie()
+    {
+        enemyPool.ReturnObject(gameObject);
+    }
+
     public void ScanForTargets()
     {
         if (currentTarget != null) return;

@@ -35,9 +35,9 @@ ModelImporter:
       name: Tower_1_Mat_GunHolder
     second: {fileID: 2100000, guid: 1699be84a99252c4faefc0e355a23f3d, type: 2}
   materials:
-    materialImportMode: 2
-    materialName: 0
-    materialSearch: 1
+    materialImportMode: 1
+    materialName: 1
+    materialSearch: 0
     materialLocation: 0
   animations:
     legacyGenerateAnimations: 4

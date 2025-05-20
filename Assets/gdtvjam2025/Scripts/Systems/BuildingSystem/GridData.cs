@@ -6,22 +6,40 @@ public class GridData
 {
     Dictionary<Vector3Int, PlacementData> placedObjects = new();
 
-    public void AddObjectAt(Vector3Int gridPosition, Vector2Int objectSize, int ID, int placedObjectIndex)
+    public void AddObjectAt(Vector3Int gridPosition, Vector2Int objectSize, EStructureType structureType, int placedObjectIndex)
     {
         List<Vector3Int> positionsToOccupy = CalculatePositions(gridPosition, objectSize);
 
-        PlacementData data = new PlacementData(positionsToOccupy, ID, placedObjectIndex);
+        PlacementData data = new PlacementData(positionsToOccupy, structureType, placedObjectIndex);
 
         foreach (Vector3Int position in positionsToOccupy)
         {
             if (placedObjects.ContainsKey(position))
             {
-                throw new Exception($"Position {position} is already occupied by ID {placedObjects[position].ID}");
+                //throw new Exception($"Position {position} is already occupied by ID {placedObjects[position].ID}");
+                throw new Exception($"Position {position} is already occupied by {placedObjects[position].structureType}");
             }
 
             placedObjects[position] = data;
         }
     }
+
+    //public void AddObjectAt(Vector3Int gridPosition, Vector2Int objectSize, int ID, int placedObjectIndex)
+    //{
+    //    List<Vector3Int> positionsToOccupy = CalculatePositions(gridPosition, objectSize);
+
+    //    PlacementData data = new PlacementData(positionsToOccupy, ID, placedObjectIndex);
+
+    //    foreach (Vector3Int position in positionsToOccupy)
+    //    {
+    //        if (placedObjects.ContainsKey(position))
+    //        {
+    //            throw new Exception($"Position {position} is already occupied by ID {placedObjects[position].ID}");
+    //        }
+
+    //        placedObjects[position] = data;
+    //    }
+    //}
 
     private List<Vector3Int> CalculatePositions(Vector3Int gridPosition, Vector2Int objectSize)
     {
@@ -76,13 +94,14 @@ public class GridData
 public class PlacementData
 {
     public List<Vector3Int> occupiedPositions;
-    public int ID { get; private set; }
+    //public int ID { get; private set; }
+    public EStructureType structureType { get; private set; }
     public int placedObjectIndex { get; private set; }
 
-    public PlacementData(List<Vector3Int> occupiedPositions, int iD, int placedObjectIndex)
+    public PlacementData(List<Vector3Int> occupiedPositions, EStructureType structureType, int placedObjectIndex)
     {
         this.occupiedPositions = occupiedPositions;
-        ID = iD;
+        this.structureType = structureType;
         this.placedObjectIndex = placedObjectIndex;
     }
 }
