@@ -5,6 +5,8 @@ using UnityEngine;
 public class ObjectPlacer : MonoBehaviour
 {
     public StructureManager structureManager;
+    public GridData structureData;
+
    [SerializeField] private List<GameObject> placedGameObjects = new List<GameObject>();
 
     private void Awake()
@@ -12,15 +14,15 @@ public class ObjectPlacer : MonoBehaviour
         structureManager = FindFirstObjectByType<StructureManager>();
     }
 
-    public int PlaceObject(GameObject prefab, EStructureType structureType, Vector3 position)
+    public int PlaceObject(GameObject prefab, EStructureType structureType, Vector3 position, Vector3Int gridPosition) 
     {
         GameObject newObject = Instantiate(prefab);
 
         newObject.transform.position = position;
 
-        structureManager.SetupStructure(newObject, structureType);
-
         placedGameObjects.Add(newObject);
+
+        structureManager.SetupStructure(newObject, structureType, structureData, position, gridPosition);
 
         return placedGameObjects.Count - 1;
     }
@@ -34,5 +36,15 @@ public class ObjectPlacer : MonoBehaviour
 
         Destroy(placedGameObjects[gameObjectIndex]);
         placedGameObjects[gameObjectIndex] = null;
+    }
+
+    public GameObject GetObjectAt(int gameObjectIndex)
+    {
+        if (placedGameObjects.Count <= gameObjectIndex || placedGameObjects[gameObjectIndex] == null)
+        {
+            return null;
+        }
+
+        return placedGameObjects[gameObjectIndex];
     }
 }

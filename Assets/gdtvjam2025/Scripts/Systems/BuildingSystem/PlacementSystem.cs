@@ -24,7 +24,7 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private EventManager eventManager;
 
     private Vector3Int lastDetectedPosition = Vector3Int.zero;
-    private GridData floorData, structureData;
+    public GridData floorData, structureData;
 
     IBuildingState buildingState;
 
@@ -39,6 +39,8 @@ public class PlacementSystem : MonoBehaviour
 
         floorData = new GridData();
         structureData = new GridData();
+
+        objectPlacer.structureData = structureData;
     }
 
     private void Update()
@@ -63,6 +65,8 @@ public class PlacementSystem : MonoBehaviour
 
     public void StartPlacement(int ID)
     {
+        objectPlacer.structureData = structureData;
+
         EStructureType structureType = (EStructureType)ID;
 
         StopPlacement();

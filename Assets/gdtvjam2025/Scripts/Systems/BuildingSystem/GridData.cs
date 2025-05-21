@@ -112,6 +112,33 @@ public class GridData
             placedObjects.Remove(pos);
         }
     }
+
+    public PlacementData GetPlacementDataOfObjectAt(Vector3Int gridPosition)
+    {
+        PlacementData returnVal = null;
+        if (placedObjects.ContainsKey(gridPosition))
+        {
+            returnVal = placedObjects[gridPosition];
+
+            Debug.Log($"Found object at {gridPosition} with ID {returnVal.occupiedPositions}");
+        }
+
+        return returnVal;
+    }
+
+    public int GetPlacementIndex(Vector3Int gridPosition)
+    {
+        int returnVal = -1;
+
+        if (placedObjects.ContainsKey(gridPosition))
+        {
+            returnVal = placedObjects[gridPosition].placedObjectIndex;
+
+            Debug.Log($"Found object at {gridPosition} with ID {placedObjects[gridPosition].placedObjectIndex}");
+        }
+
+        return returnVal;
+    }
 }
 
 public class PlacementData

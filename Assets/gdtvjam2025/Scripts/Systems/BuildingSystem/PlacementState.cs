@@ -74,7 +74,8 @@ public class PlacementState : IBuildingState
 
         int index = objectPlacer.PlaceObject(databaseSO.objectsData[selectedObjectIndex].prefab,
                                              databaseSO.objectsData[selectedObjectIndex].StructureType,
-                                             grid.CellToWorld(gridPosition));
+                                             grid.CellToWorld(gridPosition),
+                                             gridPosition);
 
         //GridData selectedData = databaseSO.objectsData[selectedObjectIndex].ID == 0 ? floorData : structureData;
 
