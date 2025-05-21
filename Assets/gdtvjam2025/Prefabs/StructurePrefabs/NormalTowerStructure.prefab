@@ -383,16 +383,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pivotPoint: {fileID: 7492226106521339806}
   firePoint: {fileID: 4570935103041174996}
+  currentTarget: {fileID: 0}
   radius: 15
   rotationSpeed: 20
   firePointOffset: 1
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
-  maxTargetsDetected: 30
+  maxTargetsDetected: 100
+  scanInterval: 0.1
   offsetFirePoint: 0
   lockVerticalRotation: 0
   invertDirection: 1
+  hitColliders: []
   UpdateAimDirection: 1
 --- !u!114 &1385150564787058384
 MonoBehaviour:

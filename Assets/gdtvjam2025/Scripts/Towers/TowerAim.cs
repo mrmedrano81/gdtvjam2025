@@ -6,7 +6,7 @@ public class TowerAim : MonoBehaviour
     [Header("References")]
     public Transform pivotPoint;
     public Transform firePoint;
-    private Transform currentTarget;
+    public Transform currentTarget;
 
     [Header("Settings")]
     public float radius = 5f;
@@ -14,21 +14,25 @@ public class TowerAim : MonoBehaviour
     [SerializeField] private float firePointOffset = 1f;
     public LayerMask targetLayer;
     public int maxTargetsDetected;
+    public float scanInterval = 1f;
     public bool offsetFirePoint = false;
     public bool lockVerticalRotation = true;
     public bool invertDirection = false;
 
-    private Collider[] hitColliders;
+    public Collider[] hitColliders;
 
     public Vector3 AimDirection { get; private set; }
 
     public bool UpdateAimDirection = true;
+
+    private float lastScanTime = 0f;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         hitColliders = new Collider[maxTargetsDetected];
+        currentTarget = null;
     }
 
     // Update is called once per frame
@@ -47,16 +51,28 @@ public class TowerAim : MonoBehaviour
     {
         if (CurrentTargetExists()) return;
 
-        Array.Clear(hitColliders, 0, hitColliders.Length);
-
-        int numColliders = Physics.OverlapSphereNonAlloc(pivotPoint.position, radius, hitColliders, targetLayer);
+        Transform closestTarget = null;
 
         float closestDistance = Mathf.Infinity;
 
-        Transform closestTarget = null;
+        int numTargets = hitColliders.Length;
 
-        for (int i = 0; i < numColliders; i++)
+        if (Time.time - lastScanTime > scanInterval)
         {
+            Array.Clear(hitColliders, 0, hitColliders.Length);
+
+            Physics.OverlapSphereNonAlloc(pivotPoint.position, radius, hitColliders, targetLayer);
+
+            lastScanTime = Time.time;
+        }
+
+        for (int i = 0; i < numTargets; i++)
+        {
+            if (hitColliders[i] == null)
+            {
+                continue;
+            }
+
             float dist = Vector3.Distance(hitColliders[i].transform.position, pivotPoint.position);
 
             if (dist < closestDistance)
