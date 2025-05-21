@@ -29,3 +29,7 @@ MonoBehaviour:
     <StructureType>k__BackingField: 3
     <Size>k__BackingField: {x: 3, y: 3}
     <prefab>k__BackingField: {fileID: 5789736714236120187, guid: 45e3792ae4996034995e051c59ceee4c, type: 3}
+  - <Name>k__BackingField: MIssileTower
+    <StructureType>k__BackingField: 4
+    <Size>k__BackingField: {x: 4, y: 4}
+    <prefab>k__BackingField: {fileID: 1195385893685935787, guid: 07049619524824142aeafded8afa8472, type: 3}

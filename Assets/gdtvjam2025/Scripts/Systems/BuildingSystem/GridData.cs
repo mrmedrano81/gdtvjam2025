@@ -54,6 +54,29 @@ public class GridData
             }
         }
 
+
+        //int halfObjectSizeX = Mathf.RoundToInt(objectSize.x / 2);
+        //int halfObjectSizeY = Mathf.RoundToInt(objectSize.y / 2);
+
+        ////if (objectSize.x % 2 != 0)
+        ////{
+        ////    halfObjectSizeX = Mathf.RoundToInt((objectSize.x +1)/ 2);
+        ////}
+
+        ////if (objectSize.y % 2 != 0)
+        ////{
+        ////    halfObjectSizeY = Mathf.RoundToInt((objectSize.y +1)/ 2);
+        ////}
+
+        //for (int x = -halfObjectSizeX; x < halfObjectSizeX; x++)
+        //{
+        //    for (int y = -halfObjectSizeY; y < halfObjectSizeY; y++)
+        //    {
+        //        Vector3Int position = new Vector3Int(gridPosition.x + x, gridPosition.y, gridPosition.z + y) + Vector3Int.one;
+        //        returnVal.Add(position);
+        //    }
+        //}
+
         return returnVal;
     }
 
