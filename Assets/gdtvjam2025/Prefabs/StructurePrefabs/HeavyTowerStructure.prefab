@@ -256,17 +256,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pivotPoint: {fileID: 52200055155406913}
   firePoint: {fileID: 7114584361875450404}
-  radius: 20
+  currentTarget: {fileID: 0}
+  targetNearest: 1
+  radius: 35
+  hasInnerRadius: 1
+  Innerradius: 10
   rotationSpeed: 10
+  offsetFirePoint: 1
   firePointOffset: 1.5
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
-  maxTargetsDetected: 10
-  offsetFirePoint: 1
+  maxTargetsDetected: 100
+  scanInterval: 1
+  useAngleAlignmentConstraint: 0
+  minimumAlignment: 0.98
   lockVerticalRotation: 1
   invertDirection: 1
   UpdateAimDirection: 1
+  hitColliders: []
 --- !u!114 &6742544794923244790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,8 +288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   addBulletSpread: 1
-  fireRate: 0.2
-  laserShotDuration: 1
+  laserLockonDuration: 0.7
   mask:
     serializedVersion: 2
     m_Bits: 512
@@ -291,6 +298,7 @@ MonoBehaviour:
   laserTrail: {fileID: 6291146235009861606, guid: 30a6995b14273b845b07930819dac713, type: 3}
   shootingParticleSystem: {fileID: 7077353029486131533}
   impactParticleSystem: {fileID: 7944142621791167603, guid: 72abc7a0d64801947ae4688510b50cf6, type: 3}
+  explosionPrefab: {fileID: 5203206662700131707, guid: c452f7f8deacde149bee66a6936a984c, type: 3}
 --- !u!1 &6031306746706238584
 GameObject:
   m_ObjectHideFlags: 0
@@ -645,7 +653,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 84927e26fbc73db45a9432e17a5bd7fe, type: 2}
+  - {fileID: 2100000, guid: b7254f480c9acee44afb502dd7a3c929, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

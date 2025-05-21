@@ -24,6 +24,7 @@ public class HeavyTowerScript : MonoBehaviour
     private float lastShootTime;
     private TowerAim towerAim;
     private TowerStats towerStats;
+    private Coroutine laserCoroutine;
 
     private void Awake()
     {
@@ -50,12 +51,14 @@ public class HeavyTowerScript : MonoBehaviour
 
     private void LaserExecutionSequence()
     {
-        if (Time.time - lastShootTime > 1 / towerStats.fireRate && towerAim.CurrentTargetExists())
+        if (Time.time - lastShootTime > 1 / towerStats.fireRate
+            && towerAim.CurrentTargetExists()
+            && towerAim.WithinFiringAngle()
+            && laserCoroutine == null)
         {
             LineRenderer laserTrail = Instantiate(this.laserTrail, EffectfirePoint.position, Quaternion.identity);
 
-            StartCoroutine(ExecuteLaser(laserTrail));
-            lastShootTime = Time.time;
+            laserCoroutine = StartCoroutine(ExecuteLaser(laserTrail));
         }
     }
 
@@ -63,11 +66,11 @@ public class HeavyTowerScript : MonoBehaviour
     {
         float time = 0;
 
-        Vector3 midPoint = (EffectfirePoint.position + towerAim.GetTargetPosition()) /2;
+        Vector3 midPoint = (EffectfirePoint.position + towerAim.AimPosition) /2;
 
         laserRenderer.SetPosition(0, EffectfirePoint.position);
         laserRenderer.SetPosition(1, midPoint);
-        laserRenderer.SetPosition(2, towerAim.GetTargetPosition());
+        laserRenderer.SetPosition(2, towerAim.AimPosition);
 
         laserRenderer.enabled = true;
 
@@ -88,6 +91,7 @@ public class HeavyTowerScript : MonoBehaviour
         laserRenderer.colorGradient = fadeGradient;
 
         Vector3 lastAimDirection = towerAim.GetAimDirection(bulletSpawnPosition);
+        Vector3 lastAimPosition = towerAim.AimPosition;
 
         while (time < 1f)
         {
@@ -103,33 +107,52 @@ public class HeavyTowerScript : MonoBehaviour
 
             laserRenderer.widthMultiplier = Mathf.Lerp(maxWidthMult, 0, t);
 
-            midPoint = (EffectfirePoint.position + towerAim.GetTargetPosition()) / 2;
-            laserRenderer.SetPosition(0, EffectfirePoint.position);
-            laserRenderer.SetPosition(1, midPoint);
-            laserRenderer.SetPosition(2, towerAim.GetTargetPosition());
+            if (towerAim.CurrentTargetExists())
+            {
+                midPoint = (EffectfirePoint.position + towerAim.AimPosition) / 2;
+                laserRenderer.SetPosition(0, EffectfirePoint.position);
+                laserRenderer.SetPosition(1, midPoint);
+                laserRenderer.SetPosition(2, towerAim.AimPosition);
 
-            lastAimDirection = towerAim.AimDirection;
+                lastAimDirection = towerAim.AimDirection;
+                lastAimPosition = towerAim.AimPosition;
+            }
+            else
+            {
+                towerAim.UpdateAimDirection = false;
+
+                midPoint = (EffectfirePoint.position + lastAimPosition) / 2;
+
+                laserRenderer.SetPosition(0, EffectfirePoint.position);
+                laserRenderer.SetPosition(1, midPoint);
+                laserRenderer.SetPosition(2, lastAimPosition);
+            }
+
 
             time += Time.deltaTime / laserLockonDuration;
-
-            if (!towerAim.CurrentTargetExists())
-            {
-                time = 2;
-            }
 
             yield return null;
         }
 
-        if (towerAim.CurrentTargetExists())
-        {
-            ShootAtTarget();
-        }
-        else
-        {
-            ShootAtLastDirection(lastAimDirection);
-        }
+        ShootAtLastTargetPosition(lastAimPosition, lastAimDirection);
+
+
+        //if (towerAim.CurrentTargetExists())
+        //{
+        //    ShootAtTarget();
+        //}
+        //else
+        //{
+        //    ShootAtLastTargetPosition(lastAimPosition, lastAimDirection);
+        //}
+
+        towerAim.UpdateAimDirection = true;
+
+        lastShootTime = Time.time;
 
         Destroy(laserRenderer.gameObject);
+
+        laserCoroutine = null;
     }
 
 
@@ -140,7 +163,13 @@ public class HeavyTowerScript : MonoBehaviour
 
         if (Physics.Raycast(bulletSpawnPosition.position, towerAim.GetAimDirection(bulletSpawnPosition), out RaycastHit hit, Mathf.Infinity, mask.value))
         {
-            Instantiate(impactParticleSystem, towerAim.GetTargetPosition(), Quaternion.LookRotation(-towerAim.AimDirection), hit.collider.gameObject.transform);
+            //Instantiate(impactParticleSystem, towerAim.GetTargetPosition(), Quaternion.LookRotation(-towerAim.AimDirection), hit.collider.gameObject.transform);
+
+            Quaternion rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(towerAim.AimDirection, Vector3.up));
+
+            GameObject explosion = Instantiate(explosionPrefab, hit.point, rotation);
+
+            explosion.GetComponentInChildren<HeavyAttack>().damage = towerStats.damage;
         }
         else
         {
@@ -148,17 +177,14 @@ public class HeavyTowerScript : MonoBehaviour
         }
     }
 
-    private void ShootAtLastDirection(Vector3 lastAimDirection)
+    private void ShootAtLastTargetPosition(Vector3 lastAimposition, Vector3 lastAimDirection)
     {
         shootingParticleSystem.Play();
 
-        if (Physics.Raycast(bulletSpawnPosition.position, lastAimDirection, out RaycastHit hit, Mathf.Infinity))
-        {
-            Instantiate(impactParticleSystem, hit.point, Quaternion.LookRotation(-towerAim.AimDirection));
-        }
-        else
-        {
-            Debug.LogError("[HEAVY] No target and no hit detected");
-        }
+        Quaternion rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(lastAimDirection, Vector3.up));
+
+        GameObject explosion = Instantiate(explosionPrefab, lastAimposition, rotation);
+
+        explosion.GetComponentInChildren<HeavyAttack>().damage = towerStats.damage;
     }
 }

@@ -3,10 +3,12 @@ using UnityEngine;
 public class EnemyCollisionHandler : CollisionHandler
 {
     private Health health;
+    private EnemyHitEffectPool enemyHitEffectPool;
 
     private void Awake()
     {
-        health = GetComponentInParent<Health>();    
+        health = GetComponentInParent<Health>();
+        enemyHitEffectPool = FindFirstObjectByType<EnemyHitEffectPool>();
     }
 
     public override void HandleOnTriggerEnter(Collider other)
@@ -20,5 +22,11 @@ public class EnemyCollisionHandler : CollisionHandler
         {
             health.TakeDamage(damage);
         }
+    }
+
+    public void PlayHitEffectAt(Vector3 position)
+    {
+        // Play the effect at the specified position
+        enemyHitEffectPool.SpawnObjectAt(position, Quaternion.identity, transform);
     }
 }

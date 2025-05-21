@@ -17,6 +17,8 @@ public class StructureManager : MonoBehaviour
     public float normalTowerRange = 5f;
     public float normalTowerFirerate = 1f;
     public float normalTowerRotationSpeed = 100f;
+    public NormalBulletLinePool normalTowerbulletTrailPool;
+    public EnemyHitEffectPool normalTowerhitEffectPool;
 
 
     [Header("Heavy Tower Stats")]
@@ -82,7 +84,7 @@ public class StructureManager : MonoBehaviour
     {
     }
 
-    public void SetupStructure(NormalTowerScript normalTowerShoot)
+    public void SetupStructure(NormalTowerScript normalTowerScript)
     {
         TowerStats towerStats = new TowerStats
         {
@@ -93,10 +95,12 @@ public class StructureManager : MonoBehaviour
             rotationSpeed = normalTowerRotationSpeed
         };
 
-        normalTowerShoot.SetNormalTowerStats(towerStats);
+        normalTowerScript.SetNormalTowerStats(towerStats);
+        normalTowerScript.bulletTrailPool = normalTowerbulletTrailPool;
+        normalTowerScript.hitEffectPool =  normalTowerhitEffectPool;
     }
 
-    public void SetupStructure(HeavyTowerScript heavyTower)
+    public void SetupStructure(HeavyTowerScript heavyTowerScript)
     {
         TowerStats towerStats = new TowerStats
         {
@@ -107,8 +111,8 @@ public class StructureManager : MonoBehaviour
             rotationSpeed = heavyTowerRotationSpeed
         };
 
-        heavyTower.laserLockonDuration = heavyTowerLaserLockonDuration;
-        heavyTower.SetHeavyTowerStats(towerStats);
+        heavyTowerScript.laserLockonDuration = heavyTowerLaserLockonDuration;
+        heavyTowerScript.SetHeavyTowerStats(towerStats);
     }
 
     //public void SetupTower(MissileTowerScript missileTower)

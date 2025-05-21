@@ -112,6 +112,39 @@ public class ObjectPool : MonoBehaviour
         }
     }
 
+    public GameObject SpawnObjectAt(Vector3 position, Quaternion rotation, Transform parentTransform)
+    {
+        if (OobjectPoolQueue.Count > 0)
+        {
+            GameObject poolObject = OobjectPoolQueue.Dequeue();
+
+            poolObject.transform.position = position;
+            poolObject.transform.rotation = rotation;
+
+            OnObjectGet(poolObject);
+
+            poolObject.transform.SetParent(parentTransform, false);
+
+            poolObject.SetActive(true);
+            return poolObject;
+        }
+        else
+        {
+            GameObject newPoolObject = Instantiate(objectPrefab, position, rotation);
+
+            OnNewObjectCreated(newPoolObject);
+
+            newPoolObject.transform.position = position;
+            newPoolObject.transform.rotation = rotation;
+
+            OnObjectGet(newPoolObject);
+
+            newPoolObject.transform.SetParent(parentTransform, false);
+
+            return newPoolObject;
+        }
+    }
+
     public void ReturnObject(GameObject poolObject)
     {
         OnObjectReturned(poolObject);

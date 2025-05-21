@@ -385,6 +385,7 @@ MonoBehaviour:
   firePoint: {fileID: 4570935103041174996}
   currentTarget: {fileID: 0}
   radius: 15
+  Innerradius: 2
   rotationSpeed: 20
   firePointOffset: 1
   targetLayer:
@@ -392,6 +393,7 @@ MonoBehaviour:
     m_Bits: 512
   maxTargetsDetected: 100
   scanInterval: 0.1
+  hasInnerRadius: 0
   offsetFirePoint: 0
   lockVerticalRotation: 0
   invertDirection: 1
@@ -420,13 +422,15 @@ MonoBehaviour:
   - {fileID: 462500452362858037}
   - {fileID: 3862296215852764017}
   bulletSpawnPosition: {fileID: 4570935103041174996}
-  bulletTrail: {fileID: 6647107335492727576, guid: 1c8361816b3091641aeacb487fd85548, type: 3}
+  bulletLineRenderer: {fileID: 8209342612857345848, guid: 92dc22189375e2d42978367fa8478423, type: 3}
   shootingParticleSystem:
   - {fileID: 4929927869112650740}
   - {fileID: 6870127029399740981}
   - {fileID: 7456656997692350651}
   - {fileID: 3626695716357319412}
   impactParticleSystem: {fileID: 7944142621791167603, guid: 72abc7a0d64801947ae4688510b50cf6, type: 3}
+  bulletTrailPool: {fileID: 0}
+  hitEffectPool: {fileID: 0}
 --- !u!1 &4011231555520318338
 GameObject:
   m_ObjectHideFlags: 0

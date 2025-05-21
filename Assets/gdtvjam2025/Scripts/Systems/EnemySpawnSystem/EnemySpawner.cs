@@ -4,6 +4,8 @@ public class EnemySpawner : MonoBehaviour
 {
     [Header("DEBUGGING")]
     public bool showSpawnArea = true;
+    public bool continuousSpawning = true;
+    public float spawnInterval = 2f;
 
     [Header("Settings")]
     public int numberOfEnemies = 5;
@@ -15,11 +17,14 @@ public class EnemySpawner : MonoBehaviour
     private InputManager inputManager;
     private ObjectPool enemyPool;
 
+    private float lastSpawnTime;
+    private bool spawningEnemies = false;
 
     private void Awake()
     {
         inputManager = FindFirstObjectByType<InputManager>();
         enemyPool = GetComponent<ObjectPool>();
+        spawningEnemies = continuousSpawning;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -28,18 +33,39 @@ public class EnemySpawner : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        if (spawningEnemies && Time.time - lastSpawnTime > spawnInterval)
+        {
+            SpawnEnemies();
+            lastSpawnTime = Time.time;
+        }
+    }
+
     private void OnEnable()
     {
-        inputManager.OnSpace += SpawnEnemies;
+        inputManager.OnSpace += ExecuteSpawningLogic;
     }
 
     private void OnDisable()
     {
-        inputManager.OnSpace -= SpawnEnemies;
+        inputManager.OnSpace -= ExecuteSpawningLogic;
     }
 
 
-    private void SpawnEnemies()
+    private void ExecuteSpawningLogic()
+    {
+        if (continuousSpawning)
+        {
+            spawningEnemies = !spawningEnemies;
+        }
+        else
+        {
+            SpawnEnemies();
+        }
+    }
+
+    public void SpawnEnemies()
     {
         for (int i = 0; i < numberOfEnemies; i++)
         {

@@ -8,22 +8,30 @@ public class TowerAim : MonoBehaviour
     public Transform firePoint;
     public Transform currentTarget;
 
-    [Header("Settings")]
+    [Header("Targetting Settings")]
+    public bool targetNearest = true;
     public float radius = 5f;
+    public bool hasInnerRadius = false;
+    public float Innerradius = 2f;
     public float rotationSpeed = 10f;
+    public bool offsetFirePoint = false;
     [SerializeField] private float firePointOffset = 1f;
     public LayerMask targetLayer;
     public int maxTargetsDetected;
     public float scanInterval = 1f;
-    public bool offsetFirePoint = false;
+    public bool useAngleAlignmentConstraint = false;
+    [Range(0f, 1f)]
+    public float minimumAlignment = 0.1f;
     public bool lockVerticalRotation = true;
     public bool invertDirection = false;
 
+    [Header("Debugging")]
+    public bool UpdateAimDirection = true;
     public Collider[] hitColliders;
 
     public Vector3 AimDirection { get; private set; }
+    public Vector3 AimPosition { get; private set; }
 
-    public bool UpdateAimDirection = true;
 
     private float lastScanTime = 0f;
 
@@ -38,8 +46,12 @@ public class TowerAim : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetClosestTarget();
-        CheckTargetDistance();
+        if (currentTarget != null && TargetOutOfRange(currentTarget))
+        {
+            currentTarget = null;
+        }
+
+        GetTarget();
 
         if (UpdateAimDirection)
         {
@@ -47,7 +59,24 @@ public class TowerAim : MonoBehaviour
         }
     }
 
-    private void GetClosestTarget()
+    public bool WithinFiringAngle()
+    {
+        Vector3 pivotForward = Vector3.ProjectOnPlane(pivotPoint.forward, Vector3.up);
+
+        if (invertDirection)
+        {
+            pivotForward = -pivotForward;
+        }
+
+        if (Vector3.Dot(pivotForward, AimDirection.normalized) > minimumAlignment)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void GetTarget()
     {
         if (CurrentTargetExists()) return;
 
@@ -56,6 +85,8 @@ public class TowerAim : MonoBehaviour
         float closestDistance = Mathf.Infinity;
 
         int numTargets = hitColliders.Length;
+
+        Vector3 pivotXZPosition = new Vector3(pivotPoint.position.x, 0, pivotPoint.position.z);
 
         if (Time.time - lastScanTime > scanInterval)
         {
@@ -72,14 +103,29 @@ public class TowerAim : MonoBehaviour
             {
                 continue;
             }
-
-            float dist = Vector3.Distance(hitColliders[i].transform.position, pivotPoint.position);
-
-            if (dist < closestDistance)
+            else
             {
-                closestTarget = hitColliders[i].transform;
-                closestDistance = dist;
+                Vector3 targetXZPosition = new Vector3(hitColliders[i].transform.position.x, 0, hitColliders[i].transform.position.z);
+
+                float dist = Vector3.Distance(targetXZPosition, pivotXZPosition);
+
+                if (TargetOutOfRange(hitColliders[i].transform))
+                {
+                    continue;
+                }
+
+                if (!targetNearest)
+                {
+                    currentTarget = hitColliders[i].transform;
+                    return;
+                }
+                else if(dist < closestDistance)
+                {
+                    closestTarget = hitColliders[i].transform;
+                    closestDistance = dist;
+                }
             }
+
         }
 
         currentTarget = closestTarget;
@@ -113,6 +159,11 @@ public class TowerAim : MonoBehaviour
     {
         if (CurrentTargetExists())
         {
+            if (TargetOutOfRange(currentTarget))
+            {
+                return;
+            }
+
             Vector3 direction = currentTarget.position - firePoint.position;
 
             if (offsetFirePoint)
@@ -121,6 +172,7 @@ public class TowerAim : MonoBehaviour
             }
 
             AimDirection = direction.normalized;
+            AimPosition = currentTarget.position;
 
             if (lockVerticalRotation)
             {
@@ -139,36 +191,66 @@ public class TowerAim : MonoBehaviour
     }
 
 
-    public Vector3 GetTargetPosition()
+    //public Vector3 GetTargetPosition()
+    //{
+    //    if (!CurrentTargetExists())
+    //    {
+    //        return Vector3.zero;
+    //    }
+
+    //    return currentTarget.position;
+    //}
+
+    private bool TargetOutOfRange(Transform targetTransform)
     {
-        if (!CurrentTargetExists())
+        if (currentTarget == null)
         {
-            return Vector3.zero;
+            return false;
         }
 
-        return currentTarget.position;
+        Vector3 targetXZPosition = new Vector3(targetTransform.position.x, 0, targetTransform.position.z);
+        Vector3 pivotXZPosition = new Vector3(pivotPoint.position.x, 0, pivotPoint.position.z);
+
+        float distance = Vector3.Distance(targetXZPosition, pivotXZPosition);
+
+        if (hasInnerRadius && distance < Innerradius)
+        {
+            return true;
+        }
+        if (distance > radius)
+        {
+            return true;
+        }
+
+        return false;
     }
 
-    private void CheckTargetDistance()
-    {
-        if (CurrentTargetExists())
-        {
-            if (Vector3.Distance(pivotPoint.position, currentTarget.position) > radius)
-            {
-                currentTarget = null;
-            }
-        }
-    }
+    //private void CheckTargetDistance()
+    //{
+    //    if (CurrentTargetExists())
+    //    {
+    //        if (Vector3.Distance(pivotPoint.position, currentTarget.position) > radius)
+    //        {
+    //            currentTarget = null;
+    //        }
+    //    }
+    //}
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.orangeRed;
         Gizmos.DrawWireSphere(pivotPoint.position, radius);
 
         if (CurrentTargetExists())
         {
             Gizmos.color = Color.green;
             Gizmos.DrawLine(firePoint.position, currentTarget.position);
+        }
+
+        if (hasInnerRadius)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(pivotPoint.position, Innerradius);
         }
     }
 }

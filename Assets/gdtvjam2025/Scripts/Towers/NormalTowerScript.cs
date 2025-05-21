@@ -12,9 +12,13 @@ public class NormalTowerScript : MonoBehaviour
     [Header("References")]
     [SerializeField] private Transform[] EffectfirePoint; 
     [SerializeField] private Transform bulletSpawnPosition; 
-    [SerializeField] private TrailRenderer bulletTrail; 
+    //[SerializeField] private TrailRenderer bulletTrail; 
+    [SerializeField] private LineRenderer bulletLineRenderer; 
     [SerializeField] private ParticleSystem[] shootingParticleSystem;
     [SerializeField] private ParticleSystem impactParticleSystem;
+
+    public NormalBulletLinePool bulletTrailPool;
+    public EnemyHitEffectPool hitEffectPool;
 
     private float lastShootTime;
     private TowerAim towerAim;
@@ -24,6 +28,8 @@ public class NormalTowerScript : MonoBehaviour
     private void Awake()
     {
         towerAim = GetComponent<TowerAim>();
+        bulletTrailPool = FindFirstObjectByType<NormalBulletLinePool>();
+        hitEffectPool = FindFirstObjectByType<EnemyHitEffectPool>();
     }
 
     // Update is called once per frame
@@ -65,34 +71,38 @@ public class NormalTowerScript : MonoBehaviour
                 }
 
 
-                int gunNumber = Random.Range(0, EffectfirePoint.Length);
+                //int gunNumber = Random.Range(0, EffectfirePoint.Length);
 
-                if (gunNumber < 2)
-                {
-                    for (int i = 0; i < 2; i++)
-                    {
-                        TrailRenderer trail = Instantiate(bulletTrail, EffectfirePoint[i].position, Quaternion.identity);
-                        StartCoroutine(SpawnTrail(trail, hit, i));
-                        trail.transform.forward = towerAim.GetAimDirection(EffectfirePoint[i]);
-                    }
-                }
-                else
-                {
-                    for (int i = 2; i < 4; i++)
-                    {
-                        TrailRenderer trail = Instantiate(bulletTrail, EffectfirePoint[i].position, Quaternion.identity);
-                        StartCoroutine(SpawnTrail(trail, hit, i));
-                        trail.transform.forward = towerAim.GetAimDirection(EffectfirePoint[i]);
-                    }
-                }
+                //GameObject trailObject = bulletTrailPool.GetObject();
+                //TrailRenderer trail = trailObject.GetComponent<TrailRenderer>();
+
+
+                //if (gunNumber < 2)
+                //{
+                //    for (int i = 0; i < 2; i++)
+                //    {
+                //        SpawnBulletLine(EffectfirePoint[i].position, hit.point);
+                //        //trailObject.transform.position = EffectfirePoint[i].position;
+                //        //StartCoroutine(SpawnTrail(trail, hit, i, trailObject));
+                //        //trail.transform.forward = towerAim.GetAimDirection(EffectfirePoint[i]);
+                //    }
+                //}
+                //else
+                //{
+                //    for (int i = 2; i < 4; i++)
+                //    {
+                //        SpawnBulletLine(EffectfirePoint[i].position, hit.point);
+                //        //trailObject.transform.position = EffectfirePoint[i].position;
+                //        //StartCoroutine(SpawnTrail(trail, hit, i, trailObject));
+                //        //trail.transform.forward = towerAim.GetAimDirection(EffectfirePoint[i]);
+                //    }
+                //}
 
                 // ------------- random firepoint ---------------- //
 
-                //int gunNumber = Random.Range(0, EffectfirePoint.Length);
-                //shootingParticleSystem[gunNumber].Play();
-                //TrailRenderer trail = Instantiate(bulletTrail, EffectfirePoint[gunNumber].position, Quaternion.identity);
-                //StartCoroutine(SpawnTrail(trail, hit));
-                //trail.transform.forward = towerAim.GetAimDirection(EffectfirePoint[gunNumber]);
+                int gunNumber = Random.Range(0, EffectfirePoint.Length);
+                shootingParticleSystem[gunNumber].Play();
+                SpawnBulletLine(EffectfirePoint[gunNumber].position, hit.point);
 
                 // ------------- All firepoints ---------------- //
                 //for (int i = 0; i < EffectfirePoint.Length; i++)
@@ -111,35 +121,58 @@ public class NormalTowerScript : MonoBehaviour
                     health.TakeDamage(towerStats.damage);
                 }
 
-                Instantiate(impactParticleSystem, hit.point, Quaternion.LookRotation(-direction), hit.collider.gameObject.transform);
+                hitEffectPool.SpawnObjectAt(hit.point, Quaternion.LookRotation(-direction));
+
+                EnemyCollisionHandler enemyCollisionHandler = hit.collider.GetComponent<EnemyCollisionHandler>();
+
+                if (enemyCollisionHandler != null)
+                {
+                    enemyCollisionHandler.PlayHitEffectAt(hit.point);
+                }
+                else
+                {
+                    Debug.LogError($"No EnemyCollisionHandler found on {hit.collider.name}");
+                }
+
+                //Instantiate(impactParticleSystem, hit.point, Quaternion.LookRotation(-direction), hit.collider.gameObject.transform);
 
                 lastShootTime = Time.time;
             }
         }
     }
 
-    private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit, int index)
+    private void SpawnBulletLine(Vector3 startPoint, Vector3 endPoint)
     {
-        float randomDelay = Random.Range(0, 0.1f);
+        GameObject bulletTrail = bulletTrailPool.GetObject();
 
-        yield return new WaitForSeconds(randomDelay);
+        LineRenderer lr = bulletTrail.GetComponent<LineRenderer>();
 
-        shootingParticleSystem[index].Play();
-
-        float time = 0;
-        Vector3 startPos = trail.transform.position;
-
-        while(time < 1)
-        {
-            trail.transform.position = Vector3.Lerp(startPos, hit.point, time);
-            time += Time.deltaTime/trail.time;
-
-            yield return null;
-        }
-
-        //animator.SetBool("IsShooting", false);
-        trail.transform.position = hit.point;
-
-        Destroy(trail.gameObject, trail.time);
+        lr.SetPosition(0, startPoint);
+        lr.SetPosition(1, endPoint);
     }
+
+    //private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit, int index, GameObject trailObject)
+    //{
+    //    float randomDelay = Random.Range(0, 0.1f);
+
+    //    yield return new WaitForSeconds(randomDelay);
+
+    //    shootingParticleSystem[index].Play();
+
+    //    float time = 0;
+    //    Vector3 startPos = trail.transform.position;
+
+    //    while(time < 1)
+    //    {
+    //        trail.transform.position = Vector3.Lerp(startPos, hit.point, time);
+    //        time += Time.deltaTime/trail.time;
+
+    //        yield return null;
+    //    }
+
+    //    //animator.SetBool("IsShooting", false);
+    //    trail.transform.position = hit.point;
+
+    //    bulletTrailPool.ReturnObject(trailObject);
+    //}
 }
