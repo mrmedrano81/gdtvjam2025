@@ -48,7 +48,7 @@ public class PlacementState : IBuildingState
 
         if (selectedObjectIndex > -1)
         {
-            previewSystem.StartShowingPlacementPreview(databaseSO.objectsData[selectedObjectIndex].prefab,
+            previewSystem.StartShowingPlacementPreview(databaseSO.objectsData[selectedObjectIndex].previewPrefab,
                                                        databaseSO.objectsData[selectedObjectIndex].Size);
         }
         else

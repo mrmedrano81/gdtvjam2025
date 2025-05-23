@@ -88,6 +88,10 @@ public class EnemyAIController : MonoBehaviour
             {
                 validTargets[i] = hitColliders[i];
             }
+            else
+            {
+                Debug.Log("No valid path to target. Path status: " + hitColliders[i].name + ", " + agent.pathStatus);
+            }
         }
 
         if (validTargets.Length == 0)

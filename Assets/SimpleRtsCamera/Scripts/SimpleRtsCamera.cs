@@ -165,29 +165,54 @@ public class SimpleRtsCamera : MonoBehaviour
         transform.position += moveDirection;
 	}
 
-	private void ZoomCamera()
-	{
-		if (Mathf.Approximately(_scrollMouseInput, 0)) return;
+    private void ZoomCamera()
+    {
+        if (Mathf.Approximately(_scrollMouseInput, 0)) return;
 
-		var zoomDirection = transform.forward;
+        Vector3 zoomDirection = transform.forward;
 
-		if (transform.position.y <= _minZoomDistance && _scrollMouseInput > 0)
-		{
-            //transform.position = new Vector3(transform.position.x, _minZoomDistance, transform.position.z);
-            return;
-		}
-		else if	(transform.position.y >= _maxZoomDistance && _scrollMouseInput < 0)
-		{
-            //transform.position = new Vector3(transform.position.x, _maxZoomDistance, transform.position.z);
-            return;
-		}
+        // Get current distance from camera to look-at point
+        Vector3 lookAtPoint = GetCameraLookAtPoint();
+        float currentDistance = Vector3.Distance(transform.position, lookAtPoint);
 
-		transform.position += zoomDirection * (_scrollMouseInput * _zoomSpeed * Time.deltaTime);
+        // Calculate the proposed zoom delta
+        float zoomDelta = _scrollMouseInput * _zoomSpeed * Time.deltaTime;
 
-		_currentZoomDistance = transform.position.y;
-	}
+        // Calculate proposed new distance
+        float newDistance = currentDistance - zoomDelta;
 
-	private void RotateCamera()
+        // Clamp the new distance
+        newDistance = Mathf.Clamp(newDistance, _minZoomDistance, _maxZoomDistance);
+
+        // Calculate the actual zoom movement to apply
+        float actualZoom = currentDistance - newDistance;
+
+        // Move the camera
+        transform.position += zoomDirection * actualZoom;
+
+        // Optionally update _currentZoomDistance
+        _currentZoomDistance = Vector3.Distance(transform.position, lookAtPoint);
+    }
+
+    //private void ZoomCamera()
+    //{
+    //	if (Mathf.Approximately(_scrollMouseInput, 0)) return;
+
+    //	var zoomDirection = transform.forward;
+
+
+    //	float dist = Vector3.Distance(GetCameraLookAtPoint(), transform.position);
+
+    //	Debug.Log($"Distance: {dist}");
+
+    //	// clamp zoom distance
+
+    //	transform.position += zoomDirection * (_scrollMouseInput * _zoomSpeed * Time.deltaTime);
+
+    //	_currentZoomDistance = transform.position.y;
+    //}
+
+    private void RotateCamera()
 	{
 		if (Mathf.Approximately(_middleMouseInput, 0)) return;
 

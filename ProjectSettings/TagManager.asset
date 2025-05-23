@@ -23,8 +23,8 @@ TagManager:
   - Wall
   - PlayerAttack
   - Obstacle
-  - 
-  - 
+  - StructureHurtCollider
+  - Preview
   - 
   - 
   - 

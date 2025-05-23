@@ -78,7 +78,7 @@ MonoBehaviour:
   maxTargets: 5
   targetLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 16384
   mapCenterPoint: {fileID: 0}
   agentBody: {fileID: 6495197092034207320}
   currentTarget: {fileID: 0}

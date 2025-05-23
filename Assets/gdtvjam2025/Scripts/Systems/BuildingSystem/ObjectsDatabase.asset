@@ -17,23 +17,29 @@ MonoBehaviour:
     <StructureType>k__BackingField: 0
     <Size>k__BackingField: {x: 4, y: 4}
     <prefab>k__BackingField: {fileID: 6599720412572843482, guid: 79c7b517c4833a14580e1868c79950aa, type: 3}
+    <previewPrefab>k__BackingField: {fileID: 6599720412572843482, guid: 934192122a3ea4545b5a6d7407fce38e, type: 3}
   - <Name>k__BackingField: Gatherer
     <StructureType>k__BackingField: 1
     <Size>k__BackingField: {x: 2, y: 2}
     <prefab>k__BackingField: {fileID: 3393274797144037646, guid: dedead6a9b3a0e9449d7d6b7bd6ff589, type: 3}
+    <previewPrefab>k__BackingField: {fileID: 3393274797144037646, guid: 1b1fbbc09efe6b84496c2426896d5cb3, type: 3}
   - <Name>k__BackingField: NormalTower
     <StructureType>k__BackingField: 2
     <Size>k__BackingField: {x: 2, y: 2}
     <prefab>k__BackingField: {fileID: 3731938814567040817, guid: 29b92b9f95ee4f240ab05e854d7a7a2e, type: 3}
+    <previewPrefab>k__BackingField: {fileID: 3731938814567040817, guid: ee181cf035265c7488a22923be8546c5, type: 3}
   - <Name>k__BackingField: HeavyTower
     <StructureType>k__BackingField: 3
     <Size>k__BackingField: {x: 3, y: 3}
     <prefab>k__BackingField: {fileID: 5789736714236120187, guid: 45e3792ae4996034995e051c59ceee4c, type: 3}
+    <previewPrefab>k__BackingField: {fileID: 5789736714236120187, guid: 357ca8a182bd84643b1f9cd3a63df58f, type: 3}
   - <Name>k__BackingField: MissileTower
     <StructureType>k__BackingField: 4
     <Size>k__BackingField: {x: 4, y: 4}
     <prefab>k__BackingField: {fileID: 1195385893685935787, guid: 07049619524824142aeafded8afa8472, type: 3}
+    <previewPrefab>k__BackingField: {fileID: 1195385893685935787, guid: 617f7081da308b149be07e367072c177, type: 3}
   - <Name>k__BackingField: Wall
     <StructureType>k__BackingField: 5
     <Size>k__BackingField: {x: 1, y: 1}
     <prefab>k__BackingField: {fileID: 9181461896264841541, guid: df5e5e6946eab044094db16eb32f6252, type: 3}
+    <previewPrefab>k__BackingField: {fileID: 9181461896264841541, guid: 3188f26fa2428ee4ab0cc390f88c538e, type: 3}

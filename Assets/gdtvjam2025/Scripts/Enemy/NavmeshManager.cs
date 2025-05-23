@@ -8,7 +8,7 @@ public class NavmeshManager : MonoBehaviour
 
     public void RebuildNavmesh()
     {
-        Debug.Log("NavmeshRebuilt");
-        navMeshSurface.BuildNavMesh();
+        //Debug.Log("NavmeshRebuilt");
+        //navMeshSurface.BuildNavMesh();
     }
 }
