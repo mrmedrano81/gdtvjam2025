@@ -101,7 +101,7 @@ public class TowerAim : MonoBehaviour
         {
             if (hitColliders[i] == null)
             {
-                continue;
+                Debug.Log("[HEAVY] Null targets");
             }
             else
             {
@@ -111,29 +111,41 @@ public class TowerAim : MonoBehaviour
 
                 if (TargetOutOfRange(hitColliders[i].transform))
                 {
+                    Debug.Log("[HEAVY] Targets out of range");
                     continue;
                 }
 
                 if (!targetNearest)
                 {
-                    currentTarget = hitColliders[i].transform;
+                    closestTarget = hitColliders[i].transform;
                     return;
                 }
-                else if(dist < closestDistance)
+                else if (dist < closestDistance)
                 {
                     closestTarget = hitColliders[i].transform;
                     closestDistance = dist;
+
+                    Debug.DrawLine(pivotPoint.position, hitColliders[i].transform.position, Color.red, 1f);
+                    Debug.Log($"[HEAVY] Closest target updated {i}");
                 }
             }
-
         }
 
+        if (closestTarget == null)
+        {
+            Debug.Log("[HEAVY] No targets found");
+        }
         currentTarget = closestTarget;
     }
 
     public bool CurrentTargetExists()
     {
         if (currentTarget == null)
+        {
+            return false;
+        }
+
+        if (TargetOutOfRange(currentTarget))
         {
             return false;
         }
@@ -203,9 +215,9 @@ public class TowerAim : MonoBehaviour
 
     private bool TargetOutOfRange(Transform targetTransform)
     {
-        if (currentTarget == null)
+        if (targetTransform == null)
         {
-            return false;
+            return true;
         }
 
         Vector3 targetXZPosition = new Vector3(targetTransform.position.x, 0, targetTransform.position.z);

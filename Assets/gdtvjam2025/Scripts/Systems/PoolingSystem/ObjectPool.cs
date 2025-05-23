@@ -30,7 +30,7 @@ public class ObjectPool : MonoBehaviour
 
     private void Update()
     {
-        currentPoolSize = OobjectPoolQueue.Count;
+        //currentPoolSize = OobjectPoolQueue.Count;
     }
 
     public GameObject GetObject()

@@ -11,6 +11,8 @@ public class EnemyGruntObjectPool : ObjectPool
 
         //set map center point
         poolObject.GetComponent<EnemyAIController>().mapCenterPoint = GameObject.FindGameObjectWithTag("HQ").transform;
+
+        currentPoolSize++;
     }
 
     public override void OnObjectReturned(GameObject poolObject)

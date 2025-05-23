@@ -103,7 +103,6 @@ public class StructureManager : MonoBehaviour
         //{
         //    case EStructureType.HQ:
         //        break;
-
         //    case EStructureType.Gatherer:
         //        //SetupGatherer(structureObject.GetComponent<GathererScript>());
         //        break;

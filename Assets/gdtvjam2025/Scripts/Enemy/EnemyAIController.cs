@@ -29,6 +29,8 @@ public class EnemyAIController : MonoBehaviour
     private Collider[] hitColliders;
     private Collider[] validTargets;
 
+    private Vector3 currentDestionation;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -140,8 +142,11 @@ public class EnemyAIController : MonoBehaviour
 
     private void MoveTowardsTarget(Vector3 position)
     {
+        agentBody.LookAt(agent.velocity.normalized, Vector3.up);
+
+        if (currentDestionation == position) return;
+
         agent.SetDestination(position);
-        agentBody.LookAt(position, Vector3.up);
     }
 
 
