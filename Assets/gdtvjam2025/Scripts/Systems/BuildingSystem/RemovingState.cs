@@ -63,9 +63,11 @@ public class RemovingState : IBuildingState
                 return;
             }
 
+            PlacementData placementData = selectedData.GetPlacementDataOfObjectAt(gridPosition);
+
             selectedData.RemoveObjectAt(gridPosition);
 
-            objectPlacer.RemoveObjectAt(gameObjectIndex);
+            objectPlacer.RemoveObjectAt(gameObjectIndex, placementData.structureType);
         }
 
         Vector3 cellPosition = grid.CellToWorld(gridPosition);

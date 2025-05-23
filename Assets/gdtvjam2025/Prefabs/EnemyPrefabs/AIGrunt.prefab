@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa410f304f92cd64cae5e2044cf462e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBarSprite: {fileID: 4896351065834356745}
+  healthBarSprite: {fileID: 3964569389587645373}
   health: {fileID: 0}
 --- !u!1 &3744731744294836625
 GameObject:
@@ -397,6 +397,14 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2063736593238566471, guid: 53f45a11a456766469c544cb8443b2ea, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2063736593238566471, guid: 53f45a11a456766469c544cb8443b2ea, type: 3}
+      propertyPath: m_FillOrigin
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5527595596576089734, guid: 53f45a11a456766469c544cb8443b2ea, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -486,9 +494,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53f45a11a456766469c544cb8443b2ea, type: 3}
---- !u!114 &4896351065834356745 stripped
+--- !u!114 &3964569389587645373 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7517760120392934899, guid: 53f45a11a456766469c544cb8443b2ea, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2063736593238566471, guid: 53f45a11a456766469c544cb8443b2ea, type: 3}
   m_PrefabInstance: {fileID: 3145526456985576954}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

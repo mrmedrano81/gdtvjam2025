@@ -27,14 +27,19 @@ public class ObjectPlacer : MonoBehaviour
         return placedGameObjects.Count - 1;
     }
 
-    public void RemoveObjectAt(int gameObjectIndex)
+    public void RemoveObjectAt(int gameObjectIndex, EStructureType structureType)
     {
         if (placedGameObjects.Count <= gameObjectIndex || placedGameObjects[gameObjectIndex] == null)
         {
             return;
         }
 
+        GameObject structureObjectToBeRemoved = placedGameObjects[gameObjectIndex];
+
+        structureManager.OnStructureRemoved(structureObjectToBeRemoved, structureType);
+
         Destroy(placedGameObjects[gameObjectIndex]);
+
         placedGameObjects[gameObjectIndex] = null;
     }
 

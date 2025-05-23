@@ -1,6 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EWallPlacementStatus
+{
+    Placing,
+    Removing
+}
+
 public class WallScript : MonoBehaviour
 {
     [Header("Wall Settings")]
@@ -38,10 +44,10 @@ public class WallScript : MonoBehaviour
 
     }
 
-    public void SetupWall()
+    public void SetupWall(EWallPlacementStatus wallPlacementStatus)
     {
         ResetWall();
-        UpdateAdjacentWalls();
+        UpdateAdjacentWalls(wallPlacementStatus);
         UpdateWallConnectors();
     }
 
@@ -89,7 +95,7 @@ public class WallScript : MonoBehaviour
         }
     }
 
-    private void UpdateAdjacentWalls()
+    private void UpdateAdjacentWalls(EWallPlacementStatus status)
     {
         Vector3Int direction = Vector3Int.zero;
         for (int i = 0; i < 4; i++)
@@ -135,8 +141,17 @@ public class WallScript : MonoBehaviour
                 {
                     if (adjacentWallDictionary[i] == null)
                     {
-                        adjacentWall.adjacentWallDictionary[adjWallIndex] = gameObject;
-                        adjacentWallDictionary[i] = adjacentWall.gameObject;
+                        if (status == EWallPlacementStatus.Placing)
+                        {
+                            adjacentWall.adjacentWallDictionary[adjWallIndex] = gameObject;
+                            adjacentWallDictionary[i] = adjacentWall.gameObject;
+                        }
+                        else if (status == EWallPlacementStatus.Removing)
+                        {
+                            adjacentWall.adjacentWallDictionary[adjWallIndex] = null;
+                            adjacentWallDictionary[i] = null;
+                        }
+
                         adjacentWall.UpdateWallConnectors();
 
                         Debug.Log($"Detected adjacent wall at {i}");
@@ -154,6 +169,8 @@ public class WallScript : MonoBehaviour
             }
         }
     }
+
+
 
     private void OnDrawGizmos()
     {

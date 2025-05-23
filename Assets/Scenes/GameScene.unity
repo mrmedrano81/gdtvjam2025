@@ -369,7 +369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &410087040
 Light:
   m_ObjectHideFlags: 0
@@ -2219,7 +2219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showSpawnArea: 1
-  continuousSpawning: 0
+  continuousSpawning: 1
   spawnInterval: 2
   numberOfEnemies: 50
   spawnAreaSize: {x: 52.9, y: 100}
@@ -2875,6 +2875,18 @@ MonoBehaviour:
   missileTowerFirerate: 1
   missileTowerRotationSpeed: 100
   wallHealth: 100
+  maxNormalTowers: 10
+  maxHeavyTowers: 10
+  maxMissileTowers: 10
+  maxWalls: 10
+  maxGatherers: 10
+  maxHQs: 1
+  numNormalTowers: 0
+  numHeavyTowers: 0
+  numMissileTowers: 0
+  numWalls: 0
+  numGatherers: 0
+  numHQs: 0
 --- !u!1 &1650781213
 GameObject:
   m_ObjectHideFlags: 0

@@ -40,6 +40,22 @@ public class StructureManager : MonoBehaviour
     [Header("Wall Stats")]
     public float wallHealth = 100f;
 
+    [Header("Structure Count Settings")]
+    public int maxNormalTowers = 24;
+    public int maxHeavyTowers = 8;
+    public int maxMissileTowers = 4;
+    public int maxWalls = 1000;
+    public int maxGatherers = 10;
+    public int maxHQs = 1;
+
+    [Header("Structure Count")]
+    public int numNormalTowers = 0;
+    public int numHeavyTowers = 0;
+    public int numMissileTowers = 0;
+    public int numWalls = 0;
+    public int numGatherers = 0;
+    public int numHQs = 0;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -51,6 +67,62 @@ public class StructureManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void AddStructureCount(EStructureType structureType, int count = 1)
+    {
+        switch (structureType)
+        {
+            case EStructureType.HQ:
+                numHQs += count;
+                break;
+            case EStructureType.Gatherer:
+                numGatherers += count;
+                break;
+            case EStructureType.NormalTower:
+                numNormalTowers += count;
+                break;
+            case EStructureType.HeavyTower:
+                numHeavyTowers += count;
+                break;
+            case EStructureType.MissileTower:
+                numMissileTowers += count;
+                break;
+            case EStructureType.Wall:
+                numWalls += count;
+                break;
+            default:
+                Debug.LogError("Unknown structure type: " + structureType);
+                break;
+        }
+    }
+
+    public void OnStructureRemoved(GameObject structureObjectToBeRemoved, EStructureType structureType)
+    {
+        //switch (structureType)
+        //{
+        //    case EStructureType.HQ:
+        //        break;
+
+        //    case EStructureType.Gatherer:
+        //        //SetupGatherer(structureObject.GetComponent<GathererScript>());
+        //        break;
+        //    case EStructureType.NormalTower:
+        //        SetupStructure(structureObject.GetComponent<NormalTowerScript>());
+        //        break;
+        //    case EStructureType.HeavyTower:
+        //        SetupStructure(structureObject.GetComponent<HeavyTowerScript>());
+        //        break;
+        //    case EStructureType.MissileTower:
+        //        //SetupTower(structureObject.GetComponent<MissileTowerScript>());
+        //        break;
+        //    case EStructureType.Wall:
+        //        SetupWall(structureObject.GetComponent<WallScript>(), gridData, gridPosition);
+        //        break;
+        //    default:
+        //        Debug.LogError("Unknown structure type: " + structureType);
+        //        break;
+        //}
     }
 
     public void SetupStructure(GameObject structureObject, EStructureType structureType, GridData gridData, Vector3 position, Vector3Int gridPosition)
@@ -81,13 +153,18 @@ public class StructureManager : MonoBehaviour
         }
     }
 
+
+    #region --- Remove Methods ---
+    #endregion
+
+    #region --- Setup Methods ---
     private void SetupWall(WallScript wallScript, GridData gridData, Vector3Int gridPosition)
     {
         wallScript.structureData = gridData;
         wallScript.health = wallHealth;
         wallScript.gridPosition = gridPosition;
 
-        wallScript.SetupWall();
+        wallScript.SetupWall(EWallPlacementStatus.Placing);
     }
 
     public void SetupGatherer()
@@ -130,4 +207,6 @@ public class StructureManager : MonoBehaviour
     //{
 
     //}
+
+    #endregion
 }
