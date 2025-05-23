@@ -101,7 +101,7 @@ public class TowerAim : MonoBehaviour
         {
             if (hitColliders[i] == null)
             {
-                Debug.Log("[HEAVY] Null targets");
+                //Debug.Log("[HEAVY] Null targets");
             }
             else
             {
@@ -111,7 +111,7 @@ public class TowerAim : MonoBehaviour
 
                 if (TargetOutOfRange(hitColliders[i].transform))
                 {
-                    Debug.Log("[HEAVY] Targets out of range");
+                    //Debug.Log("[HEAVY] Targets out of range");
                     continue;
                 }
 
@@ -125,15 +125,15 @@ public class TowerAim : MonoBehaviour
                     closestTarget = hitColliders[i].transform;
                     closestDistance = dist;
 
-                    Debug.DrawLine(pivotPoint.position, hitColliders[i].transform.position, Color.red, 1f);
-                    Debug.Log($"[HEAVY] Closest target updated {i}");
+                    //Debug.DrawLine(pivotPoint.position, hitColliders[i].transform.position, Color.red, 1f);
+                    //Debug.Log($"[HEAVY] Closest target updated {i}");
                 }
             }
         }
 
         if (closestTarget == null)
         {
-            Debug.Log("[HEAVY] No targets found");
+            //Debug.Log("[HEAVY] No targets found");
         }
         currentTarget = closestTarget;
     }

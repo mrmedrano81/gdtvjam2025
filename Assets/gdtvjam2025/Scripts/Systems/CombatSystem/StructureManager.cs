@@ -99,29 +99,29 @@ public class StructureManager : MonoBehaviour
 
     public void OnStructureRemoved(GameObject structureObjectToBeRemoved, EStructureType structureType)
     {
-        //switch (structureType)
-        //{
-        //    case EStructureType.HQ:
-        //        break;
-        //    case EStructureType.Gatherer:
-        //        //SetupGatherer(structureObject.GetComponent<GathererScript>());
-        //        break;
-        //    case EStructureType.NormalTower:
-        //        SetupStructure(structureObject.GetComponent<NormalTowerScript>());
-        //        break;
-        //    case EStructureType.HeavyTower:
-        //        SetupStructure(structureObject.GetComponent<HeavyTowerScript>());
-        //        break;
-        //    case EStructureType.MissileTower:
-        //        //SetupTower(structureObject.GetComponent<MissileTowerScript>());
-        //        break;
-        //    case EStructureType.Wall:
-        //        SetupWall(structureObject.GetComponent<WallScript>(), gridData, gridPosition);
-        //        break;
-        //    default:
-        //        Debug.LogError("Unknown structure type: " + structureType);
-        //        break;
-        //}
+        switch (structureType)
+        {
+            case EStructureType.HQ:
+                break;
+            case EStructureType.Gatherer:
+                //SetupGatherer(structureObject.GetComponent<GathererScript>());
+                break;
+            case EStructureType.NormalTower:
+                //SetupStructure(structureObject.GetComponent<NormalTowerScript>());
+                break;
+            case EStructureType.HeavyTower:
+                //SetupStructure(structureObject.GetComponent<HeavyTowerScript>());
+                break;
+            case EStructureType.MissileTower:
+                //SetupTower(structureObject.GetComponent<MissileTowerScript>());
+                break;
+            case EStructureType.Wall:
+                structureObjectToBeRemoved.GetComponent<WallScript>().SetupWall(EWallPlacementStatus.Removing);
+                break;
+            default:
+                Debug.LogError("Unknown structure type: " + structureType);
+                break;
+        }
     }
 
     public void SetupStructure(GameObject structureObject, EStructureType structureType, GridData gridData, Vector3 position, Vector3Int gridPosition)

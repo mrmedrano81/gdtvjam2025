@@ -139,28 +139,45 @@ public class WallScript : MonoBehaviour
 
                 if (adjacentWall != null)
                 {
-                    if (adjacentWallDictionary[i] == null)
+                    if (status == EWallPlacementStatus.Placing)
                     {
-                        if (status == EWallPlacementStatus.Placing)
+                        // Store the adjacent wall if it is not already stored
+                        if (adjacentWallDictionary[i] == null)
                         {
-                            adjacentWall.adjacentWallDictionary[adjWallIndex] = gameObject;
                             adjacentWallDictionary[i] = adjacentWall.gameObject;
                         }
-                        else if (status == EWallPlacementStatus.Removing)
+                        else
                         {
-                            adjacentWall.adjacentWallDictionary[adjWallIndex] = null;
-                            adjacentWallDictionary[i] = null;
+                            Debug.LogError($"Adjacent wall at {i} is already stored in this wall.");
                         }
 
-                        adjacentWall.UpdateWallConnectors();
-
-                        Debug.Log($"Detected adjacent wall at {i}");
+                        // Store this wall as an adjacent wall for the current adjacent wall if it is not already stored
+                        if (adjacentWall.adjacentWallDictionary[adjWallIndex] == null)
+                        {
+                            adjacentWall.adjacentWallDictionary[adjWallIndex] = gameObject;
+                        }
+                        else
+                        {
+                            Debug.LogError($"This wall is already stored at at {i} of the adjacent wall.");
+                        }
 
                     }
-                    else
+
+                    if (status == EWallPlacementStatus.Removing)
                     {
-                        Debug.LogError($"Adjacent wall already exists in direction {i}");
+                        // Store the adjacent wall if it is not already stored
+                        if (adjacentWallDictionary[i] != null)
+                        {
+                            adjacentWallDictionary[i] = null;
+                        }
+                        // Store this wall as an adjacent wall for the current adjacent wall if it is not already stored
+                        if (adjacentWall.adjacentWallDictionary[adjWallIndex] != null)
+                        {
+                            adjacentWall.adjacentWallDictionary[adjWallIndex] = null;
+                        }
                     }
+
+                    adjacentWall.UpdateWallConnectors();
                 }
             }
             else

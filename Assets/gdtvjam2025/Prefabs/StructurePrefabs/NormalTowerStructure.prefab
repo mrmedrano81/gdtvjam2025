@@ -567,7 +567,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5469432153142887002}
-  - component: {fileID: 6142501426380420498}
   - component: {fileID: 5736567772631177372}
   m_Layer: 10
   m_Name: NavmeshCollider
@@ -591,29 +590,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5505933126859637461}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &6142501426380420498
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8448863693239204862}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.7
-  m_Height: 3.8
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.69, z: 0}
 --- !u!208 &5736567772631177372
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -624,7 +600,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 0.6, y: 0.6, z: 0.6}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
