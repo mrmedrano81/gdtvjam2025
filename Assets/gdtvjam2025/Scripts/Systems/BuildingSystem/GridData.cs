@@ -5,6 +5,7 @@ using UnityEngine;
 public class GridData
 {
     Dictionary<Vector3Int, PlacementData> placedObjects = new();
+    public Vector2 gridSize = new Vector2(30, 30);
 
     public void AddObjectAt(Vector3Int gridPosition, Vector2Int objectSize, EStructureType structureType, int placedObjectIndex)
     {
@@ -90,6 +91,12 @@ public class GridData
             {
                 return false;
             }
+        }
+
+        // check if the object fits within the grid size
+        if (gridPosition.x + objectSize.x > gridSize.x || gridPosition.z + objectSize.y > gridSize.y)
+        {
+            return false;
         }
 
         return true;

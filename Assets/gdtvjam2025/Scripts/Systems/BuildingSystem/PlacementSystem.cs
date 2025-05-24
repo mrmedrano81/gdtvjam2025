@@ -14,6 +14,7 @@ public enum EStructureType
 
 public class PlacementSystem : MonoBehaviour
 {
+
     [Header("References")]
     [SerializeField] private InputManager inputManager;
     [SerializeField] private Grid grid;
@@ -22,6 +23,9 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private PreviewSystem previewSystem;
     [SerializeField] private ObjectPlacer objectPlacer;
     [SerializeField] private EventManager eventManager;
+
+    [Header("Settings")]
+    public Vector2 gridSize = new Vector2(30, 30);
 
     private Vector3Int lastDetectedPosition = Vector3Int.zero;
     public GridData floorData, structureData;
@@ -39,6 +43,9 @@ public class PlacementSystem : MonoBehaviour
 
         floorData = new GridData();
         structureData = new GridData();
+
+        floorData.gridSize = gridSize;
+        structureData.gridSize = gridSize;
 
         objectPlacer.structureData = structureData;
 

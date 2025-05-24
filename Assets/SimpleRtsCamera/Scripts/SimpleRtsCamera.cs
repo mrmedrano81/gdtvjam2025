@@ -34,15 +34,27 @@ public class SimpleRtsCamera : MonoBehaviour
 	public Vector3 mousePosition;
 
 	Quaternion _initialRotation;
+	private Vector3 _initialPosition;
+    private Vector3 _initialLookAtPoint; // Store the initial look-at point
+    private Vector3 _initialPositionOffsetFromLookAt; // Store the initial offset
 
-	private void Awake()
-	{
-		_playerInput = FindAnyObjectByType<PlayerInput>();
-		_playerInput.SwitchCurrentActionMap("General");
-		_initialRotation = transform.rotation;
-	}
+    private bool resetCameraRotation = true;
+    private bool resetCameraPosition = true;
 
-	private void OnEnable()
+
+    private void Awake()
+    {
+        _playerInput = FindAnyObjectByType<PlayerInput>();
+        _playerInput.SwitchCurrentActionMap("General");
+        _initialRotation = transform.rotation;
+        _initialPosition = transform.position;
+
+        // Calculate and store the initial look-at point and offset
+        _initialLookAtPoint = GetCameraLookAtPoint();
+        _initialPositionOffsetFromLookAt = transform.position - _initialLookAtPoint;
+    }
+
+    private void OnEnable()
 	{
 		_playerInput.actions["CameraMove"].performed += MoveHandler;
 		_playerInput.actions["CameraMove"].canceled += MoveHandler;
@@ -212,6 +224,7 @@ public class SimpleRtsCamera : MonoBehaviour
     //	_currentZoomDistance = transform.position.y;
     //}
 
+
     private void RotateCamera()
 	{
 		if (Mathf.Approximately(_middleMouseInput, 0)) return;
@@ -221,12 +234,33 @@ public class SimpleRtsCamera : MonoBehaviour
 		transform.RotateAround(lookAtPoint, Vector3.up, mouseDelta.x * _rotateSpeed * Time.deltaTime);
 	}
 
-	public void ResetCameraRotation()
-	{
-		transform.rotation = _initialRotation;
-	}
+    #region Camera UI Settings
+    public void ToggleCameraResetRotation(bool toggle)
+    {
+        resetCameraRotation = toggle;
+    }
 
-	private Vector3 GetCameraLookAtPoint()
+    public void ToggleCameraResetPosition(bool toggle)
+    {
+        resetCameraPosition = toggle;
+    }
+
+    public void ResetCameraRotation()
+    {
+        if (resetCameraRotation)
+        {
+            transform.rotation = _initialRotation;
+        }
+
+        if (resetCameraPosition)
+        {
+            // Reset position relative to the initial look-at point
+            transform.position = _initialLookAtPoint + _initialPositionOffsetFromLookAt;
+        }
+    }
+    #endregion
+
+    private Vector3 GetCameraLookAtPoint()
 	{
 		var ray = new Ray(transform.position, transform.forward);
 

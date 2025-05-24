@@ -9,6 +9,8 @@ public class MinimapCameraScript : MonoBehaviour
 
     private float zoomScale;
 
+    private Quaternion originalRotation;
+
     private void Awake()
     {
         mainCamera = FindFirstObjectByType<SimpleRtsCamera>();
@@ -17,7 +19,7 @@ public class MinimapCameraScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        originalRotation = Quaternion.Euler(90f, 0f, 0f);
     }
 
     // Update is called once per frame
@@ -27,6 +29,10 @@ public class MinimapCameraScript : MonoBehaviour
         {
             UpdateRotation();
         }
+        else
+        {
+            transform.rotation = originalRotation;
+        }
     }
 
     private void UpdateRotation()
@@ -35,5 +41,10 @@ public class MinimapCameraScript : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(90f, mainCamera.transform.eulerAngles.y, 0f);
         }
+    }
+
+    public void ToggleUpdateRotation(bool toggle)
+    {
+        updateRotation = toggle;
     }
 }

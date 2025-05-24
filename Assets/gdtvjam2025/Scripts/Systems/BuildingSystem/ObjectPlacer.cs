@@ -24,6 +24,8 @@ public class ObjectPlacer : MonoBehaviour
 
         structureManager.SetupStructure(newObject, structureType, structureData, position, gridPosition);
 
+        Debug.Log($"Placed {structureType} at {gridPosition}");
+
         return placedGameObjects.Count - 1;
     }
 
