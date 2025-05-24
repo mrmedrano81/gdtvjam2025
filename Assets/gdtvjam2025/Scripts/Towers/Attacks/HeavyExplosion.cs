@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class HeavyAttack : MonoBehaviour
 {
+    public GameObject attackObject; // Prefab for the explosion effect
     public float damage;
     public float duration = 0.05f;
 

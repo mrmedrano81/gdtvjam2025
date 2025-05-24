@@ -238,6 +238,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5430521923467204093}
   - {fileID: 8071476957130705486}
   - {fileID: 5664870186582963426}
   m_Father: {fileID: 0}
@@ -258,9 +259,9 @@ MonoBehaviour:
   firePoint: {fileID: 7114584361875450404}
   currentTarget: {fileID: 0}
   targetNearest: 1
-  radius: 35
+  radius: 25
   hasInnerRadius: 1
-  Innerradius: 10
+  Innerradius: 5
   rotationSpeed: 10
   offsetFirePoint: 1
   firePointOffset: 1.5
@@ -298,7 +299,7 @@ MonoBehaviour:
   laserTrail: {fileID: 6291146235009861606, guid: 30a6995b14273b845b07930819dac713, type: 3}
   shootingParticleSystem: {fileID: 7077353029486131533}
   impactParticleSystem: {fileID: 7944142621791167603, guid: 72abc7a0d64801947ae4688510b50cf6, type: 3}
-  explosionPrefab: {fileID: 5203206662700131707, guid: c452f7f8deacde149bee66a6936a984c, type: 3}
+  explosionPrefab: {fileID: 5068255052953716287, guid: 8028b731015a6f140a6ef016256958f5, type: 3}
 --- !u!1 &6031306746706238584
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,7 +398,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5664870186582963426}
-  - component: {fileID: 3333182489077786516}
   m_Layer: 8
   m_Name: HeavyTower
   m_TagString: Untagged
@@ -423,29 +423,6 @@ Transform:
   - {fileID: 52200055155406913}
   m_Father: {fileID: 5641902558161454180}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &3333182489077786516
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7589827261460052455}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 3.31
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8169219844881399310
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,6 +645,89 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8818903457669721729
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5430521923467204093}
+  - component: {fileID: 3707917057492299810}
+  - component: {fileID: 4555706585885876519}
+  m_Layer: 14
+  m_Name: HurtBox
+  m_TagString: Tower
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5430521923467204093
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8818903457669721729}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.5, y: 0.027, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5641902558161454180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &3707917057492299810
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8818903457669721729}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.11
+  m_Height: 3.31
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.41, z: 0}
+--- !u!54 &4555706585885876519
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8818903457669721729}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &8947062777545180350
 GameObject:
   m_ObjectHideFlags: 0

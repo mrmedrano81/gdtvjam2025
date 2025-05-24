@@ -41,11 +41,30 @@ public class PlacementSystem : MonoBehaviour
         structureData = new GridData();
 
         objectPlacer.structureData = structureData;
+
+        InitializeHQPlacement();
     }
 
     private void Update()
     {
         UpdatePlacementSystem();
+    }
+    
+    public void InitializeHQPlacement()
+    {
+        Vector3Int gridPosition = new Vector3Int(-2, 0, -2);
+
+        int index = objectPlacer.PlaceObject(databaseSO.objectsData[0].prefab,
+                                     databaseSO.objectsData[0].StructureType,
+                                     grid.CellToWorld(gridPosition),
+                                     gridPosition);
+
+        //GridData selectedData = databaseSO.objectsData[selectedObjectIndex].ID == 0 ? floorData : structureData;
+
+        structureData.AddObjectAt(gridPosition,
+                                 databaseSO.objectsData[0].Size,
+                                 databaseSO.objectsData[0].StructureType,
+                                 index);
     }
 
     private void UpdatePlacementSystem()

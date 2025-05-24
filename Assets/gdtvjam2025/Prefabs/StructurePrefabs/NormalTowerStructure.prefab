@@ -445,7 +445,7 @@ MonoBehaviour:
   firePoint: {fileID: 4570935103041174996}
   currentTarget: {fileID: 0}
   targetNearest: 1
-  radius: 15
+  radius: 10
   hasInnerRadius: 0
   Innerradius: 2
   rotationSpeed: 20
