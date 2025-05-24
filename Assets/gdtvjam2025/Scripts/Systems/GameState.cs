@@ -42,7 +42,7 @@ public class GameState : MonoBehaviour
 
         if (_instance != null && _instance != this)
         {
-            Debug.LogWarning("Multiple instances of GameState detected. Destroying the new instance.");
+            Debug.LogWarning("Multiple instances of GameState detected. Destroying the new instance. ");
             Destroy(this.gameObject);
         }
         else

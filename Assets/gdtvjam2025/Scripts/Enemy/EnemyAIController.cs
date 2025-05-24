@@ -10,6 +10,8 @@ public class EnemyAIController : MonoBehaviour
     [Header("DEBUGGING")]
     public bool showDetectionRadius = true;
     public bool showTargetDirection = true;
+    public bool isStopped = false;
+    public NavMeshPathStatus pathStatus;
 
     [Header("Settings")]
     public float speed = 5f;
@@ -42,7 +44,6 @@ public class EnemyAIController : MonoBehaviour
 
     private Collider[] hitColliders;
     private Collider[] validTargets;
-    private CapsuleCollider agentHurtbox;
 
     private Vector3 currentDestination;
 
@@ -65,7 +66,6 @@ public class EnemyAIController : MonoBehaviour
         health = GetComponent<Health>();
         healthBar = GetComponent<UIHealthBar>();
         animator = GetComponentInChildren<Animator>();
-        agentHurtbox = GetComponentInChildren<CapsuleCollider>();
 
         hitColliders = new Collider[maxTargets];
         validTargets = new Collider[maxTargets];
@@ -78,6 +78,9 @@ public class EnemyAIController : MonoBehaviour
 
     private void Update()
     {
+        isStopped = agent.isStopped;
+        pathStatus = agent.pathStatus;
+
         if (isDead) return; // If the enemy is dead, skip the update logic
 
         RunScanTimer();
@@ -361,11 +364,11 @@ public class EnemyAIController : MonoBehaviour
         if (closestTarget != null)
         {
             currentTarget = closestTarget;
-            Debug.Log($"New target found: {currentTarget.name}");
+            //Debug.Log($"New target found: {currentTarget.name}");
         }
         else
         {
-            Debug.Log("No specific targets found. Moving towards general objective.");
+            //Debug.Log("No specific targets found. Moving towards general objective.");
         }
     }
 
@@ -385,7 +388,7 @@ public class EnemyAIController : MonoBehaviour
 
         if (path.status == NavMeshPathStatus.PathInvalid)
         {
-            Debug.Log("No valid path to target. Path status: " + path.status, this);
+            //Debug.Log("No valid path to target. Path status: " + path.status, this);
             return false;
         }
 
@@ -414,6 +417,13 @@ public class EnemyAIController : MonoBehaviour
             {
                 agent.SetDestination(hit.position);
                 currentDestination = hit.position; // Store the actual NavMesh destination
+
+                //Debug.Log($"Agent {gameObject.name} set destination to {hit.position}. Path Status: {agent.pathStatus}");
+            }
+            else
+            {
+                agent.SetDestination(currentDestination);
+                //Debug.Log($"Agent {gameObject.name} already at destination {hit.position}. No need to set again.");
             }
             agent.isStopped = false; // Ensure agent can move
             RotateTowardsVelocity(); // Rotate while moving
@@ -423,19 +433,22 @@ public class EnemyAIController : MonoBehaviour
         else
         {
             // Could not find a valid point on the NavMesh near the target position
-            Debug.LogWarning($"Could not find a valid point on NavMesh near {targetWorldPosition}. Agent cannot move.");
+            //Debug.LogWarning($"Could not find a valid point on NavMesh near {targetWorldPosition}. Agent cannot move.");
         }
     }
-
     private void RotateTowardsVelocity()
     {
+        // If the agent is moving, rotate towards its velocity
         if (agent.velocity.magnitude > 0.1f)
         {
-            // If the agent is not moving, do not rotate
-            return;
-        }
+            Vector3 lookDirection = agent.velocity.normalized;
+            lookDirection.y = 0; // Keep rotation horizontal
+            if (lookDirection == Vector3.zero) return; // Avoid NaN if directly on target
 
-        agentBody.LookAt(agent.velocity.normalized, Vector3.up);
+            Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+            agentBody.rotation = Quaternion.Slerp(agentBody.rotation, targetRotation, 5f * Time.deltaTime);
+        }
+        // If not moving, and has a target, RotateTowardsTarget should handle it
     }
 
     /// <summary>

@@ -489,7 +489,7 @@ GameObject:
   - component: {fileID: 1195570742881910230}
   - component: {fileID: 4896466664982706838}
   - component: {fileID: 8501462767574376384}
-  m_Layer: 14
+  m_Layer: 11
   m_Name: HurtCollider
   m_TagString: Wall
   m_Icon: {fileID: 0}

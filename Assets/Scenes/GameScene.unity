@@ -3647,7 +3647,7 @@ Transform:
   m_GameObject: {fileID: 1177265777}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -25.7, y: 0, z: 0}
+  m_LocalPosition: {x: -43.21, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3666,10 +3666,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showSpawnArea: 1
-  continuousSpawning: 0
-  spawnInterval: 2
+  continuousSpawning: 1
+  spawnInterval: 0.1
   numberOfEnemies: 1
-  spawnAreaSize: {x: 10, y: 10}
+  spawnAreaSize: {x: 15, y: 15}
   mapCenterPoint: {fileID: 1913251850}
   enemyPrefab: {fileID: 2307198383579229290, guid: 3693a6cad6e92554ea813c54ad239988, type: 3}
 --- !u!114 &1177265780
