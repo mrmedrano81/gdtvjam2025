@@ -599,8 +599,8 @@ NavMeshObstacle:
   m_GameObject: {fileID: 8448863693239204862}
   m_Enabled: 1
   serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.6, y: 0.6, z: 0.6}
+  m_Shape: 0
+  m_Extents: {x: 1.1, y: 1, z: 1.1}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -810,6 +810,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 198515452120210940, guid: 3f3ad32eaee1fff408199a5cedbf84ae, type: 3}
+      propertyPath: stopAction
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -875,6 +879,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: 3f3ad32eaee1fff408199a5cedbf84ae, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198515452120210940, guid: 3f3ad32eaee1fff408199a5cedbf84ae, type: 3}
+      propertyPath: stopAction
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -944,6 +952,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 198515452120210940, guid: 3f3ad32eaee1fff408199a5cedbf84ae, type: 3}
+      propertyPath: stopAction
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1009,6 +1021,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: 3f3ad32eaee1fff408199a5cedbf84ae, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198515452120210940, guid: 3f3ad32eaee1fff408199a5cedbf84ae, type: 3}
+      propertyPath: stopAction
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

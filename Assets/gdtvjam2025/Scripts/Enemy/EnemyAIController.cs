@@ -84,9 +84,10 @@ public class EnemyAIController : MonoBehaviour
             // Calculate effective attack range dynamically
             CalculateEffectiveAttackRange();
 
-            float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
+            //float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
+            float distanceToTarget = Vector3.Distance(transform.position, currentDestination);
 
-            if (distanceToTarget <= effectiveAttackRange && agent.remainingDistance <= agent.stoppingDistance)
+            if (distanceToTarget <= effectiveAttackRange)
             {
                 // We are within attack range and have stopped moving
                 if (!isAttacking)
@@ -198,6 +199,20 @@ public class EnemyAIController : MonoBehaviour
             effectiveAttackRange = baseAttackRange;
         }
     }
+
+    private float PathLength(NavMeshPath path)
+    {
+        if (path.corners.Length < 2)
+            return 0;
+
+        float lengthSoFar = 0.0F;
+        for (int i = 1; i < path.corners.Length; i++)
+        {
+            lengthSoFar += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+        }
+        return lengthSoFar;
+    }
+
     #endregion
 
     #region pool related

@@ -4,6 +4,8 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     [Header("Settings")]
+
+    [field: SerializeField]
     public float maxHealth { get; private set; } = 100; // Maximum health of the object
     public float currentHealth { get; private set; } // Current health of the object
 

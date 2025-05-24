@@ -3,14 +3,20 @@ using UnityEngine;
 
 public class HeavyAttack : MonoBehaviour
 {
-    public GameObject attackObject; // Prefab for the explosion effect
     public float damage;
     public float duration = 0.05f;
 
 
+    private DestroyScript destroyScript;
+
+    private void Awake()
+    {
+        destroyScript = GetComponentInParent<DestroyScript>();
+    }
+
     private void OnEnable()
     {
-        Destroy(gameObject, duration);
+        destroyScript.DestroyAfter(duration);
     }
 
     private void OnTriggerEnter(Collider other)

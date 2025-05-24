@@ -299,7 +299,7 @@ MonoBehaviour:
   laserTrail: {fileID: 6291146235009861606, guid: 30a6995b14273b845b07930819dac713, type: 3}
   shootingParticleSystem: {fileID: 7077353029486131533}
   impactParticleSystem: {fileID: 7944142621791167603, guid: 72abc7a0d64801947ae4688510b50cf6, type: 3}
-  explosionPrefab: {fileID: 5068255052953716287, guid: 8028b731015a6f140a6ef016256958f5, type: 3}
+  explosionPrefab: {fileID: 7023338620180638252, guid: c452f7f8deacde149bee66a6936a984c, type: 3}
 --- !u!1 &6031306746706238584
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,9 +553,9 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 0
-  m_Extents: {x: 0.8, y: 2.135, z: 0.8}
+  m_Extents: {x: 1.04, y: 2.135, z: 1.04}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 1.08, z: 0}
   m_TimeToStationary: 0.5
