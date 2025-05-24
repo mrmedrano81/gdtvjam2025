@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.LowLevelPhysics;
 using static UnityEngine.GraphicsBuffer;
 
 public class EnemyAIController : MonoBehaviour
@@ -11,6 +12,7 @@ public class EnemyAIController : MonoBehaviour
     public bool showDetectionRadius = true;
     public bool showTargetDirection = true;
     public bool isStopped = false;
+    public bool isAttacking;
     public NavMeshPathStatus pathStatus;
 
     [Header("Settings")]
@@ -25,10 +27,12 @@ public class EnemyAIController : MonoBehaviour
     public int maxTargets = 10;
     public int maxNavmeshSamples = 5;
     public LayerMask targetLayer;
+    public LayerMask wallLayer;
 
     [Header("Attack Settings")]
 
-    [SerializeField] private float effectiveAttackRange;
+    [SerializeField] private float effectiveAttackRangeOuterBound;
+    [SerializeField] private float effectiveAttackRangeInnerBound;
     [SerializeField] private float baseAttackRange;
     [SerializeField] private float attackRangeMultiplier;
 
@@ -49,7 +53,7 @@ public class EnemyAIController : MonoBehaviour
 
     private Health health;
     private UIHealthBar healthBar;
-    private bool isAttacking;
+
     private float lastAttackTime;
 
     private Animator animator;
@@ -59,6 +63,12 @@ public class EnemyAIController : MonoBehaviour
     private readonly string MOVE_ANIM = "Move";
     private readonly string IDLE_ANIM = "Idle";
     private readonly string DIE_ANIM = "Die";
+
+    private bool includeWallsInTargets = false;
+    private float lastMoveTime = 0f; // Track the last time the agent moved
+
+    [Header("Safety Measures")]
+    public float mobTimeOutDuration = 10f; // Time after which the mob will reset if no target is found
 
     private void Awake()
     {
@@ -83,6 +93,20 @@ public class EnemyAIController : MonoBehaviour
 
         if (isDead) return; // If the enemy is dead, skip the update logic
 
+        if (agent.isStopped && !isAttacking)
+        {
+            lastMoveTime += Time.deltaTime;
+        }
+        else
+        {
+            lastMoveTime = 0f; // Reset the timer if the agent is moving
+        }
+
+        if (lastMoveTime > mobTimeOutDuration)
+        {
+            EnemyDie();
+        }
+
         RunScanTimer();
 
         //if (currentTarget == null)
@@ -97,7 +121,8 @@ public class EnemyAIController : MonoBehaviour
         if (currentTarget == null)
         {
             // If no specific target, move towards the general objective (e.g., HQ)
-            MoveTowardsTarget(generalTargetPoint.position);
+            //MoveTowardsTarget(generalTargetPoint.position);
+            MoveTowardsCenter(); // Move towards the center or general target point
         }
         else
         {
@@ -107,19 +132,22 @@ public class EnemyAIController : MonoBehaviour
             //float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
             float distanceToTarget = Vector3.Distance(transform.position, currentDestination);
 
-            if (distanceToTarget <= effectiveAttackRange)
+            if (distanceToTarget <= baseAttackRange)
             {
-                // We are within attack range and have stopped moving
-                if (!isAttacking)
-                {
-                    StartAttack();
-                }
                 RotateTowardsTarget(currentTarget.position); // Ensure agent faces the target
+
+                // We are within attack range and have stopped moving
+
+                agent.isStopped = true; // Stop the agent to prepare for attack
+
+                StartAttack();
+
             }
             else
             {
                 // We need to move closer to the target's attack position
                 StopAttack(); // Stop any ongoing attack
+
                 MoveToAttackPosition(currentTarget); // Move towards a reachable attack point
             }
         }
@@ -131,6 +159,8 @@ public class EnemyAIController : MonoBehaviour
     /// </summary>
     private void MoveToAttackPosition(Transform target)
     {
+        if (isAttacking) return;
+
         if (target == null)
         {
             agent.isStopped = true;
@@ -139,22 +169,32 @@ public class EnemyAIController : MonoBehaviour
 
         // Calculate a point 'effectiveAttackRange - offset' away from the target, in the direction from agent to target
         // The offset ensures the agent tries to stop slightly inside the attack range, accounting for stoppingDistance.
+
         Vector3 directionToTarget = (target.position - transform.position).normalized;
         // Ensure effectiveAttackRange is always positive and greater than stoppingDistance
-        float distanceToStop = Mathf.Max(0.1f, effectiveAttackRange - (agent.stoppingDistance / 2f));
+        float distanceToStop = Mathf.Max(agent.stoppingDistance, effectiveAttackRangeInnerBound - (agent.stoppingDistance / 2f));
         Vector3 desiredAttackPosition = target.position - directionToTarget * distanceToStop;
 
         NavMeshHit hit;
         // Sample a position on the NavMesh near the desired attack point
         // The maxDistance for SamplePosition should be large enough to find a point around the obstacle
-        if (NavMesh.SamplePosition(desiredAttackPosition, out hit, effectiveAttackRange * 2f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(desiredAttackPosition, out hit, effectiveAttackRangeOuterBound, NavMesh.AllAreas))
         {
-            // Only set destination if it's new or the current path is invalid
             if (currentDestination != hit.position || agent.pathStatus == NavMeshPathStatus.PathInvalid)
             {
-                agent.SetDestination(hit.position);
-                currentDestination = hit.position;
+                Vector3 finalAttackPosition = hit.position;
+
+                float hitPositionDistanceToTarget = Vector3.Distance(hit.position, target.position);
+
+                if (hitPositionDistanceToTarget < effectiveAttackRangeInnerBound)
+                {
+                    finalAttackPosition = hit.position + (-directionToTarget) * (effectiveAttackRangeInnerBound - hitPositionDistanceToTarget) ;
+                }
+
+                agent.SetDestination(finalAttackPosition);
+                currentDestination = finalAttackPosition;
             }
+
             agent.isStopped = false; // Ensure agent can move
             RotateTowardsVelocity(); // Rotate while moving
 
@@ -172,7 +212,11 @@ public class EnemyAIController : MonoBehaviour
     {
         if (Time.time - lastAttackTime > 1/attackSpeed)
         {
-            Debug.Log("Attacking");
+            isAttacking = true; // Set attacking state to true
+
+            lastAttackTime = Time.time;
+
+            Debug.Log($"Attacking at {Math.Round(lastAttackTime, 2)}");
 
             animator.Play(ATTACK_ANIM);
         }
@@ -202,28 +246,44 @@ public class EnemyAIController : MonoBehaviour
     /// </summary>
     private void CalculateEffectiveAttackRange()
     {
-        NavMeshObstacle obstacle = currentTarget.GetComponent<NavMeshObstacle>();
-        if (obstacle != null)
+        //NavMeshObstacle obstacle = currentTarget.GetComponent<NavMeshObstacle>();
+
+        Collider collider = currentTarget.GetComponent<Collider>();
+
+        if (collider != null)
         {
             float obstacleSize = 0f;
-            if (obstacle.shape == NavMeshObstacleShape.Box)
+
+            //if (obstacle.shape == NavMeshObstacleShape.Box)
+            if (collider.GeometryHolder.Type == GeometryType.Box)
             {
+                float xOffset = currentTarget.GetComponent<BoxCollider>().size.x;
+                float yOffset = currentTarget.GetComponent<BoxCollider>().size.y;
+
                 // For a box, take the largest dimension (XZ plane) as a proxy for its "width"
-                obstacleSize = Mathf.Max(obstacle.size.x, obstacle.size.z);
+                obstacleSize = Mathf.Max(xOffset, yOffset)/2f;
             }
-            else if (obstacle.shape == NavMeshObstacleShape.Capsule)
+            else if (collider.GeometryHolder.Type == GeometryType.Capsule)
             {
+                float radius = currentTarget.GetComponent<CapsuleCollider>().radius;
+
                 // For a capsule, use its radius
-                obstacleSize = obstacle.radius * 2; // Diameter
+                obstacleSize = radius; // Diameter
+            }
+            else
+            {
+                Debug.LogWarning($"Unsupported collider shape for {currentTarget.name}. Using base attack range.");
             }
 
+            effectiveAttackRangeInnerBound = obstacleSize;
+
             // Combine base attack range with obstacle size
-            effectiveAttackRange = baseAttackRange + (obstacleSize * attackRangeMultiplier);
+            effectiveAttackRangeOuterBound = baseAttackRange + (obstacleSize * attackRangeMultiplier);
         }
         else
         {
             // If the target doesn't have a NavMeshObstacle, use the base attack range
-            effectiveAttackRange = baseAttackRange;
+            effectiveAttackRangeOuterBound = baseAttackRange;
         }
     }
 
@@ -272,72 +332,11 @@ public class EnemyAIController : MonoBehaviour
         enemyGruntPool.ReturnObject(gameObject);
     }
 
-
-    public void SetTarget(Transform target)
-    {
-        Vector3 targetPoint;
-
-
-        if (NavMesh.SamplePosition(target.position, out NavMeshHit hit, agent.height*2f, NavMesh.AllAreas))
-        {
-            targetPoint = hit.position;
-
-            agent.SetDestination(targetPoint);
-        }
-    }
-
-    //public void ScanForTargets()
-    //{
-    //    if (currentTarget != null) return;
-
-    //    Array.Clear(validTargets, 0, validTargets.Length);
-    //    Array.Clear(hitColliders, 0, hitColliders.Length);
-
-
-    //    int numColliders = Physics.OverlapSphereNonAlloc(agentBody.position, scanRadius, hitColliders, targetLayer);
-
-    //    float closestDistance = Mathf.Infinity;
-
-    //    Transform closestTarget = null;
-
-    //    for (int i = 0; i < numColliders; i++)
-    //    {
-    //        if (HasValidPathToTarget(hitColliders[i].transform.position))
-    //        {
-    //            validTargets[i] = hitColliders[i];
-    //        }
-    //        else
-    //        {
-    //            Debug.Log("No valid path to target. Path status: " + hitColliders[i].name + ", " + agent.pathStatus);
-    //        }
-    //    }
-
-    //    if (validTargets.Length == 0)
-    //    {
-    //        Debug.Log("No valid targets found.");
-    //        return;
-    //    }
-
-    //    for (int i = 0; i < validTargets.Length; i++)
-    //    {
-    //        if (validTargets[i] == null) continue;
-
-    //        float distance = Vector3.Distance(validTargets[i].transform.position, agentBody.position);
-
-    //        if (distance < closestDistance)
-    //        {
-    //            // TODO: Prioritize structures over walls. Gatherer > Tower > Wall
-    //            closestTarget = validTargets[i].transform;
-    //            closestDistance = distance;
-    //        }
-    //    }
-
-    //    currentTarget = closestTarget;
-    //}
-
     public void ScanForTargets()
     {
         if (currentTarget != null) return;
+
+        currentDestination = generalTargetPoint.position; // Reset current destination when scanning for new targets
 
         Array.Clear(validTargets, 0, validTargets.Length);
         Array.Clear(hitColliders, 0, hitColliders.Length);
@@ -349,7 +348,9 @@ public class EnemyAIController : MonoBehaviour
 
         for (int i = 0; i < numColliders; i++)
         {
-            if (hitColliders[i] == null) continue; // Skip null entries
+            Debug.Log($"Checking collider {i}: {hitColliders[i]?.name}");
+
+            if (hitColliders[i] == null || !HasValidPathToTarget(hitColliders[i].transform.position)) continue; // Skip null entries
 
             float distance = Vector3.Distance(hitColliders[i].transform.position, agentBody.position);
 
@@ -365,11 +366,40 @@ public class EnemyAIController : MonoBehaviour
         if (closestTarget != null)
         {
             currentTarget = closestTarget;
-            //Debug.Log($"New target found: {currentTarget.name}");
+            Debug.Log($"New target found: {currentTarget.name}");
         }
         else
         {
-            //Debug.Log("No specific targets found. Moving towards general objective.");
+            Array.Clear(hitColliders, 0, hitColliders.Length);
+
+            numColliders = Physics.OverlapSphereNonAlloc(agentBody.position, scanRadius, hitColliders, wallLayer);
+
+            closestDistance = Mathf.Infinity;
+
+            for (int i = 0; i < numColliders; i++)
+            {
+                if (hitColliders[i] == null) continue; // Skip null entries
+
+                float distance = Vector3.Distance(hitColliders[i].transform.position, agentBody.position);
+
+                // TODO: Implement your prioritization logic (Gatherer > Tower > Wall) here if needed.
+                // For now, it simply finds the closest one.
+                if (distance < closestDistance)
+                {
+                    closestTarget = hitColliders[i].transform;
+                    closestDistance = distance;
+                }
+            }
+
+            if (closestTarget != null)
+            {
+                currentTarget = closestTarget;
+                Debug.Log($"Wall found: {currentTarget.name}");
+            }
+            else
+            {
+                Debug.Log("No valid targets found within scan radius.");
+            }
         }
     }
 
@@ -387,20 +417,43 @@ public class EnemyAIController : MonoBehaviour
 
         agent.CalculatePath(targetPosition, path);
 
-        if (path.status == NavMeshPathStatus.PathInvalid)
+        if (path.status == NavMeshPathStatus.PathComplete)
         {
             //Debug.Log("No valid path to target. Path status: " + path.status, this);
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
-
-    private void StopMoving()
+    private void MoveTowardsCenter()
     {
-        agent.isStopped = true;
-        agent.ResetPath();
+        NavMeshHit hit;
+
+        if (NavMesh.SamplePosition(generalTargetPoint.position, out hit, agent.height * 2f, NavMesh.AllAreas))
+        {
+            if (!HasValidPathToTarget(hit.position))
+            {
+                Vector3 hqDirection = (generalTargetPoint.position - agentBody.position).normalized;
+                agent.velocity = (hqDirection * agent.speed); // Stop the agent if no valid path
+                Debug.Log("No valid path to general target. Moving towards center directly.");
+            }
+            else
+            {
+                if (currentDestination != hit.position) // Only set destination if it's different
+                {
+                    currentDestination = hit.position; // Store the actual NavMesh destination
+
+                    //Debug.Log($"Agent {gameObject.name} set destination to {hit.position}. Path Status: {agent.pathStatus}");
+                }
+
+                agent.SetDestination(hit.position);
+            }
+
+            RotateTowardsVelocity(); // Rotate while moving
+
+            animator.Play(MOVE_ANIM);
+        }
     }
 
     /// <summary>
@@ -421,12 +474,19 @@ public class EnemyAIController : MonoBehaviour
 
                 //Debug.Log($"Agent {gameObject.name} set destination to {hit.position}. Path Status: {agent.pathStatus}");
             }
-            else
+            else if (HasValidPathToTarget(currentDestination))
             {
                 agent.SetDestination(currentDestination);
                 //Debug.Log($"Agent {gameObject.name} already at destination {hit.position}. No need to set again.");
             }
+            else
+            {
+                currentTarget = null; // If no valid path, clear the target
+                return;
+            }
+
             agent.isStopped = false; // Ensure agent can move
+
             RotateTowardsVelocity(); // Rotate while moving
 
             animator.Play(MOVE_ANIM);
@@ -435,6 +495,8 @@ public class EnemyAIController : MonoBehaviour
         {
             // Could not find a valid point on the NavMesh near the target position
             //Debug.LogWarning($"Could not find a valid point on NavMesh near {targetWorldPosition}. Agent cannot move.");
+
+            currentTarget = null; // Clear the target if no valid point is found
         }
     }
     private void RotateTowardsVelocity()
@@ -504,7 +566,10 @@ public class EnemyAIController : MonoBehaviour
             if (Application.isPlaying) // Only draw this in play mode as effectiveAttackRange is calculated then
             {
                 Gizmos.color = Color.magenta;
-                Gizmos.DrawWireSphere(currentTarget.position, effectiveAttackRange);
+                Gizmos.DrawWireSphere(currentTarget.position, effectiveAttackRangeOuterBound);
+
+                Gizmos.color = Color.pink;
+                Gizmos.DrawWireSphere(currentTarget.position, effectiveAttackRangeInnerBound);
             }
         }
 

@@ -54,7 +54,7 @@ public class PlacementSystem : MonoBehaviour
 
     private void Update()
     {
-        if (GameState.Instance.CurrentGameState == EGameState.Paused)
+        if (GameState.Instance.CurrentGameState == EGameState.Paused || GameState.Instance.CurrentGameState == EGameState.InCombat)
         {
             return;
         }
@@ -135,8 +135,16 @@ public class PlacementSystem : MonoBehaviour
 
     private void PlaceStructure()
     {
-        if (inputManager.IsPointerOverUI())
+        if (GameState.Instance.CurrentGameState == EGameState.Paused
+            || GameState.Instance.CurrentGameState == EGameState.InCombat)
+        {
             return;
+        }
+
+        if (inputManager.IsPointerOverUI())
+        {
+            return;
+        }
 
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);

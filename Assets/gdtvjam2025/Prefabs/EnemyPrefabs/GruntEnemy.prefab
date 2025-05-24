@@ -70,29 +70,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 146160bbe6fb6b7449c30ab0ce1af9b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showDetectionRadius: 0
-  showTargetDirection: 0
+  showDetectionRadius: 1
+  showTargetDirection: 1
   isStopped: 0
+  isAttacking: 0
   pathStatus: 0
   speed: 3
-  attackSpeed: 1
-  sampleRangeMultiplier: 2
-  scanRadius: 8
+  attackSpeed: 0.5
+  sampleRangeMultiplier: 1
+  scanRadius: 5
   scanInterval: 1
-  maxTargets: 5
+  maxTargets: 20
   maxNavmeshSamples: 5
   targetLayer:
     serializedVersion: 2
     m_Bits: 16384
-  effectiveAttackRange: 0.8
-  baseAttackRange: 1
-  attackRangeMultiplier: 1.2
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  effectiveAttackRangeOuterBound: 0
+  effectiveAttackRangeInnerBound: 0
+  baseAttackRange: 0.5
+  attackRangeMultiplier: 1
   generalTargetPoint: {fileID: 0}
   agentBody: {fileID: 6495197092034207320}
   currentTarget: {fileID: 0}
   agent: {fileID: 0}
   enemyGruntPool: {fileID: 0}
   enemyGruntDeadPool: {fileID: 0}
+  mobTimeOutDuration: 10
 --- !u!114 &552863352244746808
 MonoBehaviour:
   m_ObjectHideFlags: 0
