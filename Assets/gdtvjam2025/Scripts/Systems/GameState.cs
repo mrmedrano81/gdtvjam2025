@@ -17,6 +17,11 @@ public class GameState : MonoBehaviour
 
     public UnityEvent OnPause;
     public UnityEvent OnResume;
+    public UnityEvent OnCombatStart;
+    public UnityEvent OnGracePeriod;
+    public UnityEvent OnDefeat;
+    public UnityEvent OnVictory;
+    public UnityEvent OnEndlessMode;
 
     public EGameState CurrentGameState { get; private set; } = EGameState.Grace;
 
