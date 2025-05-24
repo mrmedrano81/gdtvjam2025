@@ -150,6 +150,8 @@ public class StructureManager : MonoBehaviour
                 Debug.LogError("Unknown structure type: " + structureType);
                 break;
         }
+
+        AddStructureCount(structureType);
     }
 
 

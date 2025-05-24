@@ -726,14 +726,14 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1739305365}
   m_Father: {fileID: 657677836}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 351, y: -12}
+  m_AnchoredPosition: {x: 314.37, y: -5.2}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &401037705
@@ -3630,6 +3630,7 @@ GameObject:
   - component: {fileID: 1177265778}
   - component: {fileID: 1177265779}
   - component: {fileID: 1177265780}
+  - component: {fileID: 1177265781}
   m_Layer: 0
   m_Name: GruntGroup
   m_TagString: Untagged
@@ -3685,6 +3686,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolSize: 50
   objectPrefab: {fileID: 2307198383579229290, guid: 3693a6cad6e92554ea813c54ad239988, type: 3}
+  currentPoolSize: 0
+  enemyGruntDeadPool: {fileID: 1177265781}
+--- !u!114 &1177265781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1177265777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40fc0b60a55c67e4987f14cc89095020, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolSize: 50
+  objectPrefab: {fileID: 4039104833392035354, guid: b15dd65add0339149a01df50bba7d24f, type: 3}
   currentPoolSize: 0
 --- !u!1 &1208516336
 GameObject:
@@ -4973,7 +4990,7 @@ MonoBehaviour:
   maxNormalTowers: 10
   maxHeavyTowers: 10
   maxMissileTowers: 10
-  maxWalls: 10
+  maxWalls: 400
   maxGatherers: 10
   maxHQs: 1
   numNormalTowers: 0
@@ -5453,8 +5470,8 @@ RectTransform:
   m_GameObject: {fileID: 1739305364}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 712709807}
   - {fileID: 2031285295}
@@ -7467,22 +7484,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnPause.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnResume.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnPause.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnResume.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
       propertyPath: OnPause.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 503249038}
@@ -7490,42 +7491,6 @@ PrefabInstance:
       propertyPath: OnResume.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 503249038}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnPause.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnPause.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnResume.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnResume.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnPause.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnResume.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnPause.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnPause.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121406473497602477, guid: f5bf23fdb2302e24986993dd0f1ece9f, type: 3}
-      propertyPath: OnResume.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

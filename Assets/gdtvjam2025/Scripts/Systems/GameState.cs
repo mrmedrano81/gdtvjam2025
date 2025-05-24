@@ -13,6 +13,10 @@ public enum EGameState
 
 public class GameState : MonoBehaviour
 {
+    [Header("Settings")]
+    [Range(30, 120)]
+    [SerializeField] private int frameRate = 60;
+
     [Header("Events")]
 
     public UnityEvent OnPause;
@@ -34,6 +38,8 @@ public class GameState : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = frameRate;
+
         if (_instance != null && _instance != this)
         {
             Debug.LogWarning("Multiple instances of GameState detected. Destroying the new instance.");

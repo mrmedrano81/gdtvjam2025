@@ -11,7 +11,12 @@ public class PoolObjectHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        Invoke("ReturnToPool", lifeTime);
+        OnObjectSpawned();
+
+        if (objectPool != null)
+        {
+            Invoke("ReturnToPool", lifeTime);
+        }
     }
 
     private void ReturnToPool()
@@ -20,6 +25,20 @@ public class PoolObjectHandler : MonoBehaviour
 
         gameObject.transform.SetParent(objectPool.transform); // Set the parent to the pool's transform
 
+        OnReturnToPool();
+
         objectPool.ReturnObject(gameObject);
+    }
+
+    public virtual void OnReturnToPool()
+    {
+        // This method can be overridden in derived classes to perform additional actions when returning to the pool.
+        // For example, resetting properties or states of the object.
+    }
+
+    public virtual void OnObjectSpawned()
+    {
+        // This method can be overridden in derived classes to perform actions when the object is spawned from the pool.
+        // For example, initializing properties or states of the object.
     }
 }

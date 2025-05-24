@@ -49,6 +49,10 @@ public class InputManager : MonoBehaviour
         {
             OnLeftClick?.Invoke();
         }
+        if (mouseLeftClick.phase == InputActionPhase.Performed)
+        {
+            OnLeftClick?.Invoke();
+        }
         if (tab.WasPressedThisFrame())
         {
             OnExit?.Invoke();

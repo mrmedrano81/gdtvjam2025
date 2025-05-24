@@ -3,9 +3,13 @@ using UnityEngine;
 
 public class EnemyGruntObjectPool : ObjectPool
 {
+    public EnemyGruntDeadPool enemyGruntDeadPool;
+
     public override void OnNewObjectCreated(GameObject poolObject)
     {
-        poolObject.GetComponent<EnemyAIController>().enemyPool = this;
+        poolObject.GetComponent<EnemyAIController>().enemyGruntPool = this;
+
+        poolObject.GetComponent<EnemyAIController>().enemyGruntDeadPool = enemyGruntDeadPool;
 
         poolObject.GetComponent<EnemyAIController>().OnObjectGet();
 

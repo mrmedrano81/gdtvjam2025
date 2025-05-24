@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.AI;
@@ -12,15 +13,16 @@ public class EnemyAIController : MonoBehaviour
 
     [Header("Settings")]
     public float speed = 5f;
-    public float scanRadius = 10f;
-    public float scanInterval = 0.5f;
-    private float scanTimer;
-    public int maxTargets = 5;
-    public int maxNavmeshSamples = 5;
-    public LayerMask targetLayer;
+    public float attackSpeed = 1f; // Attack speed in seconds
 
     [Header("Targeting Settings")]
     public float sampleRangeMultiplier = 3f; // Multiplier for the sample range when searching for targets
+    public float scanRadius = 10f;
+    public float scanInterval = 0.5f;
+    private float scanTimer;
+    public int maxTargets = 10;
+    public int maxNavmeshSamples = 5;
+    public LayerMask targetLayer;
 
     [Header("Attack Settings")]
 
@@ -35,22 +37,35 @@ public class EnemyAIController : MonoBehaviour
 
     [Header("Script References")]
     public NavMeshAgent agent;
-    public ObjectPool enemyPool;
+    public ObjectPool enemyGruntPool;
+    public ObjectPool enemyGruntDeadPool;
 
     private Collider[] hitColliders;
     private Collider[] validTargets;
+    private CapsuleCollider agentHurtbox;
 
     private Vector3 currentDestination;
 
     private Health health;
     private UIHealthBar healthBar;
     private bool isAttacking;
+    private float lastAttackTime;
+
+    private Animator animator;
+    private bool isDead = false;
+
+    private readonly string ATTACK_ANIM = "Attack";
+    private readonly string MOVE_ANIM = "Move";
+    private readonly string IDLE_ANIM = "Idle";
+    private readonly string DIE_ANIM = "Die";
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         health = GetComponent<Health>();
         healthBar = GetComponent<UIHealthBar>();
+        animator = GetComponentInChildren<Animator>();
+        agentHurtbox = GetComponentInChildren<CapsuleCollider>();
 
         hitColliders = new Collider[maxTargets];
         validTargets = new Collider[maxTargets];
@@ -63,6 +78,8 @@ public class EnemyAIController : MonoBehaviour
 
     private void Update()
     {
+        if (isDead) return; // If the enemy is dead, skip the update logic
+
         RunScanTimer();
 
         //if (currentTarget == null)
@@ -137,6 +154,8 @@ public class EnemyAIController : MonoBehaviour
             }
             agent.isStopped = false; // Ensure agent can move
             RotateTowardsVelocity(); // Rotate while moving
+
+            animator.Play(MOVE_ANIM);
         }
         else
         {
@@ -148,7 +167,12 @@ public class EnemyAIController : MonoBehaviour
 
     private void StartAttack()
     {
-        Debug.Log("Attacking");
+        if (Time.time - lastAttackTime > 1/attackSpeed)
+        {
+            Debug.Log("Attacking");
+
+            animator.Play(ATTACK_ANIM);
+        }
     }
 
     /// <summary>
@@ -228,13 +252,20 @@ public class EnemyAIController : MonoBehaviour
         health.ResetHealth();
         healthBar.UpdateHealthbar();
         generalTargetPoint = GameObject.FindGameObjectWithTag("HQ").transform;
+        isDead = false;
     }
     #endregion
 
-    // To be called by health script when the enemy dies
+    // Call this when the enemy should die
     public void EnemyDie()
     {
-        enemyPool.ReturnObject(gameObject);
+        isDead = true; // Set the enemy as dead to prevent further updates
+        // Play the death animation (assuming "Die" is the state/clip name)
+        agent.isStopped = true; // Stop the agent from moving
+
+        enemyGruntDeadPool.SpawnObjectAt(transform.position, agentBody.rotation);
+
+        enemyGruntPool.ReturnObject(gameObject);
     }
 
 
@@ -361,32 +392,12 @@ public class EnemyAIController : MonoBehaviour
         return true;
     }
 
-    //private void MoveTowardsCenter()
-    //{
-    //    agent.SetDestination(mapCenterPoint.position);
-    //    agentBody.LookAt(mapCenterPoint.position, Vector3.up);
-    //}
 
     private void StopMoving()
     {
         agent.isStopped = true;
         agent.ResetPath();
     }
-
-    //private void MoveTowardsTarget(Vector3 position)
-    //{
-    //    if (!HasValidPathToTarget(position))
-    //    {
-    //        StopMoving();
-    //        return;
-    //    }
-
-    //    RotateTowardsVelocity();
-
-    //    if (currentDestination == position) return;
-
-    //    agent.SetDestination(position);
-    //}
 
     /// <summary>
     /// Attempts to set the agent's destination, trying to find a valid NavMesh point.
@@ -406,6 +417,8 @@ public class EnemyAIController : MonoBehaviour
             }
             agent.isStopped = false; // Ensure agent can move
             RotateTowardsVelocity(); // Rotate while moving
+
+            animator.Play(MOVE_ANIM);
         }
         else
         {
