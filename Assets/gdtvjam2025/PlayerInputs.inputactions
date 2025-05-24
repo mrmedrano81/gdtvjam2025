@@ -76,6 +76,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Tab",
+                    "type": "Button",
+                    "id": "477cc741-d2a5-4cce-a935-d5240c4a8ae8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -208,6 +217,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Space",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "636c4e79-101f-4e04-98ae-6161191ae215",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tab",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

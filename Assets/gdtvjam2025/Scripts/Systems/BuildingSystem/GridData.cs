@@ -99,6 +99,11 @@ public class GridData
             return false;
         }
 
+        if (GameState.Instance.CurrentGameState == EGameState.Paused)
+        {
+            return false;
+        }
+
         return true;
     }
 

@@ -54,6 +54,11 @@ public class PlacementSystem : MonoBehaviour
 
     private void Update()
     {
+        if (GameState.Instance.CurrentGameState == EGameState.Paused)
+        {
+            return;
+        }
+
         UpdatePlacementSystem();
     }
     

@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
+    [Header("Settings")]
     [SerializeField] private Camera sceneCamera;
 
     private Vector3 lastPosition;
@@ -19,6 +20,8 @@ public class InputManager : MonoBehaviour
     private InputAction escape;
 
     private InputAction space;
+    private InputAction tab;
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,6 +35,7 @@ public class InputManager : MonoBehaviour
         mouseLeftClick = playerInput.actions.FindAction("Left Click");
         escape = playerInput.actions.FindAction("Escape");
         space = playerInput.actions.FindAction("Space");
+        tab = playerInput.actions.FindAction("Tab");
     }
 
     // Update is called once per frame
@@ -45,9 +49,13 @@ public class InputManager : MonoBehaviour
         {
             OnLeftClick?.Invoke();
         }
-        if (escape.WasPressedThisFrame())
+        if (tab.WasPressedThisFrame())
         {
             OnExit?.Invoke();
+        }
+        if (escape.WasPressedThisFrame())
+        {
+            GameState.Instance.PauseGame();
         }
     }
 
