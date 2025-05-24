@@ -254,6 +254,7 @@ public class EnemyAIController : MonoBehaviour
     {
         health.ResetHealth();
         healthBar.UpdateHealthbar();
+        currentTarget = null; // Clear the current target when returning to the pool
         generalTargetPoint = GameObject.FindGameObjectWithTag("HQ").transform;
         isDead = false;
     }

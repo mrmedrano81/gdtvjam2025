@@ -110,7 +110,7 @@ public class StructureManager : MonoBehaviour
                 //SetupStructure(structureObject.GetComponent<NormalTowerScript>());
                 break;
             case EStructureType.HeavyTower:
-                //SetupStructure(structureObject.GetComponent<HeavyTowerScript>());
+                structureObjectToBeRemoved.GetComponent<HeavyTowerScript>().OnTowerRemoved();
                 break;
             case EStructureType.MissileTower:
                 //SetupTower(structureObject.GetComponent<MissileTowerScript>());

@@ -4972,7 +4972,7 @@ MonoBehaviour:
   normalTowerDamage: 15
   normalTowerRange: 15
   normalTowerFirerate: 4
-  normalTowerRotationSpeed: 5
+  normalTowerRotationSpeed: 6
   normalTowerbulletTrailPool: {fileID: 1905618050}
   normalTowerhitEffectPool: {fileID: 1311446502}
   heavyTowerHealth: 100

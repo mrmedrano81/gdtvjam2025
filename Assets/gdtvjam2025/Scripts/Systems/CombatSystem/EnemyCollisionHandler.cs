@@ -21,12 +21,15 @@ public class EnemyCollisionHandler : CollisionHandler
         if (health != null)
         {
             health.TakeDamage(damage);
+
+            //enemyHitEffectPool.SpawnObjectAt(transform.position);
+
         }
     }
 
     public void PlayHitEffectAt(Vector3 position)
     {
         // Play the effect at the specified position
-        enemyHitEffectPool.SpawnObjectAt(position, Quaternion.identity, transform);
+        enemyHitEffectPool.SpawnObjectAt(position, Quaternion.identity);
     }
 }

@@ -121,13 +121,6 @@ public class NormalTowerScript : MonoBehaviour
                     health.TakeDamage(towerStats.damage);
                 }
 
-                int randomInt = Random.Range(0, 100);
-
-                if (randomInt > 30)
-                {
-                    hitEffectPool.SpawnObjectAt(hit.point, Quaternion.LookRotation(-direction));
-                }
-
                 EnemyCollisionHandler enemyCollisionHandler = hit.collider.GetComponent<EnemyCollisionHandler>();
 
                 if (enemyCollisionHandler != null)

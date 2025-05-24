@@ -456,8 +456,8 @@ MonoBehaviour:
     m_Bits: 512
   maxTargetsDetected: 100
   scanInterval: 0.1
-  useAngleAlignmentConstraint: 0
-  minimumAlignment: 0.1
+  useAngleAlignmentConstraint: 1
+  minimumAlignment: 0.9
   lockVerticalRotation: 0
   invertDirection: 1
   UpdateAimDirection: 1

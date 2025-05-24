@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
@@ -26,6 +27,8 @@ public class HeavyTowerScript : MonoBehaviour
     private TowerStats towerStats;
     private Coroutine laserCoroutine;
 
+    private List<LineRenderer> instantiatedLaserTrails = new();
+
     private void Awake()
     {
         //animator = GetComponent<Animator>();
@@ -39,6 +42,17 @@ public class HeavyTowerScript : MonoBehaviour
         {
             LaserExecutionSequence();
         }
+    }
+    
+    public void OnTowerRemoved()
+    {
+        if (laserCoroutine != null)
+        {
+            StopCoroutine(laserCoroutine);
+            laserCoroutine = null;
+        }
+
+        instantiatedLaserTrails.ForEach(laser => Destroy(laser.gameObject));
     }
 
     public void SetHeavyTowerStats(TowerStats towerStats)
@@ -57,6 +71,8 @@ public class HeavyTowerScript : MonoBehaviour
             && laserCoroutine == null)
         {
             LineRenderer laserTrail = Instantiate(this.laserTrail, EffectfirePoint.position, Quaternion.identity);
+
+            instantiatedLaserTrails.Add(laserTrail);
 
             laserCoroutine = StartCoroutine(ExecuteLaser(laserTrail));
         }
@@ -149,6 +165,8 @@ public class HeavyTowerScript : MonoBehaviour
         towerAim.UpdateAimDirection = true;
 
         lastShootTime = Time.time;
+
+        instantiatedLaserTrails.Remove(laserRenderer);
 
         Destroy(laserRenderer.gameObject);
 
