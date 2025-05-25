@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class ObjectPlacer : MonoBehaviour
 {
-    public StructureManager structureManager;
+    public StructureSetupManager structureManager;
     public GridData structureData;
 
    [SerializeField] private List<GameObject> placedGameObjects = new List<GameObject>();
 
     private void Awake()
     {
-        structureManager = FindFirstObjectByType<StructureManager>();
+        structureManager = FindFirstObjectByType<StructureSetupManager>();
     }
 
     public int PlaceObject(GameObject prefab, EStructureType structureType, Vector3 position, Vector3Int gridPosition) 

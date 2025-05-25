@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2459454086306165292}
+  - component: {fileID: 9060218522771604650}
+  - component: {fileID: 5001182722254280560}
   m_Layer: 0
   m_Name: MissileTowerStructure
   m_TagString: Untagged
@@ -30,8 +32,179 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8419992513477228220}
+  - {fileID: 3117642396232385491}
+  - {fileID: 3660631605706943444}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9060218522771604650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195385893685935787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b31724e8228d56f4fa05d825bb37bb53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pivotPoint: {fileID: 3660631605706943444}
+  firePoint: {fileID: 3660631605706943444}
+  currentTarget: {fileID: 0}
+  targetNearest: 1
+  radius: 50
+  hasInnerRadius: 1
+  Innerradius: 10
+  rotationSpeed: 100
+  offsetFirePoint: 0
+  firePointOffset: 1
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  maxTargetsDetected: 100
+  scanInterval: 1
+  useAngleAlignmentConstraint: 0
+  minimumAlignment: 0.1
+  lockVerticalRotation: 1
+  invertDirection: 0
+  UpdateAimDirection: 1
+  hitColliders: []
+--- !u!114 &5001182722254280560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195385893685935787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8f02de0e3eb100458a8e9ad8d2b9dbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  missileCount: 3
+  chargeupDuration: 0.7
+  chargeInterval: 0.2
+  chargeupHeight: 70
+  maxWidthMult: 0.5
+  EffectfirePoint: {fileID: 3660631605706943444}
+  bulletSpawnPosition: {fileID: 3660631605706943444}
+  chargeupTrail: {fileID: 6291146235009861606, guid: 419ceb0425a25e64f88cbf3900748ba2, type: 3}
+  shootingParticleSystem: {fileID: 198234346748616026, guid: b4bea007553dadf4f90ded1c3164e836, type: 3}
+  attackPrefab: {fileID: 742374424698604615, guid: fde58cf579985de4e9e43c0d34130256, type: 3}
+--- !u!1 &2370227887809255712
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3660631605706943444}
+  m_Layer: 0
+  m_Name: Firepoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3660631605706943444
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2370227887809255712}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2, y: 1.26, z: 1.96}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2459454086306165292}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3605453514272306482
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3117642396232385491}
+  - component: {fileID: 7286964617068800276}
+  - component: {fileID: 2596528730641769420}
+  m_Layer: 14
+  m_Name: MissileTowerHurtbox
+  m_TagString: Tower
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3117642396232385491
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3605453514272306482}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2, y: 0, z: 1.96}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2459454086306165292}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &7286964617068800276
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3605453514272306482}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!136 &2596528730641769420
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3605453514272306482}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.63
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.16, z: 0}
 --- !u!1001 &8310104386034422103
 PrefabInstance:
   m_ObjectHideFlags: 0

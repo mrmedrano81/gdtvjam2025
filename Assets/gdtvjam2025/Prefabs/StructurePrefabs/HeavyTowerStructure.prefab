@@ -299,7 +299,7 @@ MonoBehaviour:
   laserTrail: {fileID: 6291146235009861606, guid: 30a6995b14273b845b07930819dac713, type: 3}
   shootingParticleSystem: {fileID: 7077353029486131533}
   impactParticleSystem: {fileID: 7944142621791167603, guid: 72abc7a0d64801947ae4688510b50cf6, type: 3}
-  explosionPrefab: {fileID: 7023338620180638252, guid: c452f7f8deacde149bee66a6936a984c, type: 3}
+  explosionPrefab: {fileID: 4151838144683117336, guid: c452f7f8deacde149bee66a6936a984c, type: 3}
 --- !u!1 &6031306746706238584
 GameObject:
   m_ObjectHideFlags: 0

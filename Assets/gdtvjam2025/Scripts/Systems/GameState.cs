@@ -1,10 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
 public enum EGameState
 {
-    Grace,
-    InCombat,
+    GracePeriod,
+    Combat,
     Paused,
     GameOver,
     Victory,
@@ -27,7 +28,7 @@ public class GameState : MonoBehaviour
     public UnityEvent OnVictory;
     public UnityEvent OnEndlessMode;
 
-    public EGameState CurrentGameState { get; private set; } = EGameState.Grace;
+    public EGameState CurrentGameState { get; private set; } = EGameState.GracePeriod;
 
     private static GameState _instance;
     public static GameState Instance { get { return _instance; } }
@@ -35,6 +36,10 @@ public class GameState : MonoBehaviour
     private bool isPaused = false;
 
     private EGameState previousGameState;
+
+    [Header("DEBUGGING")]
+    public TMP_Text gameStateText;
+
 
     private void Awake()
     {
@@ -51,6 +56,11 @@ public class GameState : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        gameStateText.text = $"{CurrentGameState}";
+    }
+
     public void SetGameState(EGameState newState)
     {
         CurrentGameState = newState;
@@ -59,12 +69,12 @@ public class GameState : MonoBehaviour
 
     public void StartGracePeriod()
     {
-        SetGameState(EGameState.Grace);
+        SetGameState(EGameState.GracePeriod);
     }
 
     public void StartCombat()
     {
-        SetGameState(EGameState.InCombat);
+        SetGameState(EGameState.Combat);
     }
 
     public void PauseGame()

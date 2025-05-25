@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class HeavyAttack : MonoBehaviour
+public class ExplosionScript : MonoBehaviour
 {
     public float damage;
     public float duration = 0.05f;
@@ -12,6 +12,11 @@ public class HeavyAttack : MonoBehaviour
     private void Awake()
     {
         destroyScript = GetComponentInParent<DestroyScript>();
+
+        if (destroyScript == null)
+        {
+            destroyScript = GetComponent<DestroyScript>();
+        }
     }
 
     private void OnEnable()

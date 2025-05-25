@@ -54,8 +54,13 @@ public class PlacementSystem : MonoBehaviour
 
     private void Update()
     {
-        if (GameState.Instance.CurrentGameState == EGameState.Paused || GameState.Instance.CurrentGameState == EGameState.InCombat)
+        if (GameState.Instance.CurrentGameState == EGameState.Paused)
         {
+            return;
+        }
+        if (GameState.Instance.CurrentGameState == EGameState.Combat)
+        {
+            StopPlacement();
             return;
         }
 
@@ -96,6 +101,11 @@ public class PlacementSystem : MonoBehaviour
 
     public void StartPlacement(int ID)
     {
+        if (GameState.Instance.CurrentGameState == EGameState.Paused || GameState.Instance.CurrentGameState == EGameState.Combat)
+        {
+            return;
+        }
+
         objectPlacer.structureData = structureData;
 
         EStructureType structureType = (EStructureType)ID;
@@ -136,7 +146,7 @@ public class PlacementSystem : MonoBehaviour
     private void PlaceStructure()
     {
         if (GameState.Instance.CurrentGameState == EGameState.Paused
-            || GameState.Instance.CurrentGameState == EGameState.InCombat)
+            || GameState.Instance.CurrentGameState == EGameState.Combat)
         {
             return;
         }

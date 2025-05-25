@@ -187,7 +187,7 @@ public class HeavyTowerScript : MonoBehaviour
 
             GameObject explosion = Instantiate(explosionPrefab, hit.point, rotation);
 
-            explosion.GetComponentInChildren<HeavyAttack>().damage = towerStats.damage;
+            explosion.GetComponentInChildren<ExplosionScript>().damage = towerStats.damage;
         }
         else
         {
@@ -203,6 +203,6 @@ public class HeavyTowerScript : MonoBehaviour
 
         GameObject explosion = Instantiate(explosionPrefab, lastAimposition, rotation);
 
-        explosion.GetComponentInChildren<HeavyAttack>().damage = towerStats.damage;
+        explosion.GetComponentInChildren<ExplosionScript>().damage = towerStats.damage;
     }
 }

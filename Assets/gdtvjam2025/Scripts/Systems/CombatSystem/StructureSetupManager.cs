@@ -10,7 +10,7 @@ public struct TowerStats
     public float rotationSpeed;
 }
 
-public class StructureManager : MonoBehaviour
+public class StructureSetupManager : MonoBehaviour
 {
     [Header("Normal Tower Stats")]
     public float normalTowerHealth = 100f;
@@ -35,7 +35,11 @@ public class StructureManager : MonoBehaviour
     public float missileTowerDamage = 10f;
     public float missileTowerRange = 5f;
     public float missileTowerFirerate = 1f;
+    public int missileTowerShotCount = 3;
+    public float missileTowerChargeInterval = 1f;
     public float missileTowerRotationSpeed = 100f;
+    public float missileTowerChargeupDuration = 0.7f;
+
 
     [Header("Wall Stats")]
     public float wallHealth = 100f;
@@ -113,7 +117,7 @@ public class StructureManager : MonoBehaviour
                 structureObjectToBeRemoved.GetComponent<HeavyTowerScript>().OnTowerRemoved();
                 break;
             case EStructureType.MissileTower:
-                //SetupTower(structureObject.GetComponent<MissileTowerScript>());
+                structureObjectToBeRemoved.GetComponent<MissileTowerScript>().OnTowerRemoved();
                 break;
             case EStructureType.Wall:
                 structureObjectToBeRemoved.GetComponent<WallScript>().SetupWall(EWallPlacementStatus.Removing);
@@ -141,7 +145,7 @@ public class StructureManager : MonoBehaviour
                 SetupStructure(structureObject.GetComponent<HeavyTowerScript>());
                 break;
             case EStructureType.MissileTower:
-                //SetupTower(structureObject.GetComponent<MissileTowerScript>());
+                SetupStructure(structureObject.GetComponent<MissileTowerScript>());
                 break;
             case EStructureType.Wall:
                 SetupWall(structureObject.GetComponent<WallScript>(), gridData, gridPosition);
@@ -204,10 +208,23 @@ public class StructureManager : MonoBehaviour
         heavyTowerScript.SetHeavyTowerStats(towerStats);
     }
 
-    //public void SetupTower(MissileTowerScript missileTower)
-    //{
+    public void SetupStructure(MissileTowerScript missileTower)
+    {
+        TowerStats towerStats = new TowerStats
+        {
+            health = missileTowerHealth,
+            damage = missileTowerDamage,
+            range = missileTowerRange,
+            fireRate = missileTowerFirerate,
+            rotationSpeed = missileTowerRotationSpeed
+        };
 
-    //}
+        missileTower.chargeupDuration = missileTowerChargeupDuration;
+        missileTower.chargeInterval = missileTowerChargeInterval;
+        missileTower.missileCount = missileTowerShotCount;
+
+        missileTower.SetMissileTowerStats(towerStats);
+    }
 
     #endregion
 }

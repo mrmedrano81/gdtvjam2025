@@ -78,7 +78,7 @@ MonoBehaviour:
   speed: 3
   attackSpeed: 0.5
   sampleRangeMultiplier: 1
-  scanRadius: 5
+  scanRadius: 8
   scanInterval: 1
   maxTargets: 20
   maxNavmeshSamples: 5
@@ -95,10 +95,10 @@ MonoBehaviour:
   generalTargetPoint: {fileID: 0}
   agentBody: {fileID: 6495197092034207320}
   currentTarget: {fileID: 0}
-  agent: {fileID: 0}
+  naveMeshAgent: {fileID: 0}
   enemyGruntPool: {fileID: 0}
   enemyGruntDeadPool: {fileID: 0}
-  mobTimeOutDuration: 10
+  mobTimeOutDuration: 15
 --- !u!114 &552863352244746808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf08e5b5373fa36409e7442f1589e5a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <maxHealth>k__BackingField: 100
+  <maxHealth>k__BackingField: 10000
   OnDamageTaken:
     m_PersistentCalls:
       m_Calls: []
@@ -602,6 +602,8 @@ MonoBehaviour:
   objectPool: {fileID: 0}
   lifeTime: 1
   returnAfterTime: 1
+  sinkRate: 0.1
+  sinkDelay: 0.5
 --- !u!1 &3595738554688583540
 GameObject:
   m_ObjectHideFlags: 0
