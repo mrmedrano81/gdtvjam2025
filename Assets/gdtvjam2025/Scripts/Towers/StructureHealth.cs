@@ -4,6 +4,8 @@ using UnityEngine.Events;
 public class StructureHealth : MonoBehaviour
 {
     [Header("Settings")]
+    public EStructureType structureType; // Type of the structure (e.g., Wall, Tower, etc.)
+    public GameObject mainObject;
 
     [field: SerializeField]
     public float maxHealth { get; private set; } = 100; // Maximum health of the object
@@ -13,6 +15,18 @@ public class StructureHealth : MonoBehaviour
     public UnityEvent OnDamageTaken;
     public UnityEvent OnHeal;
     public UnityEvent OnDeath;
+
+    private StructureManager structureManager; // Reference to the StructureManager for managing structures
+
+    private void Awake()
+    {
+        structureManager = FindFirstObjectByType<StructureManager>(); // Find the StructureManager in the scene
+
+        if (structureManager == null)
+        {
+            Debug.LogError("StructureManager not found in the scene. Please ensure it is present.");
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -43,6 +57,8 @@ public class StructureHealth : MonoBehaviour
         if (currentHealth <= 0)
         {
             OnDeath?.Invoke();
+
+            structureManager.OnStructureRemoved(mainObject, structureType);
         }
         else
         {

@@ -10,7 +10,7 @@ public struct TowerStats
     public float rotationSpeed;
 }
 
-public class StructureSetupManager : MonoBehaviour
+public class StructureManager : MonoBehaviour
 {
     [Header("HQ Stats")]
     public float hqHealth = 100f;
@@ -116,10 +116,9 @@ public class StructureSetupManager : MonoBehaviour
             case EStructureType.HQ:
                 break;
             case EStructureType.Gatherer:
-                //SetupGatherer(structureObject.GetComponent<GathererScript>());
+                structureObjectToBeRemoved.GetComponent<GathererScript>().OnGathererRemoved();
                 break;
             case EStructureType.NormalTower:
-                //SetupStructure(structureObject.GetComponent<NormalTowerScript>());
                 break;
             case EStructureType.HeavyTower:
                 structureObjectToBeRemoved.GetComponent<HeavyTowerScript>().OnTowerRemoved();
@@ -134,6 +133,10 @@ public class StructureSetupManager : MonoBehaviour
                 Debug.LogError("Unknown structure type: " + structureType);
                 break;
         }
+
+        AddStructureCount(structureType, -1);
+
+        Destroy(structureObjectToBeRemoved);
     }
 
     public void SetupStructure(GameObject structureObject, EStructureType structureType, GridData gridData, Vector3 position, Vector3Int gridPosition)
@@ -185,11 +188,6 @@ public class StructureSetupManager : MonoBehaviour
         wallScript.gridPosition = gridPosition;
 
         wallScript.SetupWall(EWallPlacementStatus.Placing);
-    }
-
-    public void SetupGatherer()
-    {
-
     }
 
     public void SetupStructure(NormalTowerScript normalTowerScript)

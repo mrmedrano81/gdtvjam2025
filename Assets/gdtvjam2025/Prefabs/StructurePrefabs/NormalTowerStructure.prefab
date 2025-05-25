@@ -129,6 +129,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1bde76e4344bc40b23e423f9d838fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structureType: 2
+  mainObject: {fileID: 3731938814567040817}
   <maxHealth>k__BackingField: 100
   OnDamageTaken:
     m_PersistentCalls:

@@ -49,6 +49,11 @@ public class NormalTowerScript : MonoBehaviour
         towerAim.rotationSpeed = towerStats.rotationSpeed;
     }
 
+    public void OnTowerRemoved()
+    {
+        Destroy(gameObject);
+    }
+
     private void Shoot()
     {
         if (Time.time - lastShootTime > 1/towerStats.fireRate)

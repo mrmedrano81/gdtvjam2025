@@ -135,7 +135,11 @@ public class WallScript : MonoBehaviour
 
             if (adjacentData != null)
             {
-                WallScript adjacentWall = objectPlacer.GetObjectAt(adjacentData.placedObjectIndex).GetComponent<WallScript>();
+
+                WallScript adjacentWall = null;
+
+                objectPlacer.GetObjectAt(adjacentData.placedObjectIndex).TryGetComponent(out adjacentWall);
+
 
                 if (adjacentWall != null)
                 {
