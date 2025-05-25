@@ -106,6 +106,8 @@ public class MissileAttack : MonoBehaviour
 
         targetingBeam.enabled = false;
 
+        Destroy(targetingBeam.gameObject);
+
         Destroy(gameObject); // Destroy the explosion effect after a short delay
     }
 

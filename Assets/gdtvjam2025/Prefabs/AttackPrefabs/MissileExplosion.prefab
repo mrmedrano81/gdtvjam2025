@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 15, y: 15, z: 15}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -150,8 +150,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6141d9baa7b8c8441a5030fb91398b15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 30
+  damage: 80
   duration: 0.05
+  effectPrefab: {fileID: 5277445284442464845, guid: 8514470525a0d624ebda14f11a3e25e1, type: 3}
+  transformToFollow: {fileID: 0}
 --- !u!114 &-4038425710374607423
 MonoBehaviour:
   m_ObjectHideFlags: 0

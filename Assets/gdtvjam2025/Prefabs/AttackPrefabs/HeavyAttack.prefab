@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 2.85, y: 2, z: 2}
+  m_LocalScale: {x: 2.63, y: 2, z: 3.04}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 861781906114559526}
@@ -96,7 +96,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6839550101301539369}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -147,7 +147,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
-  duration: 0.05
+  duration: 0.4
+  effectPrefab: {fileID: 8342075076220486466, guid: ca95e2c4b44af8f4382fd8f32b15f7bc, type: 3}
+  transformToFollow: {fileID: 5024513662644406376}
 --- !u!54 &2390630225471392438
 Rigidbody:
   m_ObjectHideFlags: 0

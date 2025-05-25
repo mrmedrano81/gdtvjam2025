@@ -6,8 +6,11 @@ public class ExplosionScript : MonoBehaviour
     public float damage;
     public float duration = 0.05f;
 
+    public GameObject effectPrefab;
 
     private DestroyScript destroyScript;
+
+    public Transform transformToFollow;
 
     private void Awake()
     {
@@ -22,6 +25,21 @@ public class ExplosionScript : MonoBehaviour
     private void OnEnable()
     {
         destroyScript.DestroyAfter(duration);
+
+        if (effectPrefab != null)
+        {
+            if (transformToFollow != null)
+            {
+
+               // Instantiate the effect at the position of the transform to follow
+                GameObject effectInstance = Instantiate(effectPrefab, transformToFollow.position, transformToFollow.rotation);
+            }
+            else
+            {
+                // Instantiate the effect at the position of this object
+                GameObject effectInstance2 = Instantiate(effectPrefab, transform.position, transform.rotation);
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)

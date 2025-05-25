@@ -15,6 +15,7 @@ public class EnemyAIController : MonoBehaviour
     [Header("Settings")]
     public float speed = 5f;
     public float attackSpeed = 1f; // Attack speed in seconds
+    public float damage = 5f;
 
     [Header("Targeting Settings")]
     public float sampleRangeMultiplier = 3f; // Multiplier for the sample range when searching for targets
@@ -49,7 +50,7 @@ public class EnemyAIController : MonoBehaviour
     private Vector3 currentDestination;
 
     private EnemyHealth health;
-    private UIHealthBar healthBar;
+    private UIHealthBarEnemy healthBar;
 
     private float lastAttackTime;
 
@@ -67,11 +68,13 @@ public class EnemyAIController : MonoBehaviour
     [Header("Safety Measures")]
     public float mobTimeOutDuration = 10f; // Time after which the mob will reset if no target is found
 
+    private StructureHealth currentTargetHealth;
+
     private void Awake()
     {
         naveMeshAgent = GetComponent<NavMeshAgent>();
         health = GetComponent<EnemyHealth>();
-        healthBar = GetComponent<UIHealthBar>();
+        healthBar = GetComponent<UIHealthBarEnemy>();
         animator = GetComponentInChildren<Animator>();
 
         hitColliders = new Collider[maxTargets];
@@ -227,6 +230,22 @@ public class EnemyAIController : MonoBehaviour
             lastAttackTime = Time.time;
 
             animator.Play(ATTACK_ANIM);
+
+            if (currentTarget != null)
+            {
+                currentTargetHealth = null;
+
+                currentTargetHealth = currentTarget.gameObject.GetComponent<StructureHealth>();
+
+                if (currentTargetHealth != null)
+                {
+                    currentTargetHealth.TakeDamage(damage);
+                }
+                else
+                {
+                    Debug.LogError($"Current target {currentTarget.name} does not have a StructureHealth component.");
+                }
+            }
         }
     }
 

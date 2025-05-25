@@ -147,6 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBarSprite: {fileID: 3964569389587645373}
   health: {fileID: 0}
+  healthBarObject: {fileID: 5380256841159782100}
 --- !u!1 &3594757222976084776
 GameObject:
   m_ObjectHideFlags: 0
@@ -845,6 +846,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5380256841159782100 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6993426884101294894, guid: 53f45a11a456766469c544cb8443b2ea, type: 3}
+  m_PrefabInstance: {fileID: 3145526456985576954}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7427228864261751676 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5527595596576089734, guid: 53f45a11a456766469c544cb8443b2ea, type: 3}
