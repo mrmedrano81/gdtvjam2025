@@ -1,16 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(EnemyHealth))]
 public class UIHealthBar : MonoBehaviour
 {
     [Header("Settings")]
     public Image healthBarSprite;
-    public Health health;
+    public EnemyHealth health;
 
     private void Awake()
     {
-        health = GetComponent<Health>();
+        health = GetComponent<EnemyHealth>();
 
         health.OnDamageTaken.AddListener(UpdateHealthbar);
     }

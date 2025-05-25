@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class EnemyCollisionHandler : CollisionHandler
 {
-    private Health health;
+    private EnemyHealth health;
     private EnemyHitEffectPool enemyHitEffectPool;
 
     private void Awake()
     {
-        health = GetComponentInParent<Health>();
+        health = GetComponentInParent<EnemyHealth>();
         enemyHitEffectPool = FindFirstObjectByType<EnemyHitEffectPool>();
     }
 

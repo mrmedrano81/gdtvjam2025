@@ -317,6 +317,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4131577684870260472}
+  - component: {fileID: 8067380166528217452}
   m_Layer: 0
   m_Name: GathererStructure
   m_TagString: Untagged
@@ -342,6 +343,20 @@ Transform:
   - {fileID: 2056945531036300832}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8067380166528217452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3393274797144037646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 977dd0bf47f154449a93141e49d79aa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gatherAmount: 1
+  gatherInterval: 1
 --- !u!1 &4107825559250640463
 GameObject:
   m_ObjectHideFlags: 0

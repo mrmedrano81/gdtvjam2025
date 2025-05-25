@@ -114,7 +114,7 @@ public class NormalTowerScript : MonoBehaviour
                 //}
 
 
-                Health health = hit.collider.GetComponentInParent<Health>();
+                EnemyHealth health = hit.collider.GetComponentInParent<EnemyHealth>();
 
                 if (health != null)
                 {

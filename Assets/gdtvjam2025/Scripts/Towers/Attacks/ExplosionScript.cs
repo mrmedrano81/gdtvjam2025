@@ -28,7 +28,7 @@ public class ExplosionScript : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            Health health = other.GetComponentInParent<Health>();
+            EnemyHealth health = other.GetComponentInParent<EnemyHealth>();
 
             if (health != null)
             {

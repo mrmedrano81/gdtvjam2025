@@ -48,7 +48,7 @@ public class EnemyAIController : MonoBehaviour
 
     private Vector3 currentDestination;
 
-    private Health health;
+    private EnemyHealth health;
     private UIHealthBar healthBar;
 
     private float lastAttackTime;
@@ -70,7 +70,7 @@ public class EnemyAIController : MonoBehaviour
     private void Awake()
     {
         naveMeshAgent = GetComponent<NavMeshAgent>();
-        health = GetComponent<Health>();
+        health = GetComponent<EnemyHealth>();
         healthBar = GetComponent<UIHealthBar>();
         animator = GetComponentInChildren<Animator>();
 

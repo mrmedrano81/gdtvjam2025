@@ -12,6 +12,14 @@ public struct TowerStats
 
 public class StructureSetupManager : MonoBehaviour
 {
+    [Header("HQ Stats")]
+    public float hqHealth = 100f;
+
+    [Header("Gatherer Stats")]
+    public float gathererHealth = 100f;
+    public float gathererGatherInterval = 1f;
+    public int gathererGatherAmount = 1;
+
     [Header("Normal Tower Stats")]
     public float normalTowerHealth = 100f;
     public float normalTowerDamage = 10f;
@@ -136,7 +144,7 @@ public class StructureSetupManager : MonoBehaviour
                 break;
 
             case EStructureType.Gatherer:
-                //SetupGatherer(structureObject.GetComponent<GathererScript>());
+                SetupGatherer(structureObject.GetComponent<GathererScript>());
                 break;
             case EStructureType.NormalTower:
                 SetupStructure(structureObject.GetComponent<NormalTowerScript>());
@@ -163,6 +171,13 @@ public class StructureSetupManager : MonoBehaviour
     #endregion
 
     #region --- Setup Methods ---
+
+    private void SetupGatherer(GathererScript gathererScript)
+    {
+        gathererScript.gatherInterval = gathererGatherInterval;
+        gathererScript.gatherAmount = gathererGatherAmount;
+    }
+
     private void SetupWall(WallScript wallScript, GridData gridData, Vector3Int gridPosition)
     {
         wallScript.structureData = gridData;

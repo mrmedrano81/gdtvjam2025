@@ -85,4 +85,26 @@ public class InputManager : MonoBehaviour
         return lastPosition;
 
     }
+
+    public Vector2 GetMousePosition()
+    {
+        return mousePosInput.ReadValue<Vector2>();
+    }
+
+    /// Get the position of the mouse in the world space
+    public Vector3 GetMouseWorldPosition(int layerMask)
+    {
+        Vector3 mousePos = mousePosInput.ReadValue<Vector2>();
+
+        mousePos.z = sceneCamera.nearClipPlane;
+        Ray ray = sceneCamera.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 100, layerMask))
+        {
+            return hit.point;
+        }
+
+        return lastPosition; // Return the last known position if no hit
+    }
 }
