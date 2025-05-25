@@ -122,6 +122,12 @@ public class EnemyAIController : MonoBehaviour
         {
             // If no specific target, move towards the general objective (e.g., HQ)
             //MoveTowardsTarget(generalTargetPoint.position);
+
+            if (isAttacking)
+            {
+                StopAttack(); // Stop any ongoing attack if no target is available
+            }
+
             MoveTowardsCenter(); // Move towards the center or general target point
         }
         else
@@ -230,12 +236,9 @@ public class EnemyAIController : MonoBehaviour
         if (isAttacking)
         {
             isAttacking = false;
-            // Only re-enable movement if there's a target to move towards
-            if (currentTarget != null)
-            {
-                agent.isStopped = false;
-            }
-            Debug.Log($"Agent {gameObject.name} stopped attacking {currentTarget.name}.");
+            agent.isStopped = false;
+
+            //Debug.Log($"Agent {gameObject.name} stopped attacking {currentTarget.name}.");
             // TODO: Stop any ongoing attack effects
             // Example: CancelInvoke("DealDamage");
         }
