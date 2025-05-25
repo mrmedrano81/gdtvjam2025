@@ -17,6 +17,10 @@ public class GameState : MonoBehaviour
     [Header("Settings")]
     [Range(30, 120)]
     [SerializeField] private int frameRate = 60;
+    public int maxEnemiesAlive = 400;
+    public int currentEnemiesAlive = 0;
+    public int currentNumKills = 0;
+    public TMP_Text numKillText;
 
     [Header("Events")]
 
@@ -40,6 +44,9 @@ public class GameState : MonoBehaviour
     [Header("DEBUGGING")]
     public TMP_Text gameStateText;
 
+    public GameObject endScreen;
+
+    
 
     private void Awake()
     {
@@ -56,9 +63,24 @@ public class GameState : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        maxEnemiesAlive = 400;
+        currentEnemiesAlive = 0;
+        currentNumKills = 0;
+
+        SetGameState(EGameState.GracePeriod);
+    }
+
     private void Update()
     {
         gameStateText.text = $"{CurrentGameState}";
+        numKillText.text = currentNumKills.ToString();
+    }
+
+    public bool CanSpawnMoreEnemies()
+    {
+        return currentEnemiesAlive < maxEnemiesAlive;
     }
 
     public void SetGameState(EGameState newState)
@@ -105,6 +127,8 @@ public class GameState : MonoBehaviour
 
     public void EndGame()
     {
+        endScreen.SetActive(true);
+
         SetGameState(EGameState.GameOver);
     }
 
@@ -116,5 +140,10 @@ public class GameState : MonoBehaviour
     public void StartEndlessMode()
     {
         SetGameState(EGameState.Endless);
+    }
+
+    public void Restart()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 }

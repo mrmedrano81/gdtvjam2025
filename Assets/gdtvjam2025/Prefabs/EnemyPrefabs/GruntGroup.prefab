@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2701822031559882190
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 976543823065876365}
+  - component: {fileID: 3619450637275173281}
+  - component: {fileID: 7690344161447852144}
+  - component: {fileID: 7151236929226149318}
+  m_Layer: 0
+  m_Name: GruntGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &976543823065876365
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2701822031559882190}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -88.4, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3619450637275173281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2701822031559882190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56be5973be5c2de48a21b517f2ea84d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showSpawnArea: 1
+  continuousSpawning: 1
+  spawnInterval: 0.6
+  numberOfEnemies: 2
+  spawnAreaSize: {x: 20, y: 150}
+  mapCenterPoint: {fileID: 0}
+  enemyPrefab: {fileID: 2307198383579229290, guid: 3693a6cad6e92554ea813c54ad239988, type: 3}
+--- !u!114 &7690344161447852144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2701822031559882190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a474ab3d7f98d6846a86d4fdc3b2628d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolSize: 100
+  objectPrefab: {fileID: 2307198383579229290, guid: 3693a6cad6e92554ea813c54ad239988, type: 3}
+  SetupBeforeActive: 1
+  currentPoolSize: 0
+  enemyGruntDeadPool: {fileID: 7151236929226149318}
+--- !u!114 &7151236929226149318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2701822031559882190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40fc0b60a55c67e4987f14cc89095020, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolSize: 100
+  objectPrefab: {fileID: 4039104833392035354, guid: b15dd65add0339149a01df50bba7d24f, type: 3}
+  SetupBeforeActive: 0
+  currentPoolSize: 0

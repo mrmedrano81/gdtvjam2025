@@ -93,19 +93,19 @@ public class EnemyAIController : MonoBehaviour
 
         if (isDead) return; // If the enemy is dead, skip the update logic
 
-        if (currentTarget == null)
-        {
-            lastTimeTargetExisted += Time.deltaTime;
-        }
-        else
-        {
-            lastTimeTargetExisted = 0f; // Reset the timer if the agent is moving
-        }
+        //if (currentTarget == null)
+        //{
+        //    lastTimeTargetExisted += Time.deltaTime;
+        //}
+        //else
+        //{
+        //    lastTimeTargetExisted = 0f; // Reset the timer if the agent is moving
+        //}
 
-        if (lastTimeTargetExisted > mobTimeOutDuration)
-        {
-            EnemyDie();
-        }
+        //if (lastTimeTargetExisted > mobTimeOutDuration)
+        //{
+        //    EnemyDie();
+        //}
 
         RunScanTimer();
 
@@ -350,6 +350,9 @@ public class EnemyAIController : MonoBehaviour
         isDead = true; // Set the enemy as dead to prevent further updates
         // Play the death animation (assuming "Die" is the state/clip name)
         naveMeshAgent.isStopped = true; // Stop the agent from moving
+
+        GameState.Instance.currentEnemiesAlive--;
+        GameState.Instance.currentNumKills++;
 
         enemyGruntDeadPool.SpawnObjectAt(transform.position, agentBody.rotation);
 

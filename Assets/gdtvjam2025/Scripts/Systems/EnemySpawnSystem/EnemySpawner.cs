@@ -35,22 +35,28 @@ public class EnemySpawner : MonoBehaviour
 
     private void Update()
     {
+        if (GameState.Instance.CurrentGameState != EGameState.Combat) return;
+
         if (spawningEnemies && Time.time - lastSpawnTime > spawnInterval)
         {
+            if (!GameState.Instance.CanSpawnMoreEnemies())
+            {
+                return;
+            }
             SpawnEnemies();
             lastSpawnTime = Time.time;
         }
     }
 
-    private void OnEnable()
-    {
-        inputManager.OnSpace += ExecuteSpawningLogic;
-    }
+    //private void OnEnable()
+    //{
+    //    inputManager.OnSpace += ExecuteSpawningLogic;
+    //}
 
-    private void OnDisable()
-    {
-        inputManager.OnSpace -= ExecuteSpawningLogic;
-    }
+    //private void OnDisable()
+    //{
+    //    inputManager.OnSpace -= ExecuteSpawningLogic;
+    //}
 
 
     private void ExecuteSpawningLogic()
@@ -67,7 +73,9 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemies()
     {
-        for (int i = 0; i < numberOfEnemies; i++)
+        int randEnemyCount = Random.Range(1, numberOfEnemies);
+
+        for (int i = 0; i < randEnemyCount; i++)
         {
             Vector3 spawnPosition = new Vector3(
                 Random.Range(-spawnAreaSize.x / 2, spawnAreaSize.x / 2),
@@ -79,6 +87,8 @@ public class EnemySpawner : MonoBehaviour
             //enemy.GetComponent<EnemyAIController>().mapCenterPoint = mapCenterPoint;
 
             enemyPool.SpawnObjectAt(spawnPosition);
+
+            GameState.Instance.currentEnemiesAlive++;
         }
     }
 

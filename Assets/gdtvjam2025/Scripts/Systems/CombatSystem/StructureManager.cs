@@ -81,6 +81,28 @@ public class StructureManager : MonoBehaviour
         
     }
 
+    public bool CanPlaceStructure(EStructureType structureType, int count = 1)
+    {
+        switch (structureType)
+        {
+            case EStructureType.Gatherer:
+                return numGatherers < maxGatherers;
+            case EStructureType.NormalTower:
+                return numNormalTowers < maxNormalTowers;
+            case EStructureType.HeavyTower:
+                return numHeavyTowers < maxHeavyTowers;
+            case EStructureType.MissileTower:
+                return numMissileTowers < maxMissileTowers;
+            case EStructureType.Wall:
+                return numWalls < maxWalls;
+            default:
+                Debug.LogError("Unknown structure type: " + structureType);
+                break;
+        }
+
+        return false; // Default case if no conditions are met
+    }
+
     public void AddStructureCount(EStructureType structureType, int count = 1)
     {
         switch (structureType)
