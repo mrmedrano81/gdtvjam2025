@@ -528,7 +528,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 971866854002660015}
-  - component: {fileID: 6509121413916110237}
+  - component: {fileID: 795937448460970731}
   m_Layer: 17
   m_Name: SelectionUIHitbox
   m_TagString: HQ
@@ -545,14 +545,14 @@ Transform:
   m_GameObject: {fileID: 1462795295209624994}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.99, y: 0, z: 1.978}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.43, z: 0}
+  m_LocalScale: {x: 1.1764705, y: 1.1764705, z: 1.1764705}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 529037758274443340}
+  m_Father: {fileID: 7675809350170600203}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &6509121413916110237
-CapsuleCollider:
+--- !u!65 &795937448460970731
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -566,14 +566,12 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.6
-  m_Height: 6.87
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.63, z: 0}
+  serializedVersion: 3
+  m_Size: {x: 3.22, y: 1.05, z: 3.2}
+  m_Center: {x: 0, y: 0.67, z: 0}
 --- !u!1 &2288592852075387120
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,6 +887,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7675809350170600203}
+  - component: {fileID: 350673938907042401}
   m_Layer: 0
   m_Name: HQModel
   m_TagString: Untagged
@@ -909,6 +908,7 @@ Transform:
   m_LocalScale: {x: 0.85, y: 0.85, z: 0.85}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 971866854002660015}
   - {fileID: 7381075470462188789}
   - {fileID: 8168417381868502476}
   - {fileID: 9133866835255182061}
@@ -920,6 +920,20 @@ Transform:
   - {fileID: 7247391840367265299}
   m_Father: {fileID: 529037758274443340}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &350673938907042401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3069292446237154067}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eabb2ea9aa529b145a837e4d80aa09a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashColor: {r: 1, g: 1, b: 1, a: 0.49019608}
+  flashSpeed: 0.7
 --- !u!1 &3474124388905237258
 GameObject:
   m_ObjectHideFlags: 0
@@ -1562,7 +1576,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 610800106533371510}
-  - {fileID: 971866854002660015}
   - {fileID: 7675809350170600203}
   - {fileID: 7542339229966874497}
   m_Father: {fileID: 0}

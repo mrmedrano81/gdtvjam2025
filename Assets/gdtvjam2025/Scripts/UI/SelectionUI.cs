@@ -6,12 +6,16 @@ public class SelectionUI : MonoBehaviour
     public LayerMask selectionUIMask;
 
     InputManager inputManager;
+    PlacementSystem placementSystem;
 
     Vector3 selectedPosition;
+
+    GameObject selectedObject;
 
     private void Awake()
     {
         inputManager = FindFirstObjectByType<InputManager>();
+        placementSystem = FindFirstObjectByType<PlacementSystem>();
 
         if (inputManager == null)
         {
@@ -24,6 +28,13 @@ public class SelectionUI : MonoBehaviour
 
     private void OnSelect()
     {
+        if (placementSystem.IsBuildingActive)
+        {
+            Debug.Log("Placement in progress, cannot select object.");
+            DeselectCurrentObject();
+            return; // Prevent selection while placing an object
+        }
+
         int mask = selectionUIMask.value;
 
         Vector3 mousePosInput = inputManager.GetMousePosition();
@@ -37,11 +48,52 @@ public class SelectionUI : MonoBehaviour
             Debug.Log("Clicked on: " + hit.collider.gameObject.name);
 
             selectedPosition = hit.point;
+
+            if (hit.collider.gameObject == selectedObject)
+            {
+                Debug.Log("Already selected: " + hit.collider.gameObject.name);
+
+                SetupSelectedObject();
+                return; // Already selected, do nothing
+            }
+
+            if (selectedObject != null)
+            {
+                DeselectCurrentObject();
+            }
+
+            selectedObject = hit.collider.gameObject;
+
+            SetupSelectedObject();
+
+            
         }
         else
         {
-            Debug.Log("Nothing hit");
+            if (selectedObject != null)
+            {
+                DeselectCurrentObject();
+            }
+
+            Debug.Log("No object selected, raycast did not hit any collider.");
         }
+    }
+
+    private void SetupSelectedObject()
+    {
+        selectedObject.GetComponentInParent<MaterialFlasher>().enabled = true;
+    }
+
+    private void DeselectCurrentObject()
+    {
+        if (selectedObject == null)
+        {
+            return; // Nothing to deselect
+        }
+
+        selectedObject.GetComponentInParent<MaterialFlasher>().enabled = false;
+
+        selectedObject = null;
     }
 
 

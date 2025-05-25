@@ -32,6 +32,8 @@ public class PlacementSystem : MonoBehaviour
 
     IBuildingState buildingState;
 
+    public bool IsBuildingActive => buildingState != null;
+
     private void Awake()
     {
         eventManager = FindFirstObjectByType<EventManager>();
@@ -122,7 +124,15 @@ public class PlacementSystem : MonoBehaviour
                                            objectPlacer,
                                            eventManager);
 
-        inputManager.OnLeftClick += PlaceStructure;
+        if (structureType == EStructureType.Wall)
+        {
+            inputManager.OnLeftClickHold += PlaceStructure;
+        }
+        else
+        {
+            inputManager.OnLeftClick += PlaceStructure;
+        }
+
         inputManager.OnExit += StopPlacement;
     }
 
@@ -139,7 +149,7 @@ public class PlacementSystem : MonoBehaviour
                                           objectPlacer,
                                           eventManager);
 
-        inputManager.OnLeftClick += PlaceStructure;
+        inputManager.OnLeftClickHold += PlaceStructure;
         inputManager.OnExit += StopPlacement;
     }
 
@@ -172,6 +182,7 @@ public class PlacementSystem : MonoBehaviour
         buildingState.EndState();
 
         inputManager.OnLeftClick -= PlaceStructure;
+        inputManager.OnLeftClickHold -= PlaceStructure;
         inputManager.OnExit -= StopPlacement;
 
         lastDetectedPosition = Vector3Int.zero;

@@ -11,7 +11,7 @@ public class InputManager : MonoBehaviour
 
     [SerializeField] private LayerMask placementLayerMask;
 
-    public event Action OnLeftClick, OnExit, OnSpace;
+    public event Action OnLeftClick, OnLeftClickHold, OnExit, OnSpace;
 
     private PlayerInput playerInput;
 
@@ -51,7 +51,7 @@ public class InputManager : MonoBehaviour
         }
         if (mouseLeftClick.phase == InputActionPhase.Performed)
         {
-            OnLeftClick?.Invoke();
+            OnLeftClickHold?.Invoke();
         }
         if (tab.WasPressedThisFrame())
         {

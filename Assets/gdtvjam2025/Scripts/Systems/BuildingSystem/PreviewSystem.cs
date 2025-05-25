@@ -16,6 +16,15 @@ public class PreviewSystem : MonoBehaviour
 
     private Renderer cellIndicatorRenderer;
 
+    public LayerMask selectionUIMask;
+    InputManager inputManager;
+
+    private GameObject selectedObject;
+
+    private void Awake()
+    {
+        inputManager = FindFirstObjectByType<InputManager>();
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -115,5 +124,57 @@ public class PreviewSystem : MonoBehaviour
 
         PrepareCursor(Vector2Int.one);
         ApplyFeedbackToCursor(false);
+    }
+
+    public void ShowObjectToBeRemoved()
+    {
+        int mask = selectionUIMask.value;
+
+        Vector3 mousePosInput = inputManager.GetMousePosition();
+
+        mousePosInput.z = Camera.main.nearClipPlane;
+
+        Ray ray = Camera.main.ScreenPointToRay(mousePosInput);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
+        {
+            if (hit.collider.gameObject.CompareTag("HQ"))
+            {
+                return;
+            }
+
+            if (hit.collider.gameObject == selectedObject)
+            {
+                selectedObject.GetComponentInParent<MaterialFlasher>().enabled = true;
+                selectedObject.GetComponentInParent<MaterialFlasher>().flashColor = Color.red;
+                return; // Already selected, do nothing
+            }
+
+            if (selectedObject != null)
+            {
+                selectedObject.GetComponentInParent<MaterialFlasher>().enabled = false;
+                selectedObject.GetComponentInParent<MaterialFlasher>().flashColor = Color.white;
+                selectedObject = null;
+            }
+
+            selectedObject = hit.collider.gameObject;
+
+            selectedObject.GetComponentInParent<MaterialFlasher>().enabled = true;
+            selectedObject.GetComponentInParent<MaterialFlasher>().flashColor = Color.red;
+
+
+
+        }
+        else
+        {
+            if (selectedObject != null)
+            {
+                selectedObject.GetComponentInParent<MaterialFlasher>().enabled = false;
+                selectedObject.GetComponentInParent<MaterialFlasher>().flashColor = Color.white;
+                selectedObject = null;
+            }
+
+            Debug.Log("No object selected, raycast did not hit any collider.");
+        }
     }
 }

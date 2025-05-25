@@ -65,6 +65,11 @@ public class RemovingState : IBuildingState
 
             PlacementData placementData = selectedData.GetPlacementDataOfObjectAt(gridPosition);
 
+            if (placementData.structureType == EStructureType.HQ)
+            {
+                return; // No placement data found, nothing to remove
+            }
+
             selectedData.RemoveObjectAt(gridPosition);
 
             objectPlacer.RemoveObjectAt(gameObjectIndex, placementData.structureType);
@@ -87,5 +92,6 @@ public class RemovingState : IBuildingState
     {
         bool validity = CheckIfSelectionIsValid(gridPosition);
         previewSystem.UpdatePosition(grid.CellToWorld(gridPosition), validity);
+        previewSystem.ShowObjectToBeRemoved();
     }
 }
