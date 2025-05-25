@@ -9,6 +9,6 @@ public class NormalBulletLinePool : ObjectPool
 
     public override void OnObjectGet(GameObject poolObject)
     {
-        poolObject.GetComponent<PoolObjectHandler>().SpawnObject();
+        poolObject.GetComponent<PoolObjectHandler>().OnSpawnObject();
     }
 }

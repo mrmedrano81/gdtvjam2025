@@ -166,8 +166,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectPool: {fileID: 0}
-  lifeTime: 1
+  lifeTime: 2
   returnAfterTime: 1
+  sinkRate: 0.6
+  sinkDelay: 1.4
 --- !u!1 &4039192065146465322
 GameObject:
   m_ObjectHideFlags: 0

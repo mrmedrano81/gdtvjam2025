@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -11,7 +12,7 @@ public class PoolObjectHandler : MonoBehaviour
 
     private void ReturnToPool()
     {
-        //Debug.Log(gameObject.name);
+        //Debug.Log($"Returning {gameObject.name} to pool");
 
         OnReturnToPool();
 
@@ -24,16 +25,29 @@ public class PoolObjectHandler : MonoBehaviour
         // For example, resetting properties or states of the object.
     }
 
-    public void SpawnObject()
+    public void OnSpawnObject()
     {
         OnObjectSpawned();
 
-        Invoke("ReturnToPool", lifeTime);
+        if (returnAfterTime)
+        {
+            //Debug.Log($"Returning {gameObject.name} to pool after {lifeTime} seconds");
+
+            StartCoroutine(HandleLifetimeRoutine());
+        }
     }
 
     public virtual void OnObjectSpawned()
     {
         // This method can be overridden in derived classes to perform actions when the object is spawned from the pool.
         // For example, initializing properties or states of the object.
+    }
+
+    private IEnumerator HandleLifetimeRoutine()
+    {
+        //Debug.Log($"Starting lifetime routine for {gameObject.name} for {lifeTime} seconds");
+        yield return new WaitForSeconds(lifeTime);
+        //Debug.Log($"Lifetime ended for {gameObject.name}, returning to pool");
+        ReturnToPool();
     }
 }

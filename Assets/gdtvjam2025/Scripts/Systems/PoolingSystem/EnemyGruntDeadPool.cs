@@ -11,7 +11,7 @@ public class EnemyGruntDeadPool : ObjectPool
     {
         base.OnObjectGet(poolObject);
 
-        poolObject.GetComponent<PoolObjectHandler>().SpawnObject();
+        poolObject.GetComponent<PoolObjectHandler>().OnSpawnObject();
     }
 
     public override void OnObjectReturned(GameObject poolObject)

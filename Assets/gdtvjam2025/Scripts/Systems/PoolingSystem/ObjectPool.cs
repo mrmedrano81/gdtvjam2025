@@ -7,6 +7,7 @@ public class ObjectPool : MonoBehaviour
     [Header("Pool Settings")]
     public int poolSize = 50;
     public GameObject objectPrefab;
+    public bool SetupBeforeActive = true;
 
     [Header("DEBUGGING")]
     public int currentPoolSize = 0;
@@ -39,9 +40,17 @@ public class ObjectPool : MonoBehaviour
         {
             GameObject poolObject = OobjectPoolQueue.Dequeue();
 
-            OnObjectGet(poolObject);
+            if (SetupBeforeActive)
+            {
+                OnObjectGet(poolObject);
+                poolObject.SetActive(true);
+            }
+            else
+            {
+                poolObject.SetActive(true);
+                OnObjectGet(poolObject);
+            }
 
-            poolObject.SetActive(true);
             return poolObject;
         }
         else
@@ -64,9 +73,17 @@ public class ObjectPool : MonoBehaviour
 
             poolObject.transform.position = position;
 
-            OnObjectGet(poolObject);
+            if (SetupBeforeActive)
+            {
+                OnObjectGet(poolObject);
+                poolObject.SetActive(true);
+            }
+            else
+            {
+                poolObject.SetActive(true);
+                OnObjectGet(poolObject);
+            }
 
-            poolObject.SetActive(true);
             return poolObject;
         }
         else
@@ -92,9 +109,16 @@ public class ObjectPool : MonoBehaviour
             poolObject.transform.position = position;
             poolObject.transform.rotation = rotation;
 
-            OnObjectGet(poolObject);
-
-            poolObject.SetActive(true);
+            if (SetupBeforeActive)
+            {
+                OnObjectGet(poolObject);
+                poolObject.SetActive(true);
+            }
+            else
+            {
+                poolObject.SetActive(true);
+                OnObjectGet(poolObject);
+            }
             return poolObject;
         }
         else
@@ -121,11 +145,19 @@ public class ObjectPool : MonoBehaviour
             poolObject.transform.position = position;
             poolObject.transform.rotation = rotation;
 
-            OnObjectGet(poolObject);
-
             poolObject.transform.SetParent(parentTransform, false);
 
-            poolObject.SetActive(true);
+            if (SetupBeforeActive)
+            {
+                OnObjectGet(poolObject);
+                poolObject.SetActive(true);
+            }
+            else
+            {
+                poolObject.SetActive(true);
+                OnObjectGet(poolObject);
+            }
+
             return poolObject;
         }
         else
