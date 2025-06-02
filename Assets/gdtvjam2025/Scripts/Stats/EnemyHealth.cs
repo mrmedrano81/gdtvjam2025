@@ -6,13 +6,14 @@ public class EnemyHealth : MonoBehaviour
     [Header("Settings")]
 
     [field: SerializeField]
-    public float maxHealth { get; private set; } = 100; // Maximum health of the object
+    public float maxHealth { get; set; } = 100; // Maximum health of the object
     public float currentHealth { get; private set; } // Current health of the object
 
     [Header("Events")]
     public UnityEvent OnDamageTaken; 
     public UnityEvent OnHeal;
     public UnityEvent OnDeath;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

@@ -18,9 +18,12 @@ public class GameState : MonoBehaviour
     [Range(30, 120)]
     [SerializeField] private int frameRate = 60;
     public int maxEnemiesAlive = 400;
+    public int maxEnemiesAliveEasy = 500;
+    public int maxEnemiesAliveHard = 900;
     public int currentEnemiesAlive = 0;
     public int currentNumKills = 0;
     public TMP_Text numKillText;
+    public bool hardMode = false;
 
     [Header("Events")]
 
@@ -76,6 +79,20 @@ public class GameState : MonoBehaviour
     {
         gameStateText.text = $"{CurrentGameState}";
         numKillText.text = currentNumKills.ToString();
+
+        if (hardMode)
+        {
+            maxEnemiesAlive = maxEnemiesAliveHard; // Increase max enemies in hard mode
+        }
+        else
+        {
+            maxEnemiesAlive = maxEnemiesAliveEasy; // Reset to normal max enemies
+        }
+    }
+
+    public void ToggleHardMode()
+    {
+        hardMode = !hardMode;
     }
 
     public bool CanSpawnMoreEnemies()

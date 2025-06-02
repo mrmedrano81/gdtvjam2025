@@ -24,6 +24,17 @@ public class EnemyGruntObjectPool : ObjectPool
 
     public override void OnObjectGet(GameObject poolObject)
     {
+        if (GameState.Instance.hardMode)
+        {
+            poolObject.GetComponent<EnemyHealth>().maxHealth = 350f;
+            poolObject.GetComponent<EnemyAIController>().damage = 4f;
+        }
+        else
+        {
+            poolObject.GetComponent<EnemyHealth>().maxHealth = 150f;
+            poolObject.GetComponent<EnemyAIController>().damage = 2f;
+        }
+
         poolObject.GetComponent<EnemyAIController>().OnObjectGet();
     }
 

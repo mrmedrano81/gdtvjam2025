@@ -20,11 +20,15 @@ public class EnemySpawner : MonoBehaviour
     private float lastSpawnTime;
     private bool spawningEnemies = false;
 
+    private float ogSpawnInterval;
+
     private void Awake()
     {
         inputManager = FindFirstObjectByType<InputManager>();
         enemyPool = GetComponent<ObjectPool>();
         spawningEnemies = continuousSpawning;
+
+        ogSpawnInterval = spawnInterval;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -36,6 +40,15 @@ public class EnemySpawner : MonoBehaviour
     private void Update()
     {
         if (GameState.Instance.CurrentGameState != EGameState.Combat) return;
+
+        if (GameState.Instance.hardMode)
+        {
+            spawnInterval = ogSpawnInterval / 1.4f;
+        }
+        else
+        {
+            spawnInterval = ogSpawnInterval;
+        }
 
         if (spawningEnemies && Time.time - lastSpawnTime > spawnInterval)
         {
